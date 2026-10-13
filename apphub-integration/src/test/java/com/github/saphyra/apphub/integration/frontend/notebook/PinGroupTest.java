@@ -169,13 +169,13 @@ public class PinGroupTest extends SeleniumTest {
             .until(() -> PinActions.getPinGroups(driver).size() == 3)
             .assertTrue("PinGroups are not created.");
 
-        assertThat(PinActions.getPinGroups(driver)).extracting(PinGroup::getName).containsExactly(Constants.DEFAULT_PIN_GROUP_NAME, NEW_PIN_GROUP_NAME, PIN_GROUP_NAME);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(PinActions.getPinGroups(driver)).extracting(PinGroup::getName).containsExactly(Constants.DEFAULT_PIN_GROUP_NAME, NEW_PIN_GROUP_NAME, PIN_GROUP_NAME));
 
         SleepUtil.sleep(1000);
         PinActions.findPinGroupByNameValidated(driver, PIN_GROUP_NAME)
             .open(driver);
         SleepUtil.sleep(2000);
 
-        assertThat(PinActions.getPinGroups(driver)).extracting(PinGroup::getName).containsExactly(Constants.DEFAULT_PIN_GROUP_NAME, PIN_GROUP_NAME, NEW_PIN_GROUP_NAME);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(PinActions.getPinGroups(driver)).extracting(PinGroup::getName).containsExactly(Constants.DEFAULT_PIN_GROUP_NAME, PIN_GROUP_NAME, NEW_PIN_GROUP_NAME));
     }
 }

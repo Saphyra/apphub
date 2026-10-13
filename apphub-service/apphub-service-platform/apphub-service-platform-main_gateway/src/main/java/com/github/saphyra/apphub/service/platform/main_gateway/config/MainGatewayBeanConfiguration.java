@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.config.rabbitmq.message.disabled_roles_changed.DisabledRolesChangedRabbitMqConsumerConfig;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
@@ -15,10 +16,12 @@ import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.util.AntPathMatcher;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration
+@Import(DisabledRolesChangedRabbitMqConsumerConfig.class)
 public class MainGatewayBeanConfiguration {
     private final ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
 

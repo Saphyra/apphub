@@ -1,21 +1,26 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.etc.user.server.DisabledRoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.EMPTY_MESSAGE;
+import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.EXCHANGE_DISABLED_ROLES_CHANGED;
+import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_DISABLED_ROLES_CHANGED;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     private final DisabledRoleRepository repository;
     private final DisabledRoleProperties properties;
     private final CheckPasswordService checkPasswordService;
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, Role role, AccessToken accessToken) {
@@ -35,6 +41,8 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
         checkPasswordService.checkPassword(accessToken.getUserId(), password.getValue());
 
         repository.save(new DisabledRoleEntity(role));
+
+        sendDisabledRolesChangedMessage();
 
         return getDisabledRoles();
     }
@@ -49,7 +57,13 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
             repository.deleteById(role);
         }
 
+        sendDisabledRolesChangedMessage();
+
         return getDisabledRoles();
+    }
+
+    private void sendDisabledRolesChangedMessage() {
+        rabbitTemplate.convertAndSend(EXCHANGE_DISABLED_ROLES_CHANGED, MESSAGE_DISABLED_ROLES_CHANGED, EMPTY_MESSAGE);
     }
 
     @Override

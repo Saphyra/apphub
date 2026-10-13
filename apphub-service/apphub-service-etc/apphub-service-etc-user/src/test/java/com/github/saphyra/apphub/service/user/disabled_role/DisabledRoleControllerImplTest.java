@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
@@ -12,11 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.EMPTY_MESSAGE;
+import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.EXCHANGE_DISABLED_ROLES_CHANGED;
+import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_DISABLED_ROLES_CHANGED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -35,6 +39,9 @@ public class DisabledRoleControllerImplTest {
     @Mock
     private CheckPasswordService checkPasswordService;
 
+    @Mock
+    private RabbitTemplate rabbitTemplate;
+
     @InjectMocks
     private DisabledRoleControllerImpl underTest;
 
@@ -52,6 +59,7 @@ public class DisabledRoleControllerImplTest {
         verify(repository).save(new DisabledRoleEntity(Role.TEST));
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
         assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
+        verify(rabbitTemplate).convertAndSend(EXCHANGE_DISABLED_ROLES_CHANGED, MESSAGE_DISABLED_ROLES_CHANGED, EMPTY_MESSAGE);
     }
 
     @Test
@@ -65,6 +73,7 @@ public class DisabledRoleControllerImplTest {
 
         verify(repository).deleteById(Role.TEST);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
+        verify(rabbitTemplate).convertAndSend(EXCHANGE_DISABLED_ROLES_CHANGED, MESSAGE_DISABLED_ROLES_CHANGED, EMPTY_MESSAGE);
 
         assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
     }

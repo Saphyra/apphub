@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.etc.modules.ModulesProperties;
+import com.github.saphyra.apphub.service.etc.modules.config.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
 import com.github.saphyra.apphub.service.etc.modules.domain.Module;
@@ -26,6 +26,7 @@ public class ModulesQueryService {
     private final AccessTokenProvider accessTokenProvider;
     private final FavoriteService favoriteService;
     private final ModulesProperties modulesProperties;
+    private final DisabledRoleCache disabledRoleCache;
 
     public Map<String, List<ModuleResponse>> getModules(UUID userId, boolean mobileClient) {
         List<String> favoriteModules = favoriteService.getByUserId(userId)
@@ -40,6 +41,7 @@ public class ModulesQueryService {
                 .stream()
                 .filter(module -> isAvailableForClient(module, mobileClient))
                 .filter(module -> isAvailableForUser(userId, module))
+                .filter(this::allRolesEnabled)
                 .map(module -> convert(isFavorite(favoriteModules, module), module))
                 .collect(Collectors.toList());
 
@@ -50,9 +52,26 @@ public class ModulesQueryService {
         return result;
     }
 
+    private boolean allRolesEnabled(Module module) {
+        List<Role> disabledRoles = disabledRoleCache.get();
+
+        boolean result = disabledRoles.stream()
+            .noneMatch(module.getRoles()::contains);
+
+        if (!result) {
+            log.info("Module {} is disabled. Required roles: {}, disabled roles: {}", module.getName(), module.getRoles(), disabledRoles);
+        }
+
+        return result;
+    }
+
     private boolean isAvailableForClient(Module module, boolean mobileClient) {
         if (mobileClient) {
-            return module.isMobileAllowed();
+            boolean result = module.isMobileAllowed();
+            if (!result) {
+                log.info("Module {} is not allowed for mobile client", module.getName());
+            }
+            return result;
         }
 
         return true;
@@ -60,7 +79,9 @@ public class ModulesQueryService {
 
     private boolean isAvailableForUser(UUID userId, Module module) {
         boolean result = userHasRole(module.getRoles());
-        log.debug("Module {} is allowed for user {}: {}", module, userId, result);
+        if (!result) {
+            log.debug("Module {} is not allowed for user {}", module.getName(), userId);
+        }
         return result;
     }
 
@@ -68,7 +89,7 @@ public class ModulesQueryService {
         AccessToken accessToken = accessTokenProvider.get();
         boolean result = new HashSet<>(accessToken.getRoles())
             .containsAll(roles);
-        log.info("User {} has all the roles {}: {}. (Granted roles are: {})", accessToken.getUserId(), roles, result, accessToken.getRoles());
+        log.debug("User {} has all the roles {}: {}. (Granted roles are: {})", accessToken.getUserId(), roles, result, accessToken.getRoles());
         return result;
     }
 

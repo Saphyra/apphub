@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
+import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
+import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -25,6 +27,15 @@ public class Navigation {
             AwaitilityWrapper.createDefault()
                 .until(() -> driver.getCurrentUrl().equals(url));
         }
+    }
+
+    public static void toModulesPage(WebDriver driver, int serverPort) {
+        String url = UrlFactory.create(serverPort, CommunityEndpoints.MODULES_PAGE);
+        toUrl(driver, url);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !ModulesPageActions.getCategories(driver).isEmpty())
+            .assertTrue("Modules not loaded");
     }
 
     public synchronized static void toUrl(WebDriver driver, String url) {

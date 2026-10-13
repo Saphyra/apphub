@@ -20,6 +20,7 @@
     <include file="database/change_sets/star_system.xml"/>
     <include file="database/change_sets/body.xml"/>
     <include file="database/change_sets/body-v2.xml"/>
+    <include file="database/change_sets/body-v3.xml"/>
     <include file="database/change_sets/minor_faction.xml"/>
     <include file="database/change_sets/station.xml"/>
     <include file="database/change_sets/station_economy.xml"/>
@@ -31,6 +32,7 @@
     <include file="database/change_sets/last_update.xml"/>
     <include file="database/change_sets/last_update-v2.xml"/>
     <include file="database/change_sets/body_data.xml"/>
+    <include file="database/change_sets/body_data-v2.xml"/>
     <include file="database/change_sets/body_ring.xml"/>
     <include file="database/change_sets/body_material.xml"/>
     <include file="database/change_sets/star_system_minor_faction_mapping.xml"/>

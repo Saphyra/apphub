@@ -34,8 +34,5 @@
 }
 
 #notebook-content-checklist-search {
-    display: block;
-    width: 90%;
-    margin: auto;
-    margin-bottom: 10px;
+    flex-grow: 2;
 }

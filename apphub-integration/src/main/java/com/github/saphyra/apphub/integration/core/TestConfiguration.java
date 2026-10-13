@@ -27,7 +27,7 @@ public class TestConfiguration {
 
     //Integration server
     public static final boolean INTEGRATION_SERVER_ENABLED = Boolean.parseBoolean(System.getProperty("integrationServerEnabled", "false"));
-    public static final int INTEGRATION_SERVER_PORT = Integer.parseInt(System.getProperty("integrationServerPort", "8072"));
+    public static final int INTEGRATION_SERVER_PORT = Integer.parseInt(System.getProperty("integrationServerPort", "8079"));
 
     //Connection
     public static final int SERVER_PORT = Integer.parseInt(System.getProperty("serverPort", "8080"));

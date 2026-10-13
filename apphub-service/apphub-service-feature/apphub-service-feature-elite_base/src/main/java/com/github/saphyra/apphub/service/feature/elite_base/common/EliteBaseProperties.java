@@ -19,5 +19,4 @@ public class EliteBaseProperties {
     private Duration incomingMessageTimeout;
     private Duration incomingMessageCheckInterval;
     private CacheProperties cache;
-    private OrphanedRecordCleanerProperties orphanedRecordCleaner;
 }

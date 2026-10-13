@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingDao;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_material.BodyMaterialDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_material.BodyMaterialSyncService;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingDao;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Slf4j
 class BodyDataConverter extends ConverterBase<BodyDataEntity, BodyData> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
     private final BodyMaterialDao bodyMaterialDao;
     private final BodyRingDao bodyRingDao;
     private final BodyMaterialSyncService bodyMaterialSyncService;
@@ -40,7 +38,6 @@ class BodyDataConverter extends ConverterBase<BodyDataEntity, BodyData> {
 
         return BodyDataEntity.builder()
             .bodyId(uuidConverter.convertDomain(domain.getBodyId()))
-            .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .landable(domain.getLandable())
             .surfaceGravity(domain.getSurfaceGravity())
             .reserveLevel(domain.getReserveLevel())
@@ -53,7 +50,6 @@ class BodyDataConverter extends ConverterBase<BodyDataEntity, BodyData> {
         UUID bodyId = uuidConverter.convertEntity(entity.getBodyId());
         return BodyData.builder()
             .bodyId(bodyId)
-            .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .landable(entity.getLandable())
             .surfaceGravity(entity.getSurfaceGravity())
             .reserveLevel(entity.getReserveLevel())

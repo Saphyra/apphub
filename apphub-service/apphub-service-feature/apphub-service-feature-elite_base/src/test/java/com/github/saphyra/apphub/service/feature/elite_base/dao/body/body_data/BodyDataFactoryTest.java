@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +26,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class BodyDataFactoryTest {
     private static final UUID BODY_ID = UUID.randomUUID();
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
     private static final Double SURFACE_GRAVITY = 34.32;
 
     @Mock
@@ -54,9 +52,8 @@ class BodyDataFactoryTest {
     @ParameterizedTest
     @MethodSource("falseish")
     void create_falseish(Boolean value) {
-        assertThat(underTest.create(BODY_ID, LAST_UPDATE, value, SURFACE_GRAVITY, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, value, null, null))
+        assertThat(underTest.create(BODY_ID, value, SURFACE_GRAVITY, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, value, null, null))
             .returns(BODY_ID, BodyData::getBodyId)
-            .returns(LAST_UPDATE, BodyData::getLastUpdate)
             .returns(value, BodyData::getLandable)
             .returns(SURFACE_GRAVITY, BodyData::getSurfaceGravity)
             .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyData::getReserveLevel)
@@ -73,9 +70,8 @@ class BodyDataFactoryTest {
         given(bodyMaterialFactory.create(BODY_ID, materials)).willReturn(List.of(bodyMaterial));
         given(bodyRingFactory.create(BODY_ID, rings)).willReturn(List.of(bodyRing));
 
-        assertThat(underTest.create(BODY_ID, LAST_UPDATE, true, SURFACE_GRAVITY, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, true, materials, rings))
+        assertThat(underTest.create(BODY_ID, true, SURFACE_GRAVITY, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, true, materials, rings))
             .returns(BODY_ID, BodyData::getBodyId)
-            .returns(LAST_UPDATE, BodyData::getLastUpdate)
             .returns(true, BodyData::getLandable)
             .returns(SURFACE_GRAVITY, BodyData::getSurfaceGravity)
             .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyData::getReserveLevel)

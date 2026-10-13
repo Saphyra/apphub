@@ -4,6 +4,7 @@ import RequestMethod from "./dao/RequestMethod";
 //Pages
 export const INDEX_PAGE = "/web";
 export const ERROR_PAGE = "/web/error";
+export const TEST_PAGE = "/web/test";
 
 //Platform
 export const CHECK_SESSION = new Endpoint(RequestMethod.GET, "/api/session");

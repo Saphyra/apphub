@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_material.BodyMaterialFactory;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.structure.journal.NamePercentPair;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.structure.journal.Ring;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -22,10 +21,9 @@ public class BodyDataFactory {
     private final BodyMaterialFactory bodyMaterialFactory;
     private final BodyRingFactory bodyRingFactory;
 
-    public BodyData create(UUID bodyId, LocalDateTime timestamp, Boolean landable, Double surfaceGravity, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel reserveLevel, Boolean hasRing, NamePercentPair[] materials, Ring[] rings) {
+    public BodyData create(UUID bodyId, Boolean landable, Double surfaceGravity, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel reserveLevel, Boolean hasRing, NamePercentPair[] materials, Ring[] rings) {
         return BodyData.builder()
             .bodyId(bodyId)
-            .lastUpdate(timestamp)
             .landable(landable)
             .surfaceGravity(surfaceGravity)
             .reserveLevel(reserveLevel)

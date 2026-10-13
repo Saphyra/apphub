@@ -16,4 +16,12 @@
 
         <addPrimaryKey schemaName="elite_base" tableName="commodity_average_price" columnNames="commodity_name" constraintName="commodity_average_price-pk"/>
     </changeSet>
+
+    <changeSet id="drop-column-commodity_average_price-last_update" author="Saphyra">
+        <preConditions>
+            <columnExists schemaName="elite_base" tableName="commodity_average_price" columnName="last_update"/>
+        </preConditions>
+
+        <dropColumn schemaName="elite_base" tableName="commodity_average_price" columnName="last_update"/>
+    </changeSet>
 </databaseChangeLog>

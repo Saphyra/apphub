@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.ServiceConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.monitoring.Feature;
@@ -31,14 +32,14 @@ public class MonitoringTest extends SeleniumTest {
 
         MonitoringPageActions.selectFeature(driver, Feature.MEMORY_MONITORING);
         MonitoringPageActions.selectFunctionality(driver, Constants.MONITORING_FUNCTIONALITY_MEMORY_STATUS);
-        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getServices(driver)).containsAll(Constants.SERVICES));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getServices(driver)).containsAll(ServiceConstants.getServicesForEnvironment()));
 
         MonitoringPageActions.load(driver);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getMetricServices(driver)).containsAll(Constants.SERVICES));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getMetricServices(driver)).containsAll(ServiceConstants.getServicesForEnvironment()));
 
-        MonitoringPageActions.filter(driver, Constants.SERVICE_NAME_USER);
+        MonitoringPageActions.filter(driver, ServiceConstants.SERVICE_NAME_USER);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getMetricServices(driver)).containsExactly(Constants.SERVICE_NAME_USER));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getMetricServices(driver)).containsExactly(ServiceConstants.SERVICE_NAME_USER));
     }
 }

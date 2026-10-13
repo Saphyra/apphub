@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
@@ -18,16 +19,40 @@ import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoint
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.DisabledRole;
+import com.github.saphyra.apphub.integration.structure.api.modules.Category;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleManagementCrudTest extends SeleniumTest {
+    @Test(groups = {"fe", "admin-panel"})
+    @FeatureLocked(Feature.ROLE_TEST)
+    public void pageForbiddenWhenRoleDisabled() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(getServerPort(), driver);
+
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_TEST);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
+
+        disableRole(driver, userData);
+
+        Navigation.toUrl(driver, UrlFactory.create(getServerPort(), GenericEndpoints.TEST_PAGE));
+        CommonUtils.verifyMissingRole(getServerPort(), driver, GenericEndpoints.TEST_PAGE);
+
+        Navigation.toModulesPage(driver, getServerPort());
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+        enableRole(driver, userData);
+    }
+
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void disableAndEnableRole() {
@@ -37,6 +62,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_TEST);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
@@ -85,9 +111,21 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");
+
+        DisabledRolesActions.back(driver);
+
+        AwaitilityWrapper.awaitAssert(() -> {
+            List<Category> categories = ModulesPageActions.getCategories(driver);
+
+            assertThat(categories).isNotEmpty();
+
+            assertThat(ModulesPageActions.getModule(driver, ModuleLocation.TEST)).isNotEmpty();
+        });
     }
 
     private static void disableRole(WebDriver driver, RegistrationParameters userData) {
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+
         DisabledRole initialRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(initialRole.isEnabled()).isTrue();
 
@@ -99,9 +137,21 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DisabledRole disabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(disabledRole.isEnabled()).isFalse();
+
+        DisabledRolesActions.back(driver);
+
+        AwaitilityWrapper.awaitAssert(() -> {
+            List<Category> categories = ModulesPageActions.getCategories(driver);
+
+            assertThat(categories).isNotEmpty();
+
+            assertThat(ModulesPageActions.getModule(driver, ModuleLocation.TEST)).isEmpty();
+        });
     }
 
     private static void enableRole_incorrectPassword(WebDriver driver, RegistrationParameters userData) {
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
+
         DisabledRole disabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
 
         disabledRole.enable(driver);
@@ -147,5 +197,15 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         DisabledRole enabledRole = DisabledRolesActions.findRoleValidated(driver, Constants.ROLE_TEST);
         assertThat(enabledRole.isEnabled()).isTrue();
+
+        DisabledRolesActions.back(driver);
+
+        AwaitilityWrapper.awaitAssert(() -> {
+            List<Category> categories = ModulesPageActions.getCategories(driver);
+
+            assertThat(categories).isNotEmpty();
+
+            assertThat(ModulesPageActions.getModule(driver, ModuleLocation.TEST)).isNotEmpty();
+        });
     }
 }

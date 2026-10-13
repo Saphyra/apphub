@@ -54,12 +54,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-encryption</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <version>${versions.jakarta-servlet-api}</version>

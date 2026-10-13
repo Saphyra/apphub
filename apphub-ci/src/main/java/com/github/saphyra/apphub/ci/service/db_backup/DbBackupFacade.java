@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
-import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.ci.value.BackupLocation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,8 @@ public class DbBackupFacade {
     private final DbBackupService dbBackupService;
     private final ExecutorServiceBean executorServiceBean;
     private final S3ListService s3ListService;
-    private final DbRestorationService dbRestorationService;
+    private final S3DbRestorationService s3DbRestorationService;
+    private final LocalDbRestorationService localDbRestorationService;
 
     /**
      * @return all the tables available in the given database
@@ -22,12 +24,23 @@ public class DbBackupFacade {
         return tableQueryService.getTables(dbHost, dbName, username, password);
     }
 
-    public void backup(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, List<String> tables, String version) {
-        executorServiceBean.execute(() -> dbBackupService.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version));
+    public void backup(
+        String dbHost,
+        String dbName, String username,
+        String password,
+        String s3AccessKey,
+        String s3SecretKey,
+        String s3Bucket,
+        List<String> tables,
+        String version,
+        String backupDirectory,
+        List<BackupLocation> backupLocations
+    ) {
+        backupLocations.forEach(backupLocation -> executorServiceBean.execute(() -> dbBackupService.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version, backupDirectory, backupLocation)));
     }
 
     public void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
-        executorServiceBean.execute(() -> dbRestorationService.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
+        executorServiceBean.execute(() -> s3DbRestorationService.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
     }
 
     public List<String> getDatabases(String s3AccessKey, String s3SecretKey, String bucket) {
@@ -50,5 +63,9 @@ public class DbBackupFacade {
             .stream()
             .map(table -> table.replace(".bin.gz", ""))
             .toList();
+    }
+
+    public void restoreLocal(String directory, String dbHost, String dbName, String username, String password) {
+        localDbRestorationService.restore(directory, dbHost, dbName, username, password);
     }
 }

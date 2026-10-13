@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
+import com.github.saphyra.apphub.service.etc.modules.service.DisabledRoleCache;
 import com.github.saphyra.apphub.service.etc.modules.service.FavoriteUpdateService;
 import com.github.saphyra.apphub.service.etc.modules.service.ModulesQueryService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ModulesControllerImpl implements ModulesController {
     private final FavoriteService favoriteService;
     private final FavoriteUpdateService favoriteUpdateService;
     private final ModulesQueryService modulesQueryService;
+    private final DisabledRoleCache disabledRoleCache;
 
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {

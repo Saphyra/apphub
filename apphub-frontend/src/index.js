@@ -52,7 +52,7 @@ import CalendarEditEventPage from 'modules/feature/calendar/edit_event/CalendarE
 import ExpiredEventsPage from 'modules/feature/calendar/expired_event/ExpiredEventsPage';
 import MonitoringPage from 'modules/platform/monitoring/MonitoringPage';
 import { MODULES_PAGE } from 'modules/etc/modules/ModulesEndpoints';
-import { ERROR_PAGE, INDEX_PAGE } from 'common/js/GenericEndpoints';
+import { ERROR_PAGE, INDEX_PAGE, TEST_PAGE } from 'common/js/GenericEndpoints';
 import { SKYXPLORE_MAIN_MENU_PAGE } from 'modules/feature/skyxplore/main_menu/SkyXploreMainMenuEndpoints';
 import { SKYXPLORE_CHARACTER_PAGE } from 'modules/feature/skyxplore/character/SkyXploreCharacterEndpoints';
 import { SKYXPLORE_LOBBY_PAGE } from 'modules/feature/skyxplore/lobby/SkyXploreLobbyEndpoints';
@@ -70,8 +70,13 @@ import TaskManagerIndexPage from 'modules/feature/task_manager/index/TaskManager
 import TaskManagerCreateOrganizationPage from 'modules/feature/task_manager/organization/create/TaskManagerCreateOrganizationPage';
 import TaskManagerOrganizationIndexPage from 'modules/feature/task_manager/organization/index/TaskManagerOrganizationIndexPage';
 import CalendarSharePage from 'modules/feature/calendar/share/CalendarSharePage';
+import TestPage from 'modules/etc/test/TestPage';
 
 const router = createBrowserRouter([
+    {
+    path: TEST_PAGE,
+    element: <TestPage />,
+  },
   {
     path: ERROR_PAGE,
     element: <ErrorPage />,

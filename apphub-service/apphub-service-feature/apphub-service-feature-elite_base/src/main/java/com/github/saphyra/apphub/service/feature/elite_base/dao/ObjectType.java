@@ -10,6 +10,7 @@ public enum ObjectType {
     STAR_SYSTEM,
     FLEET_CARRIER,
     BODY,
+    BODY_DATA,
     COMMODITY_AVERAGE_PRICE,
     MINOR_FACTION,
     ;

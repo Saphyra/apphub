@@ -15,6 +15,7 @@ import java.util.function.Supplier;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_ACCESS_COUNT;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_HIT_COUNT;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_MISS_COUNT;
+import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_SIZE;
 import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class MonitoredCache<K, V> {
         @Nullable V cached = cache.getIfPresent(key);
 
         if (isNull(cached)) {
-            metricRegistry.reportMetric(Feature.CACHE, cacheName, cacheHitMetricProperties(0, 1));
+            metricRegistry.reportMetric(Feature.CACHE, cacheName, cacheHitMetricProperties(0, 1, cache.estimatedSize()));
 
             V value = loader.get();
             cache.put(key, value);
@@ -43,7 +44,7 @@ public class MonitoredCache<K, V> {
             return value;
         }
 
-        metricRegistry.reportMetric(Feature.CACHE, cacheName, cacheHitMetricProperties(1, 0));
+        metricRegistry.reportMetric(Feature.CACHE, cacheName, cacheHitMetricProperties(1, 0, cache.estimatedSize()));
         return cached;
     }
 
@@ -55,7 +56,7 @@ public class MonitoredCache<K, V> {
         cache.invalidateAll(keys);
     }
 
-    private static List<MetricPropertyModel> cacheHitMetricProperties(double cacheHitCount, double cacheMissCount) {
+    private static List<MetricPropertyModel> cacheHitMetricProperties(double cacheHitCount, double cacheMissCount, long cacheSize) {
         return List.of(
             MetricPropertyModel.builder()
                 .key(KEY_CACHE_ACCESS_COUNT)
@@ -71,6 +72,11 @@ public class MonitoredCache<K, V> {
                 .key(KEY_CACHE_MISS_COUNT)
                 .value(cacheMissCount)
                 .aggregationStrategy(AggregationStrategy.SUM)
+                .build(),
+            MetricPropertyModel.builder()
+                .key(KEY_CACHE_SIZE)
+                .value((double) cacheSize)
+                .aggregationStrategy(AggregationStrategy.AVERAGE)
                 .build()
         );
     }

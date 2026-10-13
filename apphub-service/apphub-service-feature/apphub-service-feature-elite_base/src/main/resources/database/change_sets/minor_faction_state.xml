@@ -30,4 +30,12 @@
             <column name="minor_faction_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-minor_faction_state" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="elite_base" tableName="minor_faction_state"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="minor_faction_state"/>
+    </changeSet>
 </databaseChangeLog>

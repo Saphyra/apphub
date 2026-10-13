@@ -9,6 +9,8 @@ liquibase:
   schema: elite_base
 
 elite-base:
+  messageHandler:
+    enabled: false
   cache:
     expireAfterAccess: PT1H
     bufferSynchronizationInterval: PT1M

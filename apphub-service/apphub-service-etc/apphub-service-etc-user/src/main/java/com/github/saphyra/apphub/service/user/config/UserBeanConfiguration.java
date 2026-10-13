@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.config;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.config.rabbitmq.message.disabled_roles_changed.DisabledRolesChangedRabbitMqPublisherConfig;
 import com.github.saphyra.apphub.service.user.UserApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
@@ -17,6 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackageClasses = UserApplication.class)
 @EntityScan(basePackageClasses = UserApplication.class)
 @ComponentScan(basePackages = "com.github.saphyra.util")
+@Import(DisabledRolesChangedRabbitMqPublisherConfig.class)
 class UserBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {

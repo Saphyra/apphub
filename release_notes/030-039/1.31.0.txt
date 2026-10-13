@@ -1,0 +1,41 @@
+===FEATURES===
+    ApphubCI
+        Backup and restore from local directories
+        Schedule shutdown
+        Deploy platform option for LOCAL and MINIKUBE envs
+        Remember last backed up version
+    Calendar
+        Set note when creating occurrence
+        Add cache size to monitoring
+
+===BUGFIXES===
+    Swallow WebSocket connection errors during integration tests
+    Modules page displayed module despite required role is disabled
+    Authentication did not consider disabled roles
+
+===PLATFORM CHANGES===
+    Merge IntegrationServer to ApphubCI
+    Start only the required services on prod/preprod
+    RabbitMQ integration
+
+===TECHNICAL DEBTS===
+    Calendar
+        Delete migration scripts and remnants of encryption
+
+===ETC===
+    ApphubCI
+        Common parameterized page for all the envs
+    EliteBase
+        Partitioned BodyData
+        Foreign key constraint to body_data.body_id
+        Move LastUpdate from BodyData
+        Partition Body
+    Integration
+        Filter test cases based on class or package
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database

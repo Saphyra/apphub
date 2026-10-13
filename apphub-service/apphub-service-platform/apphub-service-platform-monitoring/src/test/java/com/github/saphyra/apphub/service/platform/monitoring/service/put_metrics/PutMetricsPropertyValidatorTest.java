@@ -27,6 +27,7 @@ import static org.mockito.Mockito.times;
 class PutMetricsPropertyValidatorTest {
     private static final UUID METRIC_ID = UUID.randomUUID();
     private static final String KEY = "key";
+    private static final String KEY_2 = "key-2";
 
     @Mock
     private MetricPropertyDao metricPropertyDao;
@@ -41,7 +42,13 @@ class PutMetricsPropertyValidatorTest {
     private MetricPropertyModel propertyModel;
 
     @Mock
+    private MetricPropertyModel propertyModel2;
+
+    @Mock
     private MetricProperty metricProperty;
+
+    @Mock
+    private MetricProperty metricProperty2;
 
     @Test
     void createNew() {
@@ -56,16 +63,38 @@ class PutMetricsPropertyValidatorTest {
     }
 
     @Test
-    void differentPropertySize() {
+    void missingProperty() {
+        given(metricPropertyDao.getByMetricId(METRIC_ID)).willReturn(List.of(metricProperty, metricProperty2));
+        given(metricProperty.getProperty()).willReturn(KEY);
+        given(metricProperty.getAggregationStrategy()).willReturn(AggregationStrategy.SUM);
+        given(metricProperty2.getProperty()).willReturn(KEY_2);
+        given(metricProperty2.getAggregationStrategy()).willReturn(AggregationStrategy.AVERAGE);
+
+        given(propertyModel.getKey()).willReturn(KEY);
+        given(propertyModel.getAggregationStrategy()).willReturn(AggregationStrategy.SUM);
+
+        ExceptionValidator.validateReportedException(
+            catchThrowable(() -> underTest.saveOrVerifyProperties(METRIC_ID, List.of(propertyModel))),
+            HttpStatus.BAD_REQUEST,
+            ErrorCode.GENERAL_ERROR
+        );
+    }
+
+    @Test
+    void newPropertySaved() {
         given(metricPropertyDao.getByMetricId(METRIC_ID)).willReturn(List.of(metricProperty));
         given(metricProperty.getProperty()).willReturn(KEY);
         given(metricProperty.getAggregationStrategy()).willReturn(AggregationStrategy.SUM);
 
-        ExceptionValidator.validateReportedException(
-            catchThrowable(() -> underTest.saveOrVerifyProperties(METRIC_ID, List.of(propertyModel, propertyModel))),
-            HttpStatus.BAD_REQUEST,
-            ErrorCode.GENERAL_ERROR
-        );
+        given(propertyModel.getKey()).willReturn(KEY);
+        given(propertyModel.getAggregationStrategy()).willReturn(AggregationStrategy.SUM);
+        given(propertyModel2.getKey()).willReturn(KEY_2);
+        given(propertyModel2.getAggregationStrategy()).willReturn(AggregationStrategy.AVERAGE);
+        given(metricPropertyFactory.create(METRIC_ID, KEY_2, AggregationStrategy.AVERAGE)).willReturn(metricProperty2);
+
+        underTest.saveOrVerifyProperties(METRIC_ID, List.of(propertyModel, propertyModel2));
+
+        then(metricPropertyDao).should().save(metricProperty2);
     }
 
     @Test

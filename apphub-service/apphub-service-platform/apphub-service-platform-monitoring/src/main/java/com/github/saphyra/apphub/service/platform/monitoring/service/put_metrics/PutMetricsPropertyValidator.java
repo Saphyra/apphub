@@ -27,23 +27,25 @@ class PutMetricsPropertyValidator {
         Map<String, AggregationStrategy> existing = metricPropertyDao.getByMetricId(metricId)
             .stream()
             .collect(Collectors.toMap(MetricProperty::getProperty, MetricProperty::getAggregationStrategy));
+        Map<String, AggregationStrategy> newProperties = properties.stream()
+            .collect(Collectors.toMap(MetricPropertyModel::getKey, MetricPropertyModel::getAggregationStrategy));
+
         if (existing.isEmpty()) {
             //If no schema present, create it
             properties.stream()
                 .map(propertyModel -> metricPropertyFactory.create(metricId, propertyModel.getKey(), propertyModel.getAggregationStrategy()))
                 .forEach(metricPropertyDao::save);
         } else {
-            if (existing.size() != properties.size()) {
-                //Number of properties of the request should be the same as the number of stored properties
+            // Every existing property must still be present with the same aggregation strategy.
+            if (!existing.entrySet().stream().allMatch(entry -> entry.getValue() == newProperties.get(entry.getKey()))) {
                 throwPropertyMismatchException(metricId, existing);
             }
 
-            Map<String, AggregationStrategy> newProperties = properties.stream()
-                .collect(Collectors.toMap(MetricPropertyModel::getKey, MetricPropertyModel::getAggregationStrategy));
-            // throw if the existing saved aggregation strategies differ from the ones in the request
-            if (!existing.equals(newProperties)) {
-                throwPropertyMismatchException(metricId, existing);
-            }
+            // New properties can be added on top of the existing schema.
+            properties.stream()
+                .filter(propertyModel -> !existing.containsKey(propertyModel.getKey()))
+                .map(propertyModel -> metricPropertyFactory.create(metricId, propertyModel.getKey(), propertyModel.getAggregationStrategy()))
+                .forEach(metricPropertyDao::save);
         }
     }
 

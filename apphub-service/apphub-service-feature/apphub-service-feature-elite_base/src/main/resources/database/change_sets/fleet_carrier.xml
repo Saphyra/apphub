@@ -44,4 +44,12 @@
             <dropNotNullConstraint schemaName="elite_base" tableName="fleet_carrier" columnName="star_system_id"/>
         </rollback>
     </changeSet>
+
+    <changeSet id="drop-table-fleet_carrier" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="elite_base" tableName="fleet_carrier"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="fleet_carrier"/>
+    </changeSet>
 </databaseChangeLog>

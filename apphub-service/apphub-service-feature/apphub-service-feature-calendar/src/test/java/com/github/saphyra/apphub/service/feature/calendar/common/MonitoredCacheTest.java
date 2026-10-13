@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_ACCESS_COUNT;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_HIT_COUNT;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_MISS_COUNT;
+import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_CACHE_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -62,7 +63,8 @@ class MonitoredCacheTest {
             .containsExactlyInAnyOrder(
                 new Tuple(KEY_CACHE_ACCESS_COUNT, 1d, AggregationStrategy.SUM),
                 new Tuple(KEY_CACHE_HIT_COUNT, 0d, AggregationStrategy.SUM),
-                new Tuple(KEY_CACHE_MISS_COUNT, 1d, AggregationStrategy.SUM)
+                new Tuple(KEY_CACHE_MISS_COUNT, 1d, AggregationStrategy.SUM),
+                new Tuple(KEY_CACHE_SIZE, 0d, AggregationStrategy.AVERAGE)
             );
 
         assertThat(argumentCaptor.getAllValues().get(1))
@@ -70,7 +72,8 @@ class MonitoredCacheTest {
             .containsExactlyInAnyOrder(
                 new Tuple(KEY_CACHE_ACCESS_COUNT, 1d, AggregationStrategy.SUM),
                 new Tuple(KEY_CACHE_HIT_COUNT, 1d, AggregationStrategy.SUM),
-                new Tuple(KEY_CACHE_MISS_COUNT, 0d, AggregationStrategy.SUM)
+                new Tuple(KEY_CACHE_MISS_COUNT, 0d, AggregationStrategy.SUM),
+                new Tuple(KEY_CACHE_SIZE, 1d, AggregationStrategy.AVERAGE)
             );
     }
 

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.value;
 
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class Service {
     private String moduleName;
     private Integer group;
     @Builder.Default
-    private Boolean optional = false;
+    private boolean optional = false;
     private Integer healthCheckPort;
     @Builder.Default
     private List<PropertyName> properties = new ArrayList<>();

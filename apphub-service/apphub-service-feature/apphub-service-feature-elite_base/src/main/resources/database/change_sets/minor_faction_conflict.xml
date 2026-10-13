@@ -21,4 +21,12 @@
             <column name="star_system_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-minor_faction_conflict" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="elite_base" tableName="minor_faction_conflict"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="minor_faction_conflict"/>
+    </changeSet>
 </databaseChangeLog>

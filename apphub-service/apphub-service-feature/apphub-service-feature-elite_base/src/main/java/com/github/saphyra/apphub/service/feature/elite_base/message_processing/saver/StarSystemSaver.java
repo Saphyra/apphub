@@ -85,7 +85,7 @@ public class StarSystemSaver {
 
     private void updateFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, StarType starType) {
         LocalDateTime lastUpdated = lastUpdateDao.findByIdOrDefault(starSystem.getId(), ObjectType.STAR_SYSTEM).getLastUpdate();
-        if ( timestamp.isBefore(lastUpdated)) {
+        if (timestamp.isBefore(lastUpdated)) {
             log.debug("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
             return;
         }

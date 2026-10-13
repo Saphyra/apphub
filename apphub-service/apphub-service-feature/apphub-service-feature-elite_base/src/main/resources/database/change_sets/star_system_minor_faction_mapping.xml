@@ -21,4 +21,12 @@
             <column name="star_system_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-star_system_minor_faction_mapping" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="elite_base" tableName="star_system_minor_faction_mapping"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="star_system_minor_faction_mapping"/>
+    </changeSet>
 </databaseChangeLog>

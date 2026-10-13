@@ -22,17 +22,13 @@ class RedirectUrlProviderTest {
     private final RedirectUrlProvider underTest = new RedirectUrlProvider();
 
     @Mock
-    private RoleSetting roleSetting;
-
-    @Mock
     private AccessToken accessToken;
 
     @Test
     void getRedirectUrl() {
-        given(roleSetting.getRequiredRoles()).willReturn(List.of(Role.TEST));
         given(accessToken.getUserId()).willReturn(USER_ID);
 
-        String result = underTest.getRedirectUrl(List.of(roleSetting), accessToken);
+        String result = underTest.getRedirectUrl(List.of(Role.TEST), accessToken);
 
         assertThat(result).isEqualTo(String.format(
             "%s?error_code=%s&user_id=%s&required_roles=%s",

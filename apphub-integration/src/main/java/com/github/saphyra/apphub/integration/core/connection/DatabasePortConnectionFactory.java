@@ -38,7 +38,7 @@ public class DatabasePortConnectionFactory implements PooledObjectFactory<BiWrap
         }
 
         PortForwardTask.portForwardDatabase(port);
-        log.debug("DatabasePort {} forwarded", port);
+        log.info("DatabasePort {} forwarded", port);
         Connection connection = getConnection(port);
         log.debug("Database connection created");
 

@@ -44,7 +44,21 @@
             <fieldset>
                 <legend>Project version</legend>
 
-                <input type="text" name="version" required placeholder="Project version">
+                <input type="text" name="version" th:value="${version}" required placeholder="Project version">
+            </fieldset>
+
+            <fieldset>
+                <legend>Backup location</legend>
+
+                <label>
+                    <input type="checkbox" name="backup_location_s3" value="true">
+                    S3
+                </label>
+
+                <label>
+                    <input type="checkbox" name="backup_location_local" value="true">
+                    Local: <span th:text="${backup_directory}"></span>
+                </label>
             </fieldset>
         </div>
 

@@ -38,4 +38,9 @@ public class DisabledRolesActions {
         driver.findElement(By.id("disabled-role-management-enable-button"))
             .click();
     }
+
+    public static void back(WebDriver driver) {
+        driver.findElement(By.id("disabled-role-management-home-button"))
+            .click();
+    }
 }

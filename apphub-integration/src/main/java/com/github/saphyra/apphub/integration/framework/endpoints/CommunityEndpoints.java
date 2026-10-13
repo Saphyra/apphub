@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.framework.endpoints;
 
 public class CommunityEndpoints {
+    public static final String MODULES_PAGE = "/web/modules";
     public static final String COMMUNITY_PAGE = "/web/community";
     public static final String COMMUNITY_BLACKLIST_SEARCH = "/api/community/blacklist/search";
     public static final String COMMUNITY_GET_BLACKLIST = "/api/community/blacklist";

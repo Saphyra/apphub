@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedAccessTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedRefreshTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.TokenParser;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.authentication.DisabledRoleCache;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorLogger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +43,9 @@ class MainGatewayRestControllerImplTest {
 
     @Mock
     private TokenParser tokenParser;
+
+    @Mock
+    private DisabledRoleCache disabledRoleCache;
 
     @InjectMocks
     private MainGatewayRestControllerImpl underTest;
