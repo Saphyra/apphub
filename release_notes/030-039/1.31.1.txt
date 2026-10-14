@@ -1,0 +1,17 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    Finish BodyData migration, restore message processing
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_BODY_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_BODY_NAME;
@@ -111,9 +112,9 @@ class BodyToV3Migrator {
                         new BiWrapper<>(COLUMN_ID, rs.getString(COLUMN_ID)),
                         new BiWrapper<>(COLUMN_STAR_SYSTEM_ID, rs.getString(COLUMN_STAR_SYSTEM_ID)),
                         new BiWrapper<>(COLUMN_TYPE, rs.getString(COLUMN_TYPE)),
-                        new BiWrapper<>(COLUMN_BODY_ID, rs.getObject(COLUMN_BODY_ID, Long.class)),
+                        new BiWrapper<>(COLUMN_BODY_ID, Optional.ofNullable(rs.getBigDecimal(COLUMN_BODY_ID)).map(Number::longValue).orElse(null)),
                         new BiWrapper<>(COLUMN_BODY_NAME, rs.getString(COLUMN_BODY_NAME)),
-                        new BiWrapper<>(COLUMN_DISTANCE_FROM_STAR, rs.getObject(COLUMN_DISTANCE_FROM_STAR, Double.class))
+                        new BiWrapper<>(COLUMN_DISTANCE_FROM_STAR, Optional.ofNullable(rs.getBigDecimal(COLUMN_DISTANCE_FROM_STAR)).map(Number::doubleValue).orElse(null))
                     ));
                 }
                 return result;

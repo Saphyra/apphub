@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.service.env_ops.production;
 
+import com.github.saphyra.apphub.ci.service.operations.production.ProductionProxyService;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesNamespaceSetupper;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
@@ -26,6 +27,7 @@ public class ProductionDeploymentService {
     private final KubernetesPodScaler kubernetesPodScaler;
     private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final KubernetesServiceDeployer kubernetesServiceDeployer;
+    private final ProductionProxyService productionProxyService;
 
     public void deploy(Action action, boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
         if (action != Action.BUILD_AND_DEPLOY) {
@@ -47,5 +49,9 @@ public class ProductionDeploymentService {
         }
 
         kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, services, 30, startupCountLimit);
+
+        if (!startUserDefinedServices) {
+            productionProxyService.start();
+        }
     }
 }

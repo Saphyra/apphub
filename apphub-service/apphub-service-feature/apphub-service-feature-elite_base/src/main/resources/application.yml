@@ -10,7 +10,7 @@ liquibase:
 
 elite-base:
   messageHandler:
-    enabled: false
+    enabled: true
   cache:
     expireAfterAccess: PT1H
     bufferSynchronizationInterval: PT1M

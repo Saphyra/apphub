@@ -16,9 +16,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_BODY_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_EXTERNAL_REFERENCE;
@@ -146,7 +148,7 @@ class BodyDataMigrator {
                     Map<String, Object> entity = CollectionUtils.toMap(
                         new BiWrapper<>(COLUMN_BODY_ID, rs.getString(COLUMN_BODY_ID)),
                         new BiWrapper<>(COLUMN_LANDABLE, rs.getObject(COLUMN_LANDABLE, Boolean.class)),
-                        new BiWrapper<>(COLUMN_SURFACE_GRAVITY, rs.getObject(COLUMN_SURFACE_GRAVITY, Double.class)),
+                        new BiWrapper<>(COLUMN_SURFACE_GRAVITY, Optional.ofNullable(rs.getBigDecimal(COLUMN_SURFACE_GRAVITY)).map(BigDecimal::doubleValue).orElse(null)),
                         new BiWrapper<>(COLUMN_RESERVE_LEVEL, rs.getString(COLUMN_RESERVE_LEVEL)),
                         new BiWrapper<>(COLUMN_HAS_RING, rs.getObject(COLUMN_HAS_RING, Boolean.class))
                     );
