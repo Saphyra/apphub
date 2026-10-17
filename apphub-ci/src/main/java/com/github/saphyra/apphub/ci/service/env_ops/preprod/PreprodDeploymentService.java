@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
+import com.github.saphyra.apphub.ci.value.Technology;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class PreprodDeploymentService {
                 services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
                     .toList();
 
-                kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, Constants.NAMESPACE_NAME_PREPROD);
+                kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, Constants.NAMESPACE_NAME_PREPROD, Technology.RABBITMQ);
             }
 
             kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, services, 30, startupCountLimit);

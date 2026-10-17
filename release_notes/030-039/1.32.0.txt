@@ -13,6 +13,7 @@
 ===TECHNICAL DEBTS===
 
 ===ETC===
+    Setting up a namespace via ApphubCI deploys technologies in batch
 
 ===Manual Release Steps===
     Pre deployment
