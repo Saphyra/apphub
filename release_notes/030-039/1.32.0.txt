@@ -1,5 +1,7 @@
 ===FEATURES===
     Add favico
+    ApphubCI
+        Optionally pre-create WebDrivers when filtering tests
 
 ===BUGFIXES===
 

@@ -151,6 +151,11 @@
                 </label>
 
                 <input type="text" name="test_filter" placeholder="Comma-separated list of tests" th:value="${test_filter}"/>
+
+                <label class="inline">
+                    <input type="checkbox" name="pre_create_drivers_when_filtering" th:value="true"/>
+                    Pre-create WebDrivers when filtering
+                </label>
             </div>
 
             <button type="submit">Run tests</button>
