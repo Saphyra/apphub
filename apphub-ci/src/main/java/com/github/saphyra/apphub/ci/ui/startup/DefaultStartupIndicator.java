@@ -9,6 +9,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.Collection;
 import java.util.List;
@@ -65,16 +66,14 @@ class DefaultStartupIndicator implements StartupIndicator {
 
     public StartupIndicator run() {
         SwingUtilities.invokeLater(() -> {
-            //Frame
-            frame = createFrame(services.size());
-
             //Progress Bar
             progressBar = createProgressBar(services.size());
-            frame.add(progressBar, BorderLayout.NORTH);
 
             //Service list
             JScrollPane serviceList = createServiceList(services.values());
-            frame.add(serviceList, BorderLayout.CENTER);
+
+            //Frame
+            frame = createFrame(progressBar, serviceList);
         });
 
         return this;
@@ -96,21 +95,31 @@ class DefaultStartupIndicator implements StartupIndicator {
         return progressBar;
     }
 
-    private static JFrame createFrame(int serviceSize) {
+    private static JFrame createFrame(JProgressBar progressBar, JScrollPane serviceList) {
         JFrame frame = new JFrame("Apphub CI - Startup up services");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
-        frame.setSize(new Dimension(PANEL_WIDTH, getScreenHeight(serviceSize)));
+        frame.add(progressBar, BorderLayout.NORTH);
+        frame.add(serviceList, BorderLayout.CENTER);
+        frame.pack();
+        frame.setSize(new Dimension(PANEL_WIDTH, getScreenHeight(frame, progressBar, serviceList)));
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         return frame;
     }
 
-    private static int getScreenHeight(int serviceSize) {
-        int maxHeight = (int) (ScreenSizeUtils.getScreenHeight() * 0.7);
-        int suggestedHeight = 40 + serviceSize * 25;
+    private static int getScreenHeight(JFrame frame, JProgressBar progressBar, JScrollPane serviceList) {
+        int screenCap = (int) (ScreenSizeUtils.getScreenHeight() * 0.7);
 
-        return Math.min(maxHeight, suggestedHeight);
+        int insetsH = frame.getInsets().top + frame.getInsets().bottom;
+        int progressH = progressBar.getPreferredSize().height;
+        Component view = serviceList.getViewport().getView();
+        int contentH = view == null ? 0 : view.getPreferredSize().height;
+        int scrollPaneChromeH = serviceList.getInsets().top + serviceList.getInsets().bottom + 2;
+
+        int needed = insetsH + progressH + contentH + scrollPaneChromeH;
+
+        return Math.min(screenCap, needed);
     }
 }

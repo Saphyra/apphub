@@ -5,6 +5,8 @@
         Sort tables by approximate size before backing up
 
 ===BUGFIXES===
+    ApphubCI
+        StartupIndicator had incorrect height
 
 ===PLATFORM CHANGES===
 
