@@ -1,0 +1,24 @@
+===FEATURES===
+    Add favico
+    ApphubCI
+        Optionally pre-create WebDrivers when filtering tests
+        Sort tables by approximate size before backing up
+
+===BUGFIXES===
+    ApphubCI
+        StartupIndicator had incorrect height
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    Setting up a namespace via ApphubCI deploys technologies in batch
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database
+        Delete date_bucket GSI from Calendar

@@ -20,6 +20,7 @@ import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ACTION;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_BUILD_THREAD_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_FILTER_TESTS;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PREFIX_ENABLED_SERVICE;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVERS_WHEN_FILTERING;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVER_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RETRY_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SKIP_TESTS;
@@ -148,7 +149,6 @@ public class RequestParamUtil {
         EnvironmentSpecificProperties environmentSpecificProperties = propertyDao.getEnvironmentSpecificProperties(PropertyName.PRE_CREATE_DRIVER_COUNT);
         environmentSpecificProperties.put(environment, Map.of(PropertyName.PRE_CREATE_DRIVER_COUNT.name(), String.valueOf(driverCount)));
 
-
         propertyDao.save(PropertyName.PRE_CREATE_DRIVER_COUNT, environmentSpecificProperties);
 
         return driverCount;
@@ -177,5 +177,9 @@ public class RequestParamUtil {
         }
 
         return Action.valueOf(actionString);
+    }
+
+    public boolean extractPreCreateDriversWhenFiltering(HttpServletRequest request) {
+        return Boolean.parseBoolean(request.getParameter(PARAM_PRE_CREATE_DRIVERS_WHEN_FILTERING));
     }
 }

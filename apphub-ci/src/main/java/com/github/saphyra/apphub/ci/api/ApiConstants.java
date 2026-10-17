@@ -36,6 +36,7 @@ public class ApiConstants {
     public static final String PARAM_DYNAMODB_PORT = "dynamodb_port";
     public static final String PARAM_RABBITMQ_PORT = "rabbitmq_port";
     public static final String PARAM_ACTION = "action";
+    public static final String PARAM_PRE_CREATE_DRIVERS_WHEN_FILTERING = "pre_create_drivers_when_filtering";
 
     public static final String PARAM_PREFIX_ENABLED_SERVICE = "enabled_service_";
 }

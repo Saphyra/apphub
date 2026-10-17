@@ -12,11 +12,8 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.BillingMode;
 import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
-import software.amazon.awssdk.services.dynamodb.model.GlobalSecondaryIndex;
 import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement;
 import software.amazon.awssdk.services.dynamodb.model.KeyType;
-import software.amazon.awssdk.services.dynamodb.model.Projection;
-import software.amazon.awssdk.services.dynamodb.model.ProjectionType;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
@@ -25,11 +22,9 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.GSI_USER_ID_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
@@ -95,10 +90,6 @@ class CommonCalendarRepository extends DynamoDbRepository {
                     AttributeDefinition.builder()
                         .attributeName(COLUMN_USER_ID)
                         .attributeType(ScalarAttributeType.S)
-                        .build(),
-                    AttributeDefinition.builder()
-                        .attributeName(COLUMN_DATE_BUCKET)
-                        .attributeType(ScalarAttributeType.S)
                         .build()
                 )
                 .keySchema(
@@ -109,22 +100,6 @@ class CommonCalendarRepository extends DynamoDbRepository {
                     KeySchemaElement.builder()
                         .attributeName(COLUMN_SK)
                         .keyType(KeyType.RANGE)
-                        .build()
-                )
-                .globalSecondaryIndexes(
-                    GlobalSecondaryIndex.builder()
-                        .indexName(GSI_USER_ID_DATE_BUCKET)
-                        .keySchema(
-                            KeySchemaElement.builder()
-                                .attributeName(COLUMN_USER_ID)
-                                .keyType(KeyType.HASH)
-                                .build(),
-                            KeySchemaElement.builder()
-                                .attributeName(COLUMN_DATE_BUCKET)
-                                .keyType(KeyType.RANGE)
-                                .build()
-                        )
-                        .projection(Projection.builder().projectionType(ProjectionType.ALL).build())
                         .build()
                 )
                 .billingMode(BillingMode.PAY_PER_REQUEST)

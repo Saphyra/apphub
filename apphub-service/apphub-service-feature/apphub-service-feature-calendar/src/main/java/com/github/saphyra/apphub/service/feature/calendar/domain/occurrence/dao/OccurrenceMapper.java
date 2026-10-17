@@ -11,7 +11,6 @@ import static com.github.saphyra.apphub.lib.dynamodb.AttributeValueUtils.createS
 import static com.github.saphyra.apphub.lib.dynamodb.AttributeValueUtils.getString;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMINDED;
@@ -32,7 +31,6 @@ class OccurrenceMapper extends ConverterBase<Map<String, AttributeValue>, Occurr
         result.put(COLUMN_PK, createString(PREFIX_EVENT + occurrence.getEventId()));
         result.put(COLUMN_SK, createString(PREFIX_OCCURRENCE + occurrence.getOccurrenceId()));
         result.put(COLUMN_USER_ID, createString(PREFIX_USER + occurrence.getUserId()));
-        result.put(COLUMN_DATE_BUCKET, createString(occurrence.getDateBucket()));
         result.put(COLUMN_DATE, createString(occurrence.getDate()));
         result.put(COLUMN_TIME, createString(occurrence.getTime()));
         result.put(COLUMN_STATUS, createString(occurrence.getStatus()));
@@ -51,7 +49,6 @@ class OccurrenceMapper extends ConverterBase<Map<String, AttributeValue>, Occurr
             .occurrenceId(getString(entity, COLUMN_SK).substring(PREFIX_OCCURRENCE.length()))
             .userId(getString(entity, COLUMN_USER_ID).substring(PREFIX_USER.length()))
             .date(getString(entity, COLUMN_DATE))
-            .dateBucket(getString(entity, COLUMN_DATE_BUCKET))
             .time(getString(entity, COLUMN_TIME))
             .status(getString(entity, COLUMN_STATUS))
             .note(getString(entity, COLUMN_NOTE))

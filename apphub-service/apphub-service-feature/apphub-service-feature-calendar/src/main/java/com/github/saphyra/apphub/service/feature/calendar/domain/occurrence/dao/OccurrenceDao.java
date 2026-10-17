@@ -57,16 +57,6 @@ public class OccurrenceDao {
         return Optional.ofNullable(getByEventId(eventId).get(occurrenceId));
     }
 
-    @Deprecated(forRemoval = true)
-    public List<Occurrence> getByBuckets(UUID userId, List<String> buckets) {
-        String userIdString = uuidConverter.convertDomain(userId);
-
-        return buckets.stream()
-            .flatMap(bucket -> repository.getByBucket(userIdString, bucket).stream())
-            .map(converter::convertEntity)
-            .toList();
-    }
-
     public void delete(List<Occurrence> occurrences) {
         List<BiWrapper<String, String>> ids = occurrences.stream()
             .map(occurrence -> new BiWrapper<>(

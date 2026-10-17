@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import lombok.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,8 +23,8 @@ class OccurrenceQueryServiceHelperTest {
     private static final LocalDate START_DATE = LocalDate.of(2026, 6, 1);
     private static final LocalDate END_DATE = LocalDate.of(2026, 7, 1);
     private static final LocalDate CURRENT_DATE = LocalDate.of(2026, 6, 15);
-    private static final @NonNull UUID EVENT_ID = UUID.randomUUID();
-    private static final @NonNull UUID OCCURRENCE_ID = UUID.randomUUID();
+    private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID OCCURRENCE_ID = UUID.randomUUID();
 
     @Mock
     private OccurrenceDao occurrenceDao;
@@ -36,25 +34,6 @@ class OccurrenceQueryServiceHelperTest {
 
     @Mock
     private Event event;
-
-    @Mock
-    private Occurrence occurrence1;
-
-    @Mock
-    private Occurrence occurrence2;
-
-    @Mock
-    private Occurrence occurrence3;
-
-    @Test
-    void getOccurrencesBetween() {
-        given(occurrenceDao.getByBuckets(USER_ID, List.of("2026-6", "2026-7"))).willReturn(List.of(occurrence1, occurrence2, occurrence3));
-        given(occurrence1.getDate()).willReturn(CURRENT_DATE);
-        given(occurrence2.getDate()).willReturn(END_DATE.plusDays(1));
-        given(occurrence3.getDate()).willReturn(START_DATE.minusDays(1));
-
-        assertThat(underTest.getOccurrencesBetween(USER_ID, START_DATE, END_DATE)).containsExactlyInAnyOrder(occurrence1);
-    }
 
     @Test
     void getOccurrencesToAdd() {

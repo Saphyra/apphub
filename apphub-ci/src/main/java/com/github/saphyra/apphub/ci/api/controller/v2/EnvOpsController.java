@@ -46,6 +46,7 @@ import static com.github.saphyra.apphub.ci.api.ApiConstants.PATH_ENV_OPS;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PATH_VARIABLE_ENVIRONMENT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.REDIRECT;
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Controller
 @RequestMapping(PATH_ENV_OPS)
@@ -164,14 +165,15 @@ class EnvOpsController {
             String testFilter = filterTests ? requestParamUtil.extractTestFilter(request) : "";
             log.info("Filter tests: {}, test filter: {}", filterTests, testFilter);
             int threadCount = requestParamUtil.extractTestThreadCount(environment, request);
-            int preCreatedDriverCount = requestParamUtil.extractPreCreatedDriverCount(environment, request);
             int retryCount = requestParamUtil.extractRetryCount(request);
+            boolean preCreateDriversWhenFiltering = requestParamUtil.extractPreCreateDriversWhenFiltering(request);
+            int preCreatedDriverCount = requestParamUtil.extractPreCreatedDriverCount(environment, request);
 
             taskQueue.add(() -> envOpsFacade.runTests(
                 environment,
                 testFilter,
                 threadCount,
-                preCreatedDriverCount,
+                isBlank(testFilter) ? preCreatedDriverCount : (preCreateDriversWhenFiltering ? preCreatedDriverCount : 0),
                 retryCount
             ));
 
