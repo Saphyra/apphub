@@ -10,7 +10,6 @@ import java.util.Map;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMINDED;
@@ -29,7 +28,6 @@ class OccurrenceMapperTest {
     private static final String USER_ID = "user-id";
     private static final String EVENT_ID = "event-id";
     private static final String OCCURRENCE_ID = "occurrence-id";
-    private static final String DATE_BUCKET = "2026-06";
     private static final String DATE = "2026-06-03";
     private static final String TIME = "14:30:00";
     private static final String STATUS = "PENDING";
@@ -47,7 +45,6 @@ class OccurrenceMapperTest {
             .userId(USER_ID)
             .eventId(EVENT_ID)
             .occurrenceId(OCCURRENCE_ID)
-            .dateBucket(DATE_BUCKET)
             .date(DATE)
             .time(TIME)
             .status(STATUS)
@@ -62,7 +59,6 @@ class OccurrenceMapperTest {
         assertThat(result.get(COLUMN_PK).s()).isEqualTo(PREFIX_EVENT + EVENT_ID);
         assertThat(result.get(COLUMN_SK).s()).isEqualTo(PREFIX_OCCURRENCE + OCCURRENCE_ID);
         assertThat(result.get(COLUMN_USER_ID).s()).isEqualTo(PREFIX_USER + USER_ID);
-        assertThat(result.get(COLUMN_DATE_BUCKET).s()).isEqualTo(DATE_BUCKET);
         assertThat(result.get(COLUMN_DATE).s()).isEqualTo(DATE);
         assertThat(result.get(COLUMN_TIME).s()).isEqualTo(TIME);
         assertThat(result.get(COLUMN_STATUS).s()).isEqualTo(STATUS);
@@ -78,7 +74,6 @@ class OccurrenceMapperTest {
             Map.entry(COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + EVENT_ID).build()),
             Map.entry(COLUMN_SK, AttributeValue.builder().s(PREFIX_OCCURRENCE + OCCURRENCE_ID).build()),
             Map.entry(COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + USER_ID).build()),
-            Map.entry(COLUMN_DATE_BUCKET, AttributeValue.builder().s(DATE_BUCKET).build()),
             Map.entry(COLUMN_DATE, AttributeValue.builder().s(DATE).build()),
             Map.entry(COLUMN_TIME, AttributeValue.builder().s(TIME).build()),
             Map.entry(COLUMN_STATUS, AttributeValue.builder().s(STATUS).build()),
@@ -93,7 +88,6 @@ class OccurrenceMapperTest {
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getEventId()).isEqualTo(EVENT_ID);
         assertThat(result.getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
-        assertThat(result.getDateBucket()).isEqualTo(DATE_BUCKET);
         assertThat(result.getDate()).isEqualTo(DATE);
         assertThat(result.getTime()).isEqualTo(TIME);
         assertThat(result.getStatus()).isEqualTo(STATUS);

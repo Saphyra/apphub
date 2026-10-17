@@ -21,3 +21,4 @@
         Restart ApphubCI
     Post deployment
         Backup Database
+        Delete date_bucket GSI from Calendar
