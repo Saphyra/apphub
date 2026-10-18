@@ -19,4 +19,12 @@
 
         <addPrimaryKey schemaName="elite_base" tableName="body_data" columnNames="body_id" constraintName="body_data-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-body_data" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="body_data"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="body_data"/>
+    </changeSet>
 </databaseChangeLog>

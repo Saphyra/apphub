@@ -11,14 +11,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_BODY_RING;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_BODY_RING_V2;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = SCHEMA, name = TABLE_BODY_RING)
+@Table(schema = SCHEMA, name = TABLE_BODY_RING_V2)
 public class BodyRingEntity {
     @Id
     private String id;

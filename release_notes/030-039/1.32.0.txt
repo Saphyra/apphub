@@ -15,11 +15,16 @@
 
 ===ETC===
     Setting up a namespace via ApphubCI deploys technologies in batch
+    EliteBase
+        Migrate body_ring to add fk
+        Migrate conflicting_minor_faction to add fk
 
 ===Manual Release Steps===
     Pre deployment
         Backup Database
         Restart ApphubCI
+        Put EliteBase to migration mode
     Post deployment
         Backup Database
         Delete date_bucket GSI from Calendar
+        Put EliteBase to normal mode

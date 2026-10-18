@@ -9,8 +9,6 @@ public class DatabaseConstants {
     public static final String TABLE_STATION_SERVICE = "station_service";
     public static final String TABLE_STATION_ECONOMY = "station_economy";
     @Deprecated
-    public static final String TABLE_BODY = "body";
-    @Deprecated
     public static final String TABLE_BODY_V2 = "body_v2";
     public static final String TABLE_BODY_V3 = "body_v3";
     public static final String TABLE_MATERIAL_TRADER_OVERRIDE = "material_trader_override";
@@ -18,29 +16,19 @@ public class DatabaseConstants {
     public static final String TABLE_BODY_DATA = "body_data";
     public static final String TABLE_BODY_DATA_V2 = "body_data_v2";
     public static final String TABLE_BODY_MATERIAL = "body_material";
+    @Deprecated
     public static final String TABLE_BODY_RING = "body_ring";
-    @Deprecated
-    public static final String TABLE_FLEET_CARRIER = "fleet_carrier";
+    public static final String TABLE_BODY_RING_V2 = "body_ring_v2";
     public static final String TABLE_FLEET_CARRIER_V2 = "fleet_carrier_v2";
-    @Deprecated
-    public static final String TABLE_LAST_UPDATE = "last_update";
     public static final String TABLE_LAST_UPDATE_V2 = "last_update_v2";
     public static final String TABLE_MINOR_FACTION = "minor_faction";
-    @Deprecated
-    public static final String TABLE_MINOR_FACTION_STATE = "minor_faction_state";
     public static final String TABLE_MINOR_FACTION_STATE_V2 = "minor_faction_state_v2";
-    @Deprecated
-    public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING = "star_system_minor_faction_mapping";
     public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING_V2 = "star_system_minor_faction_mapping_v2";
-    @Deprecated
-    public static final String TABLE_MINOR_FACTION_CONFLICT = "minor_faction_conflict";
     public static final String TABLE_MINOR_FACTION_CONFLICT_V2 = "minor_faction_conflict_v2";
+    @Deprecated
     public static final String TABLE_CONFLICTING_MINOR_FACTION = "conflicting_minor_faction";
+    public static final String TABLE_CONFLICTING_MINOR_FACTION_V2 = "conflicting_minor_faction_v2";
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING_V2 = "star_system_power_mapping_v2";
-    @Deprecated
-    public static final String TABLE_STAR_SYSTEM_POWER_MAPPING = "star_system_power_mapping";
-    @Deprecated
-    public static final String TABLE_POWERPLAY_CONFLICT = "powerplay_conflict";
     public static final String TABLE_POWERPLAY_CONFLICT_V2 = "powerplay_conflict_v2";
     public static final String TABLE_ITEM_TYPE = "item_type";
     public static final String TABLE_ITEM_COMMODITY = "item_commodity";
@@ -88,5 +76,12 @@ public class DatabaseConstants {
     public static final String COLUMN_STOCK = "stock";
     public static final String COLUMN_DEMAND = "demand";
     public static final String COLUMN_POWERPLAY_STATE = "powerplay_state";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_INNER_RADIUS = "inner_radius";
+    public static final String COLUMN_OUTER_RADIUS = "outer_radius";
+    public static final String COLUMN_MASS = "mass";
+    public static final String COLUMN_CONFLICT_ID = "conflict_id";
+    public static final String COLUMN_WON_DAYS = "won_days";
+    public static final String COLUMN_STAKE = "stake";
 }
 

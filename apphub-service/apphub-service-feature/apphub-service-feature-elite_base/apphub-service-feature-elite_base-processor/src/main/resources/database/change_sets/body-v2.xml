@@ -38,4 +38,12 @@
             <column name="star_system_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-body_v2" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="body_v2"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="body_v2"/>
+    </changeSet>
 </databaseChangeLog>

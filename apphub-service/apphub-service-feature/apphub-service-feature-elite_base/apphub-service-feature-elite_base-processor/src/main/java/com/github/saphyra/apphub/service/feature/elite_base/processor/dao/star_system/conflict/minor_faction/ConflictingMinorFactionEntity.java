@@ -10,14 +10,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_CONFLICTING_MINOR_FACTION;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_CONFLICTING_MINOR_FACTION_V2;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = SCHEMA, name = TABLE_CONFLICTING_MINOR_FACTION)
+@Table(schema = SCHEMA, name = TABLE_CONFLICTING_MINOR_FACTION_V2)
 @IdClass(ConflictingMinorFactionEntityId.class)
 class ConflictingMinorFactionEntity {
     @Id
