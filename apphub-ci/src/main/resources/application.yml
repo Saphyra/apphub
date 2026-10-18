@@ -161,11 +161,27 @@ services:
     optional: true
     properties:
       - DYNAMO_DB_CONFIGURATION
-  - name: elite-base
+
+  #Elite Base
+  - name: elite-base-processor
     port: 8087
-    location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/target/application.jar"
-    moduleName: apphub-service-feature-elite_base
+    location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/apphub-service-feature-elite_base-processor/target/application.jar"
+    moduleName: apphub-service-feature-elite_base-processor
     group: 2
     optional: true
     properties:
       - PSQL_HOST
+  - name: elite-base-db-cache
+    port: 8083
+    location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/apphub-service-feature-elite_base-db_cache/target/application.jar"
+    moduleName: apphub-service-feature-elite_base-db_cache
+    group: 2
+    optional: true
+    properties:
+      - PSQL_HOST
+  - name: elite-base-receiver
+    port: 8100
+    location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/apphub-service-feature-elite_base-receiver/target/application.jar"
+    moduleName: apphub-service-feature-elite_base-receiver
+    group: 2
+    optional: true

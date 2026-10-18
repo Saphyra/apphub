@@ -1,0 +1,18 @@
+package com.github.saphyra.apphub.api.feature.elite_base.db_cache;
+
+import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
+import org.springframework.web.bind.annotation.PostMapping;
+
+public interface EliteBaseDbCacheEventController {
+    @PostMapping(EliteBaseEndpoints.EVENT_PROCESS_MESSAGES)
+    void processMessages();
+
+    @PostMapping(EliteBaseEndpoints.EVENT_RESET_UNHANDLED_MESSAGES)
+    void resetUnhandled();
+
+    @PostMapping(EliteBaseEndpoints.EVENT_DELETE_EXPIRED_MESSAGES)
+    void deleteExpiredMessages();
+
+    @PostMapping(EliteBaseEndpoints.EVENT_MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR)
+    void resetError();
+}

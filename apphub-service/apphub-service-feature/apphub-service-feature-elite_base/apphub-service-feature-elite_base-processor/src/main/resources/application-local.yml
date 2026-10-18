@@ -1,0 +1,8 @@
+server:
+  port: 8087
+elite-base:
+  executor:
+    threadCount: 10
+  messageProcessorRetryDelay: PT2M
+  messageProcessorMaxRetryCount: 10
+  incomingMessageCheckInterval: PT60M

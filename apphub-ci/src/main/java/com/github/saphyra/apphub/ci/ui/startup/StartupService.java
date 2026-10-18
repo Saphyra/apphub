@@ -81,4 +81,11 @@ class StartupService {
         sb.append(" ".repeat(Math.max(0, spacesToAdd)));
         return sb.toString();
     }
+
+    public void startupFailed() {
+        status = StartupStatus.FAILED;
+        finishedAt = LocalDateTime.now();
+        label.setText(getLabelText());
+        SwingUtilities.invokeLater(() -> label.setText(getLabelText()));
+    }
 }

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elite-base-db-cache
+  labels:
+    app: elite-base-db-cache
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: elite-base-db-cache
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: elite-base-db-cache
+    spec:
+      containers:
+        - name: elite-base-db-cache
+          image: saphyra/apphub-service-feature-elite_base-db_cache:latest
+          env:
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,develop
+            - name: PSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: psql-host
+                  key: PSQL_HOST
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elite-base-db-cache
+  labels:
+    app: elite-base-db-cache
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    name: elite-base-db-cache

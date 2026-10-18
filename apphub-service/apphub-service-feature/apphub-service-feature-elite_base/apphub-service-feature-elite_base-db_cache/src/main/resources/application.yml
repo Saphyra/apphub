@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: elite-base-db-cache
+
+liquibase:
+  schema: elite_base
+
+elite-base:
+  message:
+    incoming:
+      consumer:
+        enabled: false #Change this to true when executing migrations
+    stored:
+      publisher:
+        enabled: true #Change this to false when executing migrations
+    backfill:
+      consumer:
+        enabled: true #Process error messages
+  processedMessageExpiration: P1D
+  messageExpiration: P30D
+  messageProcessorBatchSize: 500

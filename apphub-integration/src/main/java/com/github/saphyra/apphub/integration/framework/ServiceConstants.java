@@ -26,7 +26,9 @@ public class ServiceConstants {
     public static final String SERVICE_NAME_COMMUNITY = "community";
     public static final String SERVICE_NAME_CALENDAR = "calendar";
     public static final String SERVICE_NAME_STORAGE = "storage";
-    public static final String SERVICE_NAME_ELITE_BASE = "elite-base";
+    public static final String SERVICE_NAME_ELITE_BASE_RECEIVER = "elite-base-receiver";
+    public static final String SERVICE_NAME_ELITE_BASE_PROCESSOR = "elite-base-processor";
+    public static final String SERVICE_NAME_ELITE_BASE_DB_CACHE = "elite-base-db-cache";
     public static final String SERVICE_NAME_MONITORING = "monitoring";
     public static final String SERVICE_NAME_AUTHORIZATION = "authorization";
     public static final String SERVICE_NAME_TASK_MANAGER = "task-manager";
@@ -46,7 +48,9 @@ public class ServiceConstants {
         SERVICE_NAME_COMMUNITY,
         SERVICE_NAME_CALENDAR,
         SERVICE_NAME_STORAGE,
-        SERVICE_NAME_ELITE_BASE,
+        SERVICE_NAME_ELITE_BASE_RECEIVER,
+        SERVICE_NAME_ELITE_BASE_PROCESSOR,
+        SERVICE_NAME_ELITE_BASE_DB_CACHE,
         SERVICE_NAME_MONITORING,
         SERVICE_NAME_AUTHORIZATION,
         SERVICE_NAME_TASK_MANAGER
@@ -63,7 +67,9 @@ public class ServiceConstants {
         SERVICE_NAME_USER,
         SERVICE_NAME_CALENDAR,
         SERVICE_NAME_STORAGE,
-        SERVICE_NAME_ELITE_BASE,
+        SERVICE_NAME_ELITE_BASE_RECEIVER,
+        SERVICE_NAME_ELITE_BASE_PROCESSOR,
+        SERVICE_NAME_ELITE_BASE_DB_CACHE,
         SERVICE_NAME_MONITORING,
         SERVICE_NAME_AUTHORIZATION
     );

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
@@ -85,10 +84,6 @@ class CommonCalendarRepository extends DynamoDbRepository {
                         .build(),
                     AttributeDefinition.builder()
                         .attributeName(COLUMN_SK)
-                        .attributeType(ScalarAttributeType.S)
-                        .build(),
-                    AttributeDefinition.builder()
-                        .attributeName(COLUMN_USER_ID)
                         .attributeType(ScalarAttributeType.S)
                         .build()
                 )

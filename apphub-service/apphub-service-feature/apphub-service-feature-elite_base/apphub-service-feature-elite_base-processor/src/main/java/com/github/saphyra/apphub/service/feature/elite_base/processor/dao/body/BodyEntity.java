@@ -1,0 +1,31 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_BODY_V3;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
+@Entity
+@Table(schema = SCHEMA, name = TABLE_BODY_V3)
+class BodyEntity {
+    @Id
+    private String id;
+    private String starSystemId;
+    @Enumerated(EnumType.STRING)
+    private BodyType type;
+    private Long bodyId;
+    private String bodyName;
+    private Double distanceFromStar;
+}

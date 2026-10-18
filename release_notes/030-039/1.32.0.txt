@@ -9,6 +9,7 @@
         StartupIndicator had incorrect height
 
 ===PLATFORM CHANGES===
+    Split EliteBase to separate message receiving and processing
 
 ===TECHNICAL DEBTS===
 

@@ -1,0 +1,26 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body;
+
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class BodyFactory {
+    private final IdGenerator idGenerator;
+
+    public Body create(UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
+        return Body.builder()
+            .id(idGenerator.randomUuid())
+            .starSystemId(starSystemId)
+            .type(bodyType)
+            .bodyId(bodyId)
+            .bodyName(bodyName)
+            .distanceFromStar(distanceFromStar)
+            .build();
+    }
+}

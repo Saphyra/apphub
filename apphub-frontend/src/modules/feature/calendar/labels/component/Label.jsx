@@ -35,11 +35,6 @@ const Label = ({
 
                 <div className="calendar-labels-label-operations">
                     <Button
-                        className="calendar-labels-label-delete"
-                        label={"X"}
-                        onclick={() => confirmLabelDeletion()}
-                    />
-                    <Button
                         className="calendar-labels-label-edit"
                         label={"X"}
                         onclick={() => setDisplayEditDialog(true)}
@@ -73,7 +68,13 @@ const Label = ({
                             key="share"
                             id="calendar-labels-edit-label-share"
                             label={localizationHandler.get("share")}
-                            onclick={()=> window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({type: TYPE_LABEL, id: labelId, parent: null}, {backUrl: CALENDAR_LABELS_PAGE})}
+                            onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_LABEL, id: labelId, parent: null }, { backUrl: CALENDAR_LABELS_PAGE })}
+                        />,
+                        <Button
+                            key="delete"
+                            className="calendar-labels-label-delete"
+                            label={localizationHandler.get("delete")}
+                            onclick={() => confirmLabelDeletion()}
                         />,
                         <Button
                             key="cancel"

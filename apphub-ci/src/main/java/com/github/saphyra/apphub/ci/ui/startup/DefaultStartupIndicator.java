@@ -64,6 +64,19 @@ class DefaultStartupIndicator implements StartupIndicator {
             });
     }
 
+    @Override
+    public void startupFailed(String name) {
+        services.get(name)
+            .startupFailed();
+
+        int finished = (int) services.values()
+            .stream()
+            .filter(startupService -> startupService.getStatus() == StartupStatus.STARTED)
+            .count();
+
+        SwingUtilities.invokeLater(() -> progressBar.setValue(finished));
+    }
+
     public StartupIndicator run() {
         SwingUtilities.invokeLater(() -> {
             //Progress Bar

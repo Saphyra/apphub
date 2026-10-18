@@ -7,6 +7,8 @@
             defaultValue="default"
     />
 
+    <logger name="org.hibernate.engine.jdbc.spi" level="off"/>
+
     <springProfile name="server">
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">

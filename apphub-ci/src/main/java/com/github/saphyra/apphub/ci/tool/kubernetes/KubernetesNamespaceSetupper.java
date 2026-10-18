@@ -32,7 +32,7 @@ public class KubernetesNamespaceSetupper {
             }
         }
 
-        kubernetesPodStartupWaiter.waitForPods(namespaceName, 10);
+        kubernetesPodStartupWaiter.waitForPods(namespaceName, 30); //Greater wait time is required because sometimes the docker images needs to be pulled first
     }
 
     private void createSecrets(Environment environment, String namespaceName) {

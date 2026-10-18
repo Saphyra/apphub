@@ -18,7 +18,9 @@
     </properties>
 
     <modules>
-        <module>apphub-api-feature-elite_base-server</module>
+        <module>apphub-api-feature-elite_base-processor</module>
         <module>apphub-api-feature-elite_base-model</module>
+        <module>apphub-api-feature-elite_base-message</module>
+        <module>apphub-api-feature-elite_base-db_cache</module>
     </modules>
 </project>

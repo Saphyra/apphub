@@ -1,0 +1,29 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.saver;
+
+import lombok.AllArgsConstructor;
+
+import java.util.function.Supplier;
+
+@AllArgsConstructor
+class UpdateHelper {
+    private final Checker checker;
+    private final Runnable updater;
+
+    UpdateHelper(Object newValue, Supplier<Object> currentValueProvider, Runnable updater) {
+        this.checker = new DefaultChecker(newValue, currentValueProvider);
+        this.updater = updater;
+    }
+
+    /**
+     * @return true if modification happened, false otherwise
+     */
+    boolean modify() {
+        if (!checker.check()) {
+            updater.run();
+
+            return true;
+        }
+
+        return false;
+    }
+}

@@ -47,8 +47,10 @@ public class CalendarLabel {
             .click();
     }
 
-    public CalendarLabel delete() {
-        webElement.findElement(By.className("calendar-labels-label-delete"))
+    public CalendarLabel delete(WebDriver driver) {
+        edit();
+
+        driver.findElement(By.className("calendar-labels-label-delete"))
             .click();
         return this;
     }
