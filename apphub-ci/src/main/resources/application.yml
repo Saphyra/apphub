@@ -55,7 +55,7 @@ services:
     port: 8080
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
     moduleName: apphub-service-platform-main_gateway
-    group: 5
+    group: 3
     properties:
       - AUTHORIZATION_CERTIFICATE
       - DYNAMO_DB_CONFIGURATION
@@ -63,7 +63,7 @@ services:
     port: 8082
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
     moduleName: apphub-service-platform-scheduler
-    group: 5
+    group: 3
   - name: user
     port: 8085
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-user/target/application.jar"
@@ -175,7 +175,7 @@ services:
     port: 8083
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/apphub-service-feature-elite_base-db_cache/target/application.jar"
     moduleName: apphub-service-feature-elite_base-db_cache
-    group: 3
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -183,5 +183,5 @@ services:
     port: 8100
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/apphub-service-feature-elite_base-receiver/target/application.jar"
     moduleName: apphub-service-feature-elite_base-receiver
-    group: 4
+    group: 2
     optional: true

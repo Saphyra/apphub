@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -20,7 +19,6 @@ import java.util.UUID;
 @Slf4j
 class StationConverter extends ConverterBase<StationEntity, Station> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
     private final StationEconomySyncService stationEconomySyncService;
     private final StationServiceSyncService stationServiceSyncService;
     private final StationEconomyDao stationEconomyDao;
@@ -33,7 +31,6 @@ class StationConverter extends ConverterBase<StationEntity, Station> {
 
         return StationEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
-            .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .bodyId(uuidConverter.convertDomain(domain.getBodyId()))
             .stationName(domain.getStationName())
@@ -50,7 +47,6 @@ class StationConverter extends ConverterBase<StationEntity, Station> {
         UUID stationId = uuidConverter.convertEntity(entity.getId());
         return Station.builder()
             .id(stationId)
-            .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .bodyId(uuidConverter.convertEntity(entity.getBodyId()))
             .stationName(entity.getStationName())

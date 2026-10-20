@@ -3,7 +3,11 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.message_p
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Allegiance;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdate;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.Station;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.StationDao;
@@ -53,6 +57,12 @@ class StationSaverTest {
     @Mock
     private MinorFactionSaver minorFactionSaver;
 
+    @Mock
+    private LastUpdateDao lastUpdateDao;
+
+    @Mock
+    private LastUpdateFactory lastUpdateFactory;
+
     @InjectMocks
     private StationSaver underTest;
 
@@ -67,6 +77,9 @@ class StationSaverTest {
 
     @Mock
     private Economy economy;
+
+    @Mock
+    private LastUpdate lastUpdate;
 
     @Test
     void nullMarketId() {
@@ -131,7 +144,6 @@ class StationSaverTest {
         given(minorFactionSaver.save(LAST_UPDATE, CONTROLLING_FACTION_NAME, FactionStateEnum.BLIGHT)).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
         given(stationFactory.create(
-            LAST_UPDATE,
             STAR_SYSTEM_ID,
             BODY_ID,
             STATION_NAME,
@@ -160,7 +172,6 @@ class StationSaverTest {
             FactionStateEnum.BLIGHT
         )).isEqualTo(station);
 
-        then(station).should(times(0)).setLastUpdate(any());
         then(station).should(times(0)).setBodyId(any());
         then(station).should(times(0)).setAllegiance(any());
         then(station).should(times(0)).setEconomy(any());
@@ -180,8 +191,10 @@ class StationSaverTest {
         given(minorFactionSaver.save(LAST_UPDATE, CONTROLLING_FACTION_NAME, FactionStateEnum.BLIGHT)).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
         given(stationEconomyFactory.create(STATION_ID, economy)).willReturn(stationEconomy);
-        given(station.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
+        given(lastUpdateDao.findByIdOrDefault(STATION_ID, ObjectType.STATION)).willReturn(lastUpdate);
+        given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
         given(station.getId()).willReturn(STATION_ID);
+        given(lastUpdateFactory.create(STATION_ID, ObjectType.STATION, LAST_UPDATE)).willReturn(lastUpdate);
 
         assertThat(underTest.save(
             LAST_UPDATE,
@@ -198,7 +211,6 @@ class StationSaverTest {
             FactionStateEnum.BLIGHT
         )).isEqualTo(station);
 
-        then(station).should().setLastUpdate(LAST_UPDATE);
         then(station).should().setBodyId(BODY_ID);
         then(station).should().setAllegiance(Allegiance.ALLIANCE);
         then(station).should().setEconomy(EconomyEnum.AGRICULTURE);
@@ -207,5 +219,6 @@ class StationSaverTest {
         then(station).should().setType(StationType.SURFACE_STATION);
         then(station).should().setControllingFactionId(CONTROLLING_FACTION_ID);
         then(stationDao).should().save(station);
+        then(lastUpdateDao).should().save(lastUpdate);
     }
 }

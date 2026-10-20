@@ -1,12 +1,7 @@
 package com.github.saphyra.apphub.lib.config.rabbitmq.message.elite_base.incoming;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.MessageListener;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_ELITE_BASE_INCOMING;
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_LISTENER_ELITE_BASE_INCOMING;
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.PLACEHOLDER_SERVICE;
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.QUEUE_ELITE_BASE_INCOMING;
@@ -45,23 +39,5 @@ public class EliteBaseIncomingRabbitMqConsumerConfig {
         container.setConcurrentConsumers(10);
 
         return container;
-    }
-
-    @Bean
-    Queue eliteBaseIncomingQueue(@Value("${spring.application.name}") String serviceName) {
-        String queue = QUEUE_ELITE_BASE_INCOMING.replace(PLACEHOLDER_SERVICE, serviceName);
-        log.info("Creating queue {}", queue);
-        return QueueBuilder.nonDurable(queue)
-            .autoDelete()
-            .exclusive()
-            .build();
-    }
-
-    @Bean
-    Binding eliteBaseIncomingBinding(Queue eliteBaseIncomingQueue, TopicExchange eliteBaseIncomingExchange) {
-        log.info("Creating binding for queue {} and exchange {}", eliteBaseIncomingQueue.getName(), eliteBaseIncomingExchange.getName());
-        return BindingBuilder.bind(eliteBaseIncomingQueue)
-            .to(eliteBaseIncomingExchange)
-            .with(MESSAGE_ELITE_BASE_INCOMING);
     }
 }

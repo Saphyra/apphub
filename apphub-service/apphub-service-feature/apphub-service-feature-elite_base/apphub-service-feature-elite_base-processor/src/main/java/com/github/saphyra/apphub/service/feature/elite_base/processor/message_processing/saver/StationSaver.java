@@ -4,7 +4,10 @@ import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Allegiance;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.Station;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.StationDao;
@@ -33,6 +36,8 @@ public class StationSaver {
     private final StationFactory stationFactory;
     private final StationEconomyFactory stationEconomyFactory;
     private final MinorFactionSaver minorFactionSaver;
+    private final LastUpdateDao lastUpdateDao;
+    private final LastUpdateFactory lastUpdateFactory;
 
     public void save(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String stationName, Long marketId, Allegiance allegiance, EconomyEnum economy, String[] stationServices, Economy[] economies) {
         save(timestamp, starSystemId, bodyId, stationName, null, marketId, allegiance, economy, stationServices, economies, null, null);
@@ -81,9 +86,12 @@ public class StationSaver {
                 .orElse(null);
 
             updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
+
+            log.debug("Saved station {}", stationName);
+
+            return station;
         } else {
             station = stationFactory.create(
-                timestamp,
                 starSystemId,
                 bodyId,
                 stationName,
@@ -97,11 +105,11 @@ public class StationSaver {
             );
             log.debug("Saving new {}", station);
             stationDao.save(station);
+
+            saveLastUpdate(timestamp, station);
+
+            return station;
         }
-
-        log.debug("Saved station {}", stationName);
-
-        return station;
     }
 
     private void updateFields(
@@ -117,15 +125,17 @@ public class StationSaver {
         Long marketId,
         UUID starSystemId
     ) {
-        if (timestamp.isBefore(station.getLastUpdate())) {
+        LocalDateTime lastUpdated = lastUpdateDao.findByIdOrDefault(station.getId(), ObjectType.STATION).getLastUpdate();
+        if (timestamp.isBefore(lastUpdated)) {
             log.debug("Station {} has newer data than {}", station.getId(), timestamp);
             return;
         }
 
+        saveLastUpdate(timestamp, station);
+
         List.of(
                 new UpdateHelper(starSystemId, station::getStarSystemId, () -> station.setStarSystemId(starSystemId)),
                 new UpdateHelper(marketId, station::getMarketId, () -> station.setMarketId(marketId)),
-                new UpdateHelper(timestamp, station::getLastUpdate, () -> station.setLastUpdate(timestamp)),
                 new UpdateHelper(bodyId, station::getBodyId, () -> station.setBodyId(bodyId)),
                 new UpdateHelper(allegiance, station::getAllegiance, () -> station.setAllegiance(allegiance)),
                 new UpdateHelper(economy, station::getEconomy, () -> station.setEconomy(economy)),
@@ -137,5 +147,9 @@ public class StationSaver {
             .forEach(UpdateHelper::modify);
 
         stationDao.save(station);
+    }
+
+    private void saveLastUpdate(LocalDateTime timestamp, Station station) {
+        lastUpdateDao.save(lastUpdateFactory.create(station.getId(), ObjectType.STATION, timestamp));
     }
 }

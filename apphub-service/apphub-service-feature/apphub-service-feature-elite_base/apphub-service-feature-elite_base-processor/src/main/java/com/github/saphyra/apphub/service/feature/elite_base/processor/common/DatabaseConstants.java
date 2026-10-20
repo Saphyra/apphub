@@ -5,7 +5,9 @@ public class DatabaseConstants {
 
     public static final String TABLE_STAR_SYSTEM = "star_system";
     public static final String TABLE_STAR_SYSTEM_DATA = "star_system_data";
+    @Deprecated
     public static final String TABLE_STATION = "station";
+    public static final String TABLE_STATION_V2 = "station_v2";
     public static final String TABLE_STATION_SERVICE = "station_service";
     public static final String TABLE_STATION_ECONOMY = "station_economy";
     @Deprecated
@@ -83,5 +85,7 @@ public class DatabaseConstants {
     public static final String COLUMN_CONFLICT_ID = "conflict_id";
     public static final String COLUMN_WON_DAYS = "won_days";
     public static final String COLUMN_STAKE = "stake";
+    public static final String COLUMN_ALLEGIANCE = "allegiance";
+    public static final String COLUMN_CONTROLLING_FACTION_ID = "controlling_faction_id";
 }
 

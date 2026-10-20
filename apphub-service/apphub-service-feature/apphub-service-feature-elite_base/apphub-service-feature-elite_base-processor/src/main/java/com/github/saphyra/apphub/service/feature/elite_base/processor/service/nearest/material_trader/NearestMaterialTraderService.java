@@ -60,7 +60,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.processor.com
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_BODY_V3;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_MATERIAL_TRADER_OVERRIDE;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STAR_SYSTEM;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_SERVICE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -88,7 +88,7 @@ public class NearestMaterialTraderService {
         String sql = SqlBuilder.select()
             .column(new NamedColumn(new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID), COLUMN_STAR_SYSTEM_ID))
             .columns(COLUMN_STAR_NAME, COLUMN_X_POS, COLUMN_Y_POS, COLUMN_Z_POS, COLUMN_STATION_NAME, COLUMN_DISTANCE_FROM_STAR, COLUMN_ECONOMY, COLUMN_MATERIAL_TYPE, COLUMN_VERIFIED)
-            .column(new NamedColumn(new QualifiedColumn(TABLE_STATION, COLUMN_ID), COLUMN_STATION_ID))
+            .column(new NamedColumn(new QualifiedColumn(TABLE_STATION_V2, COLUMN_ID), COLUMN_STATION_ID))
             .column(new NamedColumn(
                 new SquareRootSegment(
                     new SumSegment(
@@ -100,11 +100,11 @@ public class NearestMaterialTraderService {
                 COLUMN_DISTANCE_FROM_REFERENCE
             ))
             .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM))
-            .innerJoin(new QualifiedTable(SCHEMA, TABLE_STATION), new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID), new QualifiedColumn(TABLE_STATION, COLUMN_STAR_SYSTEM_ID))
-            .leftJoin(new QualifiedTable(SCHEMA, TABLE_BODY_V3), new QualifiedColumn(TABLE_STATION, COLUMN_BODY_ID), new QualifiedColumn(TABLE_BODY_V3, COLUMN_ID))
-            .leftJoin(new QualifiedTable(SCHEMA, TABLE_MATERIAL_TRADER_OVERRIDE), new QualifiedColumn(TABLE_STATION, COLUMN_ID), new QualifiedColumn(TABLE_MATERIAL_TRADER_OVERRIDE, COLUMN_STATION_ID))
+            .innerJoin(new QualifiedTable(SCHEMA, TABLE_STATION_V2), new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID), new QualifiedColumn(TABLE_STATION_V2, COLUMN_STAR_SYSTEM_ID))
+            .leftJoin(new QualifiedTable(SCHEMA, TABLE_BODY_V3), new QualifiedColumn(TABLE_STATION_V2, COLUMN_BODY_ID), new QualifiedColumn(TABLE_BODY_V3, COLUMN_ID))
+            .leftJoin(new QualifiedTable(SCHEMA, TABLE_MATERIAL_TRADER_OVERRIDE), new QualifiedColumn(TABLE_STATION_V2, COLUMN_ID), new QualifiedColumn(TABLE_MATERIAL_TRADER_OVERRIDE, COLUMN_STATION_ID))
             .condition(new InCondition(
-                new QualifiedColumn(TABLE_STATION, COLUMN_ID),
+                new QualifiedColumn(TABLE_STATION_V2, COLUMN_ID),
                 SqlBuilder.select()
                     .column(COLUMN_STATION_ID)
                     .from(new QualifiedTable(SCHEMA, TABLE_STATION_SERVICE))

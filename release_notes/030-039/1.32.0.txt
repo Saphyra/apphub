@@ -20,6 +20,7 @@
     EliteBase
         Migrate body_ring to add fk
         Migrate conflicting_minor_faction to add fk
+        Migrate station to add fk
 
 ===Manual Release Steps===
     Pre deployment

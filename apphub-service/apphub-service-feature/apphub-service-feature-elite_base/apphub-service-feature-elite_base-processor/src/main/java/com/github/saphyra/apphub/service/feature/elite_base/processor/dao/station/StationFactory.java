@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +25,6 @@ public class StationFactory {
     private final StationEconomyFactory stationEconomyFactory;
 
     public Station create(
-        LocalDateTime timestamp,
         UUID starSystemId,
         UUID bodyId,
         String stationName,
@@ -42,7 +40,6 @@ public class StationFactory {
 
         return Station.builder()
             .id(stationId)
-            .lastUpdate(timestamp)
             .starSystemId(starSystemId)
             .bodyId(bodyId)
             .stationName(stationName)

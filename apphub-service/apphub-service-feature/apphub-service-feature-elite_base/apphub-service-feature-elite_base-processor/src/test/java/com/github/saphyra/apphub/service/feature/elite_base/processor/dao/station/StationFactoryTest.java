@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +26,6 @@ class StationFactoryTest {
     private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
     private static final UUID BODY_ID = UUID.randomUUID();
     private static final UUID CONTROLLING_FACTION_ID = UUID.randomUUID();
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
     private static final String STATION_NAME = "station-name";
     private static final Long MARKET_ID = 34L;
 
@@ -52,7 +50,6 @@ class StationFactoryTest {
         given(stationEconomyFactory.create(STATION_ID, economy)).willReturn(stationEconomy);
 
         assertThat(underTest.create(
-            LAST_UPDATE,
             STAR_SYSTEM_ID,
             BODY_ID,
             STATION_NAME,
@@ -65,7 +62,6 @@ class StationFactoryTest {
             CONTROLLING_FACTION_ID
         ))
             .returns(STATION_ID, Station::getId)
-            .returns(LAST_UPDATE, Station::getLastUpdate)
             .returns(STAR_SYSTEM_ID, Station::getStarSystemId)
             .returns(BODY_ID, Station::getBodyId)
             .returns(STATION_NAME, Station::getStationName)

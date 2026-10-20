@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Allegiance;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomyDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomySyncService;
@@ -10,9 +12,6 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.statio
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceEnum;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceSyncService;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Allegiance;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,9 +45,6 @@ class StationConverterTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private DateTimeConverter dateTimeConverter;
-
-    @Mock
     private StationEconomySyncService stationEconomySyncService;
 
     @Mock
@@ -73,7 +69,6 @@ class StationConverterTest {
     void convertDomain() {
         Station in = Station.builder()
             .id(ID)
-            .lastUpdate(LAST_UPDATE)
             .starSystemId(STAR_SYSTEM_ID)
             .bodyId(BODY_ID)
             .stationName(STATION_NAME)
@@ -90,11 +85,9 @@ class StationConverterTest {
         given(uuidConverter.convertDomain(STAR_SYSTEM_ID)).willReturn(STAR_SYSTEM_ID_STRING);
         given(uuidConverter.convertDomain(BODY_ID)).willReturn(BODY_ID_STRING);
         given(uuidConverter.convertDomain(CONTROLLING_FACTION_ID)).willReturn(CONTROLLING_FACTION_ID_STRING);
-        given(dateTimeConverter.convertDomain(LAST_UPDATE)).willReturn(LAST_UPDATE_STRING);
 
         assertThat(underTest.convertDomain(in))
             .returns(ID_STRING, StationEntity::getId)
-            .returns(LAST_UPDATE_STRING, StationEntity::getLastUpdate)
             .returns(STAR_SYSTEM_ID_STRING, StationEntity::getStarSystemId)
             .returns(BODY_ID_STRING, StationEntity::getBodyId)
             .returns(STATION_NAME, StationEntity::getStationName)
@@ -112,7 +105,6 @@ class StationConverterTest {
     void convertEntity() {
         StationEntity in = StationEntity.builder()
             .id(ID_STRING)
-            .lastUpdate(LAST_UPDATE_STRING)
             .starSystemId(STAR_SYSTEM_ID_STRING)
             .bodyId(BODY_ID_STRING)
             .stationName(STATION_NAME)
@@ -127,7 +119,6 @@ class StationConverterTest {
         given(uuidConverter.convertEntity(STAR_SYSTEM_ID_STRING)).willReturn(STAR_SYSTEM_ID);
         given(uuidConverter.convertEntity(BODY_ID_STRING)).willReturn(BODY_ID);
         given(uuidConverter.convertEntity(CONTROLLING_FACTION_ID_STRING)).willReturn(CONTROLLING_FACTION_ID);
-        given(dateTimeConverter.convertToLocalDateTime(LAST_UPDATE_STRING)).willReturn(LAST_UPDATE);
 
         given(stationServiceDao.getByStationId(ID)).willReturn(List.of(stationService));
         given(stationEconomyDao.getByStationId(ID)).willReturn(List.of(stationEconomy));
@@ -135,7 +126,6 @@ class StationConverterTest {
 
         assertThat(underTest.convertEntity(in))
             .returns(ID, Station::getId)
-            .returns(LAST_UPDATE, Station::getLastUpdate)
             .returns(STAR_SYSTEM_ID, Station::getStarSystemId)
             .returns(BODY_ID, Station::getBodyId)
             .returns(STATION_NAME, Station::getStationName)

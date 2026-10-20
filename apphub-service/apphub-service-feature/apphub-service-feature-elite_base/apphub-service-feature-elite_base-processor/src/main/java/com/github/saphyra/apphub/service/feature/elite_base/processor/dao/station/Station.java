@@ -4,16 +4,15 @@ import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Allegiance;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.ItemLocationData;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceEnum;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +22,6 @@ import java.util.UUID;
 @ToString(exclude = {"services", "economies"})
 public class Station implements ItemLocationData {
     private final UUID id;
-    private LocalDateTime lastUpdate;
     private UUID starSystemId;
     private UUID bodyId;
     private String stationName;

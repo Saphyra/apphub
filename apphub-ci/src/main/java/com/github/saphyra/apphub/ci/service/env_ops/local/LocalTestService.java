@@ -29,16 +29,19 @@ public class LocalTestService {
         log.info("");
         log.info("Running tests again local environment with test filter: {}, threadCount: {}, preCreatedDriverCount: {}, retryCount: {}", testFilter.isEmpty() ? "All" : testFilter, threadCount, preCreatedDriverCount, retryCount);
 
-        if (testFilter.isEmpty() && !allServicesRunning()) {
-            throw new IllegalStateException("Services are not running.");
-        } else if (!testFilter.isEmpty()) {
+        if (testFilter.isEmpty()) {
+            List<String> unreachableServices = allServicesRunning();
+            if (!unreachableServices.isEmpty()) {
+                throw new IllegalStateException("Services are not running. Missing services: " + unreachableServices);
+            }
+        } else {
             List<String> unreachableServices = enabledServicesAreRunning();
             if (!unreachableServices.isEmpty()) {
                 throw new IllegalStateException("Enabled services are not running. Missing services: " + unreachableServices);
             }
-        } else {
-            log.info("Services are running.");
         }
+
+        log.info("Services are running.");
 
         Optional<Exception> maybeFrontendFailure = servicePinger.singlePing("http://localhost:3000/");
         if (maybeFrontendFailure.isPresent()) {
@@ -66,10 +69,12 @@ public class LocalTestService {
         );
     }
 
-    private boolean allServicesRunning() {
+    private List<String> allServicesRunning() {
         return services.getServices()
             .stream()
-            .allMatch(service -> servicePinger.singlePingLocal(service.getPort()).isEmpty());
+            .filter(service -> servicePinger.singlePingLocal(service.getPort()).isPresent())
+            .map(Service::getName)
+            .toList();
     }
 
     /**
