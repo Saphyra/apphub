@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
+import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,11 @@ public class LocalTestService {
 
         if (testFilter.isEmpty() && !allServicesRunning()) {
             throw new IllegalStateException("Services are not running.");
-        } else if (!testFilter.isEmpty() && !enabledServicesAreRunning()) {
-            throw new IllegalStateException("Enabled services are not running.");
+        } else if (!testFilter.isEmpty()) {
+            List<String> unreachableServices = enabledServicesAreRunning();
+            if (!unreachableServices.isEmpty()) {
+                throw new IllegalStateException("Enabled services are not running. Missing services: " + unreachableServices);
+            }
         } else {
             log.info("Services are running.");
         }
@@ -68,12 +72,18 @@ public class LocalTestService {
             .allMatch(service -> servicePinger.singlePingLocal(service.getPort()).isEmpty());
     }
 
-    private boolean enabledServicesAreRunning() {
+    /**
+     *
+     * @return missing services
+     */
+    private List<String> enabledServicesAreRunning() {
         List<String> disabledServices = propertyDao.getDisabledServices();
 
         return services.getServices()
             .stream()
             .filter(service -> !disabledServices.contains(service.getName()))
-            .allMatch(service -> servicePinger.singlePingLocal(service.getPort()).isEmpty());
+            .filter(service -> servicePinger.singlePingLocal(service.getPort()).isPresent())
+            .map(Service::getName)
+            .toList();
     }
 }

@@ -3,6 +3,8 @@
     ApphubCI
         Optionally pre-create WebDrivers when filtering tests
         Sort tables by approximate size before backing up
+    Calendar
+        Search in shared events
 
 ===BUGFIXES===
     ApphubCI

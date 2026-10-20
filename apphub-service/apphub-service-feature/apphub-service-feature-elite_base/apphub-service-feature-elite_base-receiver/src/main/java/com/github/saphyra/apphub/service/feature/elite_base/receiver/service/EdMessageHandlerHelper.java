@@ -34,6 +34,10 @@ class EdMessageHandlerHelper {
     }
 
     public boolean shutdownNeeded(LocalDateTime lastMessage) {
+        if (!eliteBaseReceiverProperties.isShutdownEnabled()) {
+            return false;
+        }
+
         log.debug("Checking connection...");
         LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
         LocalDateTime expirationTime = currentTime
@@ -49,7 +53,7 @@ class EdMessageHandlerHelper {
     }
 
     public void shutdown() {
-        ConfigurableApplicationContext applicationContext  =applicationContextProxy.getContext();
+        ConfigurableApplicationContext applicationContext = applicationContextProxy.getContext();
         applicationContext.registerShutdownHook();
         applicationContext.close();
     }

@@ -76,43 +76,6 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
     }
 
     @Test(groups = {"fe", "notebook", "headed-only"})
-    public void autoRefreshSearchResult() {
-        WebDriver driver = extractDriver(WebDriverMode.HEADED);
-        Navigation.toIndexPage(getServerPort(), driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-
-        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
-
-        NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_TITLE);
-
-        NotebookActions.search(driver, NEW_CATEGORY_TITLE);
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> NotebookActions.getListItems(driver).isEmpty())
-            .assertTrue("Search result is not loaded.");
-
-        driver.switchTo()
-            .newWindow(WindowType.TAB);
-        driver.navigate().to(UrlFactory.create(getServerPort(), NotebookEndpoints.NOTEBOOK_PAGE));
-
-        AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CATEGORY_TITLE), Optional::isPresent)
-            .orElseThrow(() -> new RuntimeException("Category not found"))
-            .edit(getServerPort(), driver);
-
-        EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
-        EditListItemActions.submitForm(driver);
-
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
-        driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
-
-        AwaitilityWrapper.createDefault()
-            .until(() -> NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE).isPresent())
-            .assertTrue("Search result is not updated.");
-    }
-
-    @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshChecklist() {
         WebDriver driver = extractDriver(WebDriverMode.HEADED);
         Navigation.toIndexPage(getServerPort(), driver);

@@ -3,3 +3,4 @@ server:
 elite-base:
   messageReceiver:
     enabled: true
+  shutdownEnabled: false

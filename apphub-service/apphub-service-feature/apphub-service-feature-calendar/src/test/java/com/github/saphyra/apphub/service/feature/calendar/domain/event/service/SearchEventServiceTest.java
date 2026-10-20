@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.object_query.OccurrenceObjectQueryService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,10 +29,10 @@ class SearchEventServiceTest {
     private static final String SEARCH = "search";
 
     @Mock
-    private EventDao eventDao;
+    private EventObjectQueryService eventObjectQueryService;
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private OccurrenceObjectQueryService occurrenceObjectQueryService;
 
     @Mock
     private EventResponseMapper eventResponseMapper;
@@ -53,30 +54,56 @@ class SearchEventServiceTest {
         Throwable ex = catchThrowable(() -> underTest.search(USER_ID, "ab"));
 
         ExceptionValidator.validateInvalidParam(ex, "searchText", "too short");
-        then(eventDao).shouldHaveNoInteractions();
+        then(eventObjectQueryService).shouldHaveNoInteractions();
+        then(occurrenceObjectQueryService).shouldHaveNoInteractions();
         then(eventResponseMapper).shouldHaveNoInteractions();
     }
 
     @Test
     void search_eventMatchesByTitle() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID_1, event1));
+        given(eventObjectQueryService.getEvents(USER_ID)).willReturn(List.of(event1));
         given(event1.getTitle()).willReturn("My Search Text");
         given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 
         List<EventResponse> result = underTest.search(USER_ID, SEARCH);
 
         assertThat(result).containsExactly(eventResponse);
-        then(occurrenceDao).shouldHaveNoInteractions();
     }
 
     @Test
     void search_eventMatchesByOccurrenceNote() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID_1, event1));
+        given(eventObjectQueryService.getEvents(USER_ID)).willReturn(List.of(event1));
         given(event1.getEventId()).willReturn(EVENT_ID_1);
         given(event1.getTitle()).willReturn("title");
         given(event1.getContent()).willReturn("content");
-        given(occurrenceDao.getByEventId(EVENT_ID_1)).willReturn(Map.of(UUID.randomUUID(), occurrence));
+        given(occurrenceObjectQueryService.getOccurrences(USER_ID, EVENT_ID_1)).willReturn(new BiWrapper<>(event1, List.of(occurrence)));
         given(occurrence.getNote()).willReturn("contains SeaRCh here");
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
+
+        List<EventResponse> result = underTest.search(USER_ID, SEARCH);
+
+        assertThat(result).containsExactly(eventResponse);
+    }
+
+    @Test
+    void search_sharedOccurrenceMatches() {
+        given(eventObjectQueryService.getEvents(USER_ID)).willReturn(List.of());
+        given(occurrenceObjectQueryService.getOccurrences(USER_ID)).willReturn(Map.of(event1, List.of(occurrence)));
+        given(event1.getEventId()).willReturn(EVENT_ID_1);
+        given(occurrence.getNote()).willReturn("contains SeaRCh here");
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
+
+        List<EventResponse> result = underTest.search(USER_ID, SEARCH);
+
+        assertThat(result).containsExactly(eventResponse);
+    }
+
+    @Test
+    void search_sharedOccurrenceAlreadyInEventList() {
+        given(eventObjectQueryService.getEvents(USER_ID)).willReturn(List.of(event1));
+        given(event1.getEventId()).willReturn(EVENT_ID_1);
+        given(event1.getTitle()).willReturn(SEARCH);
+        given(occurrenceObjectQueryService.getOccurrences(USER_ID)).willReturn(Map.of(event1, List.of(occurrence)));
         given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 
         List<EventResponse> result = underTest.search(USER_ID, SEARCH);

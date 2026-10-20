@@ -12,4 +12,5 @@ import java.time.Duration;
 public class EliteBaseReceiverProperties {
     private Duration incomingMessageCheckInterval;
     private Duration incomingMessageTimeout;
+    private boolean shutdownEnabled;
 }

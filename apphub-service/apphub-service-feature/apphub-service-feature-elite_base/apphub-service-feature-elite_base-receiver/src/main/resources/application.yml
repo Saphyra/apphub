@@ -14,3 +14,4 @@ elite-base:
       threadCount: 2
   incomingMessageTimeout: PT10M
   incomingMessageCheckInterval: PT30S
+  shutdownEnabled: true

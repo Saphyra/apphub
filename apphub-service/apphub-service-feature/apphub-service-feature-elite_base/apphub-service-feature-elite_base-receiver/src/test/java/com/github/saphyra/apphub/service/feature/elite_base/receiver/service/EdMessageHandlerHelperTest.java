@@ -66,7 +66,17 @@ class EdMessageHandlerHelperTest {
     }
 
     @Test
+    void shutdownDisabled() {
+        given(eliteBaseReceiverProperties.isShutdownEnabled()).willReturn(false);
+
+        assertThat(underTest.shutdownNeeded(LAST_MESSAGE)).isFalse();
+
+        then(errorReporterService).shouldHaveNoInteractions();
+    }
+
+    @Test
     void shutdownNeeded() {
+        given(eliteBaseReceiverProperties.isShutdownEnabled()).willReturn(true);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(LAST_MESSAGE.plus(INCOMING_MESSAGE_TIMEOUT).plusSeconds(1));
         given(eliteBaseReceiverProperties.getIncomingMessageTimeout()).willReturn(INCOMING_MESSAGE_TIMEOUT);
 
@@ -77,6 +87,7 @@ class EdMessageHandlerHelperTest {
 
     @Test
     void shutdownIsNotNeeded() {
+        given(eliteBaseReceiverProperties.isShutdownEnabled()).willReturn(true);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(LAST_MESSAGE.plus(INCOMING_MESSAGE_TIMEOUT).minusSeconds(1));
         given(eliteBaseReceiverProperties.getIncomingMessageTimeout()).willReturn(INCOMING_MESSAGE_TIMEOUT);
 
