@@ -22,6 +22,7 @@ import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_FILTER_TESTS;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PREFIX_ENABLED_SERVICE;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVERS_WHEN_FILTERING;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVER_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_MAX_WEB_DRIVER_CACHE_SIZE;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RETRY_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SKIP_TESTS;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_STARTUP_COUNT_LIMIT;
@@ -152,6 +153,18 @@ public class RequestParamUtil {
         propertyDao.save(PropertyName.PRE_CREATE_DRIVER_COUNT, environmentSpecificProperties);
 
         return driverCount;
+    }
+
+    public int extractMaxWebDriverCacheSize(HttpServletRequest request) {
+        String param = request.getParameter(PARAM_MAX_WEB_DRIVER_CACHE_SIZE);
+        if (isNull(param)) {
+            throw new IllegalArgumentException("Missing parameter: " + PARAM_MAX_WEB_DRIVER_CACHE_SIZE);
+        }
+        int maxWebDriverCacheSize = Integer.parseInt(param);
+
+        propertyDao.save(PropertyName.MAX_WEB_DRIVER_CACHE_SIZE, String.valueOf(maxWebDriverCacheSize));
+
+        return maxWebDriverCacheSize;
     }
 
     public int extractRetryCount(HttpServletRequest request) {

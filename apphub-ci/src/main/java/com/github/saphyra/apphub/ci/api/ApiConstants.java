@@ -29,6 +29,7 @@ public class ApiConstants {
     public static final String PARAM_TEST_FILTER = "test_filter";
     public static final String PARAM_TEST_THREAD_COUNT = "test_thread_count";
     public static final String PARAM_PRE_CREATE_DRIVER_COUNT = "pre_create_driver_count";
+    public static final String PARAM_MAX_WEB_DRIVER_CACHE_SIZE = "max_web_driver_cache_size";
     public static final String PARAM_RETRY_COUNT = "retry_count";
     public static final String PARAM_STOP_USER_DEFINED_SERVICES = "stop_user_defined_services";
     public static final String PARAM_SERVER_PORT = "server_port";

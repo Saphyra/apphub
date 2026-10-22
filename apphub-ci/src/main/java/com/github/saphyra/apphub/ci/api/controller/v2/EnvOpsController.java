@@ -31,6 +31,7 @@ import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_DYNAMODB_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ENVIRONMENT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ERROR;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVER_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_MAX_WEB_DRIVER_CACHE_SIZE;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PSQL_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RABBITMQ_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RETRY_COUNT;
@@ -122,7 +123,7 @@ class EnvOpsController {
         String preCreateDriverCount = propertyDao.getEnvironmentSpecificProperties(PropertyName.PRE_CREATE_DRIVER_COUNT)
             .getForEnvironmentOrDefault(environment, PropertyName.PRE_CREATE_DRIVER_COUNT.name(), String.valueOf(defaultProperties.getPreCreateDriverCount()));
         mav.addObject(PARAM_PRE_CREATE_DRIVER_COUNT, Integer.parseInt(preCreateDriverCount));
-
+        mav.addObject(PARAM_MAX_WEB_DRIVER_CACHE_SIZE, propertyDao.getProperty(PropertyName.MAX_WEB_DRIVER_CACHE_SIZE).map(Integer::parseInt).orElse(defaultProperties.getMaxWebDriverCacheSize()));
 
         log.debug("{}", mav);
 
@@ -166,6 +167,7 @@ class EnvOpsController {
             log.info("Filter tests: {}, test filter: {}", filterTests, testFilter);
             int threadCount = requestParamUtil.extractTestThreadCount(environment, request);
             int retryCount = requestParamUtil.extractRetryCount(request);
+            int maxWebDriverCacheSize = requestParamUtil.extractMaxWebDriverCacheSize(request);
             boolean preCreateDriversWhenFiltering = requestParamUtil.extractPreCreateDriversWhenFiltering(request);
             int preCreatedDriverCount = requestParamUtil.extractPreCreatedDriverCount(environment, request);
 
@@ -174,7 +176,8 @@ class EnvOpsController {
                 testFilter,
                 threadCount,
                 isBlank(testFilter) ? preCreatedDriverCount : (preCreateDriversWhenFiltering ? preCreatedDriverCount : 0),
-                retryCount
+                retryCount,
+                maxWebDriverCacheSize
             ));
 
             return REDIRECT + PATH_ENV_OPS.replace(PATH_VARIABLE_ENVIRONMENT, environment.name()) + "?success=Run+tests+task+added+to+queue";

@@ -139,6 +139,11 @@
                 </label>
 
                 <label class="inline">
+                    Max WebDriver cache size:
+                    <input type="number" class="number-input-2-digit" name="max_web_driver_cache_size" required min="0" placeholder="Max WebDriver cache size" th:value="${max_web_driver_cache_size}"/>
+                </label>
+
+                <label class="inline">
                     Retry limit:
                     <input type="number" class="number-input-2-digit" name="retry_count" required min="1" placeholder="Retry limit" th:value="${retry_count}"/>
                 </label>

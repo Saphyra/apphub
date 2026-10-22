@@ -13,6 +13,7 @@ public class TestConfiguration {
     public static final int AVAILABLE_PERMITS = Integer.parseInt(System.getProperty("threadCount", "10"));
     public static final boolean REST_LOGGING_ENABLED = Boolean.parseBoolean(System.getProperty("restLoggingEnabled", "true"));
     public static final boolean WEB_DRIVER_CACHE_ENABLED = Boolean.parseBoolean(System.getProperty("webDriverCacheEnabled", "true"));
+    public static final int MAX_WEB_DRIVER_CACHE_SIZE = Integer.parseInt(System.getProperty("maxWebDriverCacheSize", String.valueOf(Integer.MAX_VALUE)));
     public static final int BROWSER_STARTUP_LIMIT = Integer.parseInt(System.getProperty("browserStartupLimit", "3"));
     public static final Integer PRE_CREATE_WEB_DRIVERS = Integer.parseInt(System.getProperty("preCreateWebDrivers", "0"));
     public static final boolean WEB_DRIVER_HEADLESS_MODE = Boolean.parseBoolean(System.getProperty("headless", "false"));

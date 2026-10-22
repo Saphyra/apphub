@@ -25,7 +25,7 @@ public class LocalTestService {
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
-    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
+    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount, int maxWebDriverCacheSize) {
         log.info("");
         log.info("Running tests again local environment with test filter: {}, threadCount: {}, preCreatedDriverCount: {}, retryCount: {}", testFilter.isEmpty() ? "All" : testFilter, threadCount, preCreatedDriverCount, retryCount);
 
@@ -64,6 +64,7 @@ public class LocalTestService {
                 .databaseConnectionCacheEnabled(false)
                 .namespace("")
                 .retryCount(retryCount)
+                .maxWebDriverCacheSize(maxWebDriverCacheSize)
                 .dynamoDbHost("localhost:" + platformProperties.getLocalDynamoDbPort())
                 .build()
         );
