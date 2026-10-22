@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -66,7 +67,7 @@ public class RolesForAllTest extends BackEndTest {
     }
 
     private void removeFromAll_nullPassword(String accessToken) {
-        ResponseValidator.verifyInvalidParam(RoleManagementActions.getRemoveFromAllResponse(getServerPort(), accessToken, null, Constants.ROLE_TEST), "password", "must not be null");
+        ResponseValidator.verifyInvalidParam(RoleManagementActions.getRemoveFromAllResponse(getServerPort(), accessToken, null, Constants.ROLE_TEST), "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void removeFromAll_restrictedRole(String accessToken, String password) {
@@ -87,7 +88,7 @@ public class RolesForAllTest extends BackEndTest {
     }
 
     private void addToAll_nullPassword(String accessToken) {
-        ResponseValidator.verifyInvalidParam(RoleManagementActions.getAddToAllResponse(getServerPort(), accessToken, null, Constants.ROLE_TEST), "password", "must not be null");
+        ResponseValidator.verifyInvalidParam(RoleManagementActions.getAddToAllResponse(getServerPort(), accessToken, null, Constants.ROLE_TEST), "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void addToAll_restrictedRole(String accessToken, String password) {

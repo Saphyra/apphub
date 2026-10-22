@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -47,7 +48,7 @@ public class DeleteAccountServiceTest {
     public void nullPassword() {
         Throwable ex = catchThrowable(() -> underTest.deleteAccount(USER_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

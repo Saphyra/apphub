@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.backend.modules;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.ModulesResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -130,7 +131,7 @@ public class ModulesTest extends BackEndTest {
 
     private static void favoriteNull(String accessToken) {
         Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessToken, "account", null);
-        verifyInvalidParam(favoriteNullResponse, "value", "must not be null");
+        verifyInvalidParam(favoriteNullResponse, "value", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void setAsFavorite(String accessToken) {

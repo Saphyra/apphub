@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
@@ -69,7 +70,7 @@ public class TextCrudTest extends BackEndTest {
             .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
             .build();
         Response create_tooLongContentResponse = TextActions.getCreateTextResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(create_tooLongContentResponse, "content", "too long");
+        verifyInvalidParam(create_tooLongContentResponse, "content", ValidationConstants.TOO_LONG);
     }
 
     private void create_tooLongTitle(String accessToken) {
@@ -77,7 +78,7 @@ public class TextCrudTest extends BackEndTest {
             .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
             .build();
         Response create_blankTitleResponse = TextActions.getCreateTextResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(create_blankTitleResponse, "title", "too long");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void create_blankTitle(String accessToken) {
@@ -86,7 +87,7 @@ public class TextCrudTest extends BackEndTest {
             .content(CONTENT)
             .build();
         Response create_blankTitleResponse = TextActions.getCreateTextResponse(getServerPort(), accessToken, create_blankTitleRequest);
-        verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_parentNotFound(String accessToken) {
@@ -116,7 +117,7 @@ public class TextCrudTest extends BackEndTest {
             .content(null)
             .build();
         Response create_nullContentResponse = TextActions.getCreateTextResponse(getServerPort(), accessToken, create_nullContentRequest);
-        verifyInvalidParam(create_nullContentResponse, "content", "must not be null");
+        verifyInvalidParam(create_nullContentResponse, "content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static UUID create(String accessToken, UUID parentCategoryId) {
@@ -144,7 +145,7 @@ public class TextCrudTest extends BackEndTest {
             .content(NEW_CONTENT)
             .build();
         Response edit_blankTitleResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_blankTitleRequest);
-        verifyInvalidParam(edit_blankTitleResponse, "title", "too long");
+        verifyInvalidParam(edit_blankTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_blankTitle(String accessToken, UUID textId) {
@@ -153,7 +154,7 @@ public class TextCrudTest extends BackEndTest {
             .content(NEW_CONTENT)
             .build();
         Response edit_blankTitleResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_blankTitleRequest);
-        verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(edit_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void edit_tooLongContent(String accessToken, UUID textId) {
@@ -162,7 +163,7 @@ public class TextCrudTest extends BackEndTest {
             .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
             .build();
         Response edit_nullContentResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_nullContentRequest);
-        verifyInvalidParam(edit_nullContentResponse, "content", "too long");
+        verifyInvalidParam(edit_nullContentResponse, "content", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_nullContent(String accessToken, UUID textId) {
@@ -171,7 +172,7 @@ public class TextCrudTest extends BackEndTest {
             .content(null)
             .build();
         Response edit_nullContentResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_nullContentRequest);
-        verifyInvalidParam(edit_nullContentResponse, "content", "must not be null");
+        verifyInvalidParam(edit_nullContentResponse, "content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit(String accessToken, UUID textId) {

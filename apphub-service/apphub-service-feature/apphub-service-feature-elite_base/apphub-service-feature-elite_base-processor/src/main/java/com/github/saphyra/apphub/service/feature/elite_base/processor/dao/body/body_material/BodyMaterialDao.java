@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class BodyMaterialDao extends AbstractDao<BodyMaterialEntity, BodyMaterial, String, BodyMaterialRepository> {
+public class BodyMaterialDao extends AbstractDao<BodyMaterialEntity, BodyMaterial, BodyMaterialEntityId, BodyMaterialRepository> {
     private final UuidConverter uuidConverter;
 
     BodyMaterialDao(BodyMaterialConverter converter, BodyMaterialRepository repository, UuidConverter uuidConverter) {

@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -136,6 +137,6 @@ public class BuildingModuleCrudTest extends BackEndTest {
     }
 
     private static void construct_nullDataId(String accessToken, UUID constructionAreaId) {
-        ResponseValidator.verifyInvalidParam(SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessToken, constructionAreaId, null), "buildingModuleDataId", "must not be null");
+        ResponseValidator.verifyInvalidParam(SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessToken, constructionAreaId, null), "buildingModuleDataId", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

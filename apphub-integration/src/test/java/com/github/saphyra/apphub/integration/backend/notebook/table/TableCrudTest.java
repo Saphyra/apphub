@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -133,21 +134,21 @@ public class TableCrudTest extends BackEndTest {
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, validCreateRequest().toBuilder()
             .title(" ")
             .build());
-        verifyInvalidParam(response, "title", "must not be null or blank");
+        verifyInvalidParam(response, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_tooLongTitle(String accessToken) {
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, validCreateRequest().toBuilder()
             .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
             .build());
-        verifyInvalidParam(response, "title", "too long");
+        verifyInvalidParam(response, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullListItemType(String accessToken) {
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, validCreateRequest().toBuilder()
             .listItemType(null)
             .build());
-        verifyInvalidParam(response, "listItemType", "must not be null");
+        verifyInvalidParam(response, "listItemType", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_parentNotFound(String accessToken) {
@@ -172,7 +173,7 @@ public class TableCrudTest extends BackEndTest {
                 .content(" ")
                 .build()))
             .build());
-        verifyInvalidParam(response, "tableHead.content", "must not be null or blank");
+        verifyInvalidParam(response, "tableHead.content", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_tooLongColumnName(String accessToken) {
@@ -182,7 +183,7 @@ public class TableCrudTest extends BackEndTest {
                 .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
                 .build()))
             .build());
-        verifyInvalidParam(response, "tableHead.content", "too long");
+        verifyInvalidParam(response, "tableHead.content", ValidationConstants.TOO_LONG);
     }
 
     private static void create_tooLongColumnValue(String accessToken) {
@@ -196,14 +197,14 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "data", "too long");
+        verifyInvalidParam(response, "data", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullRows(String accessToken) {
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, validCreateRequest().toBuilder()
             .rows(null)
             .build());
-        verifyInvalidParam(response, "rows", "must not be null");
+        verifyInvalidParam(response, "rows", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullRowIndex(String accessToken) {
@@ -217,7 +218,7 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "row.rowIndex", "must not be null");
+        verifyInvalidParam(response, "row.rowIndex", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullColumns(String accessToken) {
@@ -227,7 +228,7 @@ public class TableCrudTest extends BackEndTest {
                 .columns(null)
                 .build()))
             .build());
-        verifyInvalidParam(response, "row.columns", "must not be null");
+        verifyInvalidParam(response, "row.columns", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_incorrectColumnAmount(String accessToken) {
@@ -262,7 +263,7 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "data", "must not be null");
+        verifyInvalidParam(response, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullColumnType(String accessToken) {
@@ -276,7 +277,7 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "row.column.columnType", "must not be null");
+        verifyInvalidParam(response, "row.column.columnType", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullColumnIndex(String accessToken) {
@@ -290,7 +291,7 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "row.column.columnIndex", "must not be null");
+        verifyInvalidParam(response, "row.column.columnIndex", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static BiWrapper<TableResponse, UUID> create(String accessToken) {
@@ -325,14 +326,14 @@ public class TableCrudTest extends BackEndTest {
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, validEditRequest(tableResponse).toBuilder()
             .title(" ")
             .build());
-        verifyInvalidParam(response, "title", "must not be null or blank");
+        verifyInvalidParam(response, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void edit_tooLongTitle(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, validEditRequest(tableResponse).toBuilder()
             .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
             .build());
-        verifyInvalidParam(response, "title", "too long");
+        verifyInvalidParam(response, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_blankColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -344,7 +345,7 @@ public class TableCrudTest extends BackEndTest {
                 .type(ItemType.EXISTING)
                 .build()))
             .build());
-        verifyInvalidParam(response, "tableHead.content", "must not be null or blank");
+        verifyInvalidParam(response, "tableHead.content", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void edit_tooLongColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -356,7 +357,7 @@ public class TableCrudTest extends BackEndTest {
                 .type(ItemType.EXISTING)
                 .build()))
             .build());
-        verifyInvalidParam(response, "tableHead.content", "too long");
+        verifyInvalidParam(response, "tableHead.content", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_tooLongColumnValue(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -374,7 +375,7 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "data", "too long");
+        verifyInvalidParam(response, "data", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_differentColumnAmount(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -418,7 +419,7 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build());
-        verifyInvalidParam(response, "data", "must not be null");
+        verifyInvalidParam(response, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_tableHeadNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {

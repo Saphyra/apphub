@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
@@ -98,7 +99,7 @@ public class ChecklistCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_blankTitleResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_blankTitleRequest);
-        verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_parentNotFound(String accessToken) {
@@ -137,7 +138,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .items(null)
             .build();
         Response create_nullNodesResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullNodesRequest);
-        verifyInvalidParam(create_nullNodesResponse, "items", "must not be null");
+        verifyInvalidParam(create_nullNodesResponse, "items", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullContent(String accessToken) {
@@ -150,7 +151,7 @@ public class ChecklistCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_nullContentResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullContentRequest);
-        verifyInvalidParam(create_nullContentResponse, "item.content", "must not be null");
+        verifyInvalidParam(create_nullContentResponse, "item.content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullChecked(String accessToken) {
@@ -163,7 +164,7 @@ public class ChecklistCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_nullCheckedResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullCheckedRequest);
-        verifyInvalidParam(create_nullCheckedResponse, "item.checked", "must not be null");
+        verifyInvalidParam(create_nullCheckedResponse, "item.checked", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullOrder(String accessToken) {
@@ -176,7 +177,7 @@ public class ChecklistCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_nullOrderResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullOrderRequest);
-        verifyInvalidParam(create_nullOrderResponse, "item.index", "must not be null");
+        verifyInvalidParam(create_nullOrderResponse, "item.index", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private BiWrapper<UUID, UUID> create(String accessToken) {
@@ -221,7 +222,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .items(List.of(edit_validNodeRequest))
             .build();
         Response edit_blankTitleResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_blankTitleRequest, listItemId);
-        verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(edit_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
         return edit_validNodeRequest;
     }
 
@@ -237,7 +238,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .items(List.of(edit_nullContentNodeRequest))
             .build();
         Response edit_nullContentResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_nullContentRequest, listItemId);
-        verifyInvalidParam(edit_nullContentResponse, "item.content", "must not be null");
+        verifyInvalidParam(edit_nullContentResponse, "item.content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_nullChecked(String accessToken, UUID listItemId, UUID checklistItemId) {
@@ -252,7 +253,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .items(List.of(edit_nullCheckedNodeRequest))
             .build();
         Response edit_nullCheckedResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_nullCheckedRequest, listItemId);
-        verifyInvalidParam(edit_nullCheckedResponse, "item.checked", "must not be null");
+        verifyInvalidParam(edit_nullCheckedResponse, "item.checked", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_nullOrder(String accessToken, UUID listItemId, UUID checklistItemId) {
@@ -267,7 +268,7 @@ public class ChecklistCrudTest extends BackEndTest {
             .items(List.of(edit_nullOrderNodeRequest))
             .build();
         Response edit_nullOrderResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_nullOrderRequest, listItemId);
-        verifyInvalidParam(edit_nullOrderResponse, "item.index", "must not be null");
+        verifyInvalidParam(edit_nullOrderResponse, "item.index", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_listItemNotFound(String accessToken, ChecklistItemModel edit_validNodeRequest) {
@@ -404,7 +405,7 @@ public class ChecklistCrudTest extends BackEndTest {
     private void editChecklistItem_nullContent(String accessToken, UUID listItemId, UUID checklistItemId) {
         Response response = ChecklistActions.getEditChecklistItemResponse(getServerPort(), accessToken, listItemId, checklistItemId, null);
 
-        ResponseValidator.verifyInvalidParam(response, "content", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void editChecklistItem(String accessToken, UUID checklistItemId, UUID listItemId) {

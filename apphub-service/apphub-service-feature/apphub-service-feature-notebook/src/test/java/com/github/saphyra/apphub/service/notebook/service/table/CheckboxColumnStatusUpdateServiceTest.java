@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
@@ -61,7 +62,7 @@ class CheckboxColumnStatusUpdateServiceTest {
     void updateColumnStatus_statusNull() {
         Throwable ex = catchThrowable(() -> underTest.updateColumnStatus(LIST_ITEM_ID, ROW_ID, COLUMN_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "status", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "status", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

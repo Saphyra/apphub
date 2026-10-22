@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
@@ -54,7 +55,7 @@ public class RevokeBanServiceTest {
     public void blankPassword() {
         Throwable ex = catchThrowable(() -> underTest.revokeBan(USER_ID, " ", BAN_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.settin
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.Range;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "maxPlayersPerSolarSystem", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "maxPlayersPerSolarSystem", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -34,7 +35,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "maxPlayersPerSolarSystem", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "maxPlayersPerSolarSystem", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -45,7 +46,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -56,7 +57,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems.min", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems.min", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -67,7 +68,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems.max", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems.max", ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -78,7 +79,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems.max", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "additionalSolarSystems.max", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -89,7 +90,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -100,7 +101,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem.min", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem.min", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -111,7 +112,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem.max", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem.max", ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -122,7 +123,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem.max", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "planetsPerSolarSystem.max", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -133,7 +134,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "planetSize", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -144,7 +145,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetSize.min", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "planetSize.min", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -155,7 +156,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetSize.max", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "planetSize.max", ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -166,7 +167,7 @@ class SkyXploreGameSettingsValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(settings));
 
-        ExceptionValidator.validateInvalidParam(ex, "planetSize.max", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "planetSize.max", ValidationUtil.TOO_LOW);
     }
 
     private static SkyXploreGameSettings.SkyXploreGameSettingsBuilder createValid() {

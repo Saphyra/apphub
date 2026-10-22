@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLab
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarShareActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
 import com.github.saphyra.apphub.integration.structure.api.calendar.ShareObjectRequest;
@@ -67,6 +68,6 @@ public class EditSharedObjectTest extends BackEndTest {
     }
 
     private void emptyGrants(String ownerToken, UUID sharedWithUserId, UUID labelId) {
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getEditSharedObjectResponse(getServerPort(), ownerToken, SharedObjectType.LABEL, labelId, sharedWithUserId, Set.of()), "grants", "must not be empty");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getEditSharedObjectResponse(getServerPort(), ownerToken, SharedObjectType.LABEL, labelId, sharedWithUserId, Set.of()), "grants", ValidationConstants.MUST_NOT_BE_EMPTY);
     }
 }

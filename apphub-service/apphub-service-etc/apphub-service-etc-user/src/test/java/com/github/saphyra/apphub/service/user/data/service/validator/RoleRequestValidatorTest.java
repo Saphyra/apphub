@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.data.service.validator;
 
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ public class RoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "userId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "userId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -43,7 +44,7 @@ public class RoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "role", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "role", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class RoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

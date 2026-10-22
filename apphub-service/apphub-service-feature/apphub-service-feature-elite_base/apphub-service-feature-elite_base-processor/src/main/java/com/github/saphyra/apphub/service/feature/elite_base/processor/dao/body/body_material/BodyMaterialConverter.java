@@ -15,9 +15,10 @@ class BodyMaterialConverter extends ConverterBase<BodyMaterialEntity, BodyMateri
     @Override
     protected BodyMaterialEntity processDomainConversion(BodyMaterial domain) {
         return BodyMaterialEntity.builder()
-            .id(uuidConverter.convertDomain(domain.getId()))
-            .bodyId(uuidConverter.convertDomain(domain.getBodyId()))
-            .material(domain.getMaterial())
+            .id(BodyMaterialEntityId.builder()
+                .bodyId(uuidConverter.convertDomain(domain.getBodyId()))
+                .material(domain.getMaterial())
+                .build())
             .percent(domain.getPercent())
             .build();
     }
@@ -25,9 +26,8 @@ class BodyMaterialConverter extends ConverterBase<BodyMaterialEntity, BodyMateri
     @Override
     protected BodyMaterial processEntityConversion(BodyMaterialEntity entity) {
         return BodyMaterial.builder()
-            .id(uuidConverter.convertEntity(entity.getId()))
-            .bodyId(uuidConverter.convertEntity(entity.getBodyId()))
-            .material(entity.getMaterial())
+            .bodyId(uuidConverter.convertEntity(entity.getId().getBodyId()))
+            .material(entity.getId().getMaterial())
             .percent(entity.getPercent())
             .build();
     }

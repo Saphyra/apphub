@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanSearchResponse;
 import com.github.saphyra.apphub.lib.common_domain.Role;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -47,7 +48,7 @@ class BanSearchServiceTest {
     void queryTooShort() {
         Throwable ex = catchThrowable(() -> underTest.search("as"));
 
-        ExceptionValidator.validateInvalidParam(ex, "query", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "query", ValidationUtil.TOO_SHORT);
     }
 
     @Test

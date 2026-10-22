@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.chat.me
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
@@ -83,7 +84,7 @@ public class ChatMessageWebSocketEventHandlerTest {
         given(objectMapper.convertValue(incomingChatMessage, IncomingChatMessage.class)).willReturn(incomingChatMessage);
         given(incomingChatMessage.getMessage()).willReturn(Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.handle(SENDER, event, webSocketHandler), "message", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.handle(SENDER, event, webSocketHandler), "message", ValidationUtil.TOO_LONG);
     }
 
     @Test

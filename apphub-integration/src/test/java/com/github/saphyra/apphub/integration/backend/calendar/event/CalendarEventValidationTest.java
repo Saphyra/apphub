@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.EventReques
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
@@ -57,7 +58,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of(5, 32))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "too high");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.TOO_HIGH);
     }
 
     private void edit_dayOfMonth_tooLow(String accessToken, UUID eventId) {
@@ -66,7 +67,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of(0, 5))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.TOO_LOW);
     }
 
     private void edit_dayOfMonth_repetitionDataContainsNull(String accessToken, UUID eventId) {
@@ -75,7 +76,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(CollectionUtils.toList(1, null))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "must not contain null values");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     private void edit_daysOfMonth_repetitionDataEmpty(String accessToken, UUID eventId) {
@@ -84,7 +85,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of())
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "must not be empty");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.MUST_NOT_BE_EMPTY);
     }
 
     private void create_daysOfMonth_repetitionData(String accessToken) {
@@ -102,7 +103,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of(5, 32))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "too high");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.TOO_HIGH);
     }
 
     private void create_dayOfMonth_tooLow(String accessToken) {
@@ -111,7 +112,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of(0, 5))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.TOO_LOW);
     }
 
     private void create_dayOfMonth_repetitionDataContainsNull(String accessToken) {
@@ -120,7 +121,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(CollectionUtils.toList(1, null))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not contain null values");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     private void create_daysOfMonth_repetitionDataEmpty(String accessToken) {
@@ -129,7 +130,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of())
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not be empty");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.MUST_NOT_BE_EMPTY);
     }
 
     private void daysOfWeek(String accessToken, UUID userId) {
@@ -156,7 +157,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(CollectionUtils.toList(DayOfWeek.MONDAY, null))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "must not contain null values");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     private void edit_daysOfWeek_repetitionDataEmpty(String accessToken, UUID eventId) {
@@ -165,7 +166,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of())
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "must not be empty");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.MUST_NOT_BE_EMPTY);
     }
 
     private void create_daysOfWeek_repetitionData(String accessToken) {
@@ -181,7 +182,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(CollectionUtils.toList(DayOfWeek.MONDAY, null))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not contain null values");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     private void create_daysOfWeek_repetitionDataEmpty(String accessToken) {
@@ -190,7 +191,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(List.of())
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not be empty");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.MUST_NOT_BE_EMPTY);
     }
 
     private void everyXDays(String accessToken, UUID userId) {
@@ -216,7 +217,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(0)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.TOO_LOW);
     }
 
     private void edit_invalidRepetitionData(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -225,7 +226,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData("invalid")
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "failed to parse");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.FAILED_TO_PARSE);
     }
 
     private void edit_nullRepetitionData(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -234,7 +235,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionData", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_endDate(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -248,7 +249,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .endDate(EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.MAX_EVENT_DURATION_DAYS + 1))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "eventDuration", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "eventDuration", ValidationConstants.TOO_LONG);
     }
 
     private void edit_endDateBeforeStartDate(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -272,7 +273,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .endDate(EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.MAX_EVENT_DURATION_DAYS + 1))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "eventDuration", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "eventDuration", ValidationConstants.TOO_LONG);
     }
 
     private void create_endDateBeforeStartDate(String accessToken, RepetitionType repetitionType) {
@@ -297,7 +298,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(0)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.TOO_LOW);
     }
 
     private void create_invalidRepetitionData(String accessToken, RepetitionType repetitionType) {
@@ -306,7 +307,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData("invalid")
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "failed to parse");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.FAILED_TO_PARSE);
     }
 
     private void create_nullRepetitionData(String accessToken, RepetitionType repetitionType) {
@@ -315,7 +316,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionData(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void oneTime(String accessToken, UUID userId) {
@@ -351,7 +352,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .labels(Map.of(labelId, userId))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", "Unsupported values: " + List.of(labelId));
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", String.format(ValidationConstants.UNSUPPORTED_VALUES, List.of(labelId)));
     }
 
     private void edit_nullLabels(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -360,7 +361,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .labels(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_remindMeBeforeDaysTooLow(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -369,7 +370,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .remindMeBeforeDays(-1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", ValidationConstants.TOO_LOW);
     }
 
     private void edit_nullRemindMeBeforeDays(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -378,7 +379,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .remindMeBeforeDays(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullContent(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -387,7 +388,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .content(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "content", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_blankTitle(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -396,7 +397,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .title(" ")
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "title", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private void edit_repeatForDaysTooLow(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -405,7 +406,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repeatForDays(0)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repeatForDays", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repeatForDays", ValidationConstants.TOO_LOW);
     }
 
     private void edit_nullRepeatForDays(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -414,7 +415,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repeatForDays(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repeatForDays", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repeatForDays", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullRepetitionType(String accessToken, UUID eventId) {
@@ -423,7 +424,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionType(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionType", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "repetitionType", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private UUID create(String accessToken, RepetitionType repetitionType) {
@@ -449,7 +450,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .autoDone(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "autoDone", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "autoDone", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_labelDoesNotExist(String accessToken, RepetitionType repetitionType, UUID userId) {
@@ -459,7 +460,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .labels(Map.of(labelId, userId))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", "Unsupported values: " + List.of(labelId));
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", String.format(ValidationConstants.UNSUPPORTED_VALUES, List.of(labelId)));
     }
 
     private void create_nullLabels(String accessToken, RepetitionType repetitionType) {
@@ -468,7 +469,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .labels(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_remindMeBeforeDaysTooLow(String accessToken, RepetitionType repetitionType) {
@@ -477,7 +478,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .remindMeBeforeDays(-1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "remindMeBeforeDays", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "remindMeBeforeDays", ValidationConstants.TOO_LOW);
     }
 
     private void create_nullRemindMeBeforeDays(String accessToken, RepetitionType repetitionType) {
@@ -486,7 +487,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .remindMeBeforeDays(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "remindMeBeforeDays", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "remindMeBeforeDays", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullContent(String accessToken, RepetitionType repetitionType) {
@@ -495,7 +496,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .content(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "content", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_blankTitle(String accessToken, RepetitionType repetitionType) {
@@ -504,7 +505,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .title(" ")
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "title", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private void create_repeatForDaysTooLow(String accessToken, RepetitionType repetitionType) {
@@ -513,7 +514,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repeatForDays(0)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repeatForDays", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repeatForDays", ValidationConstants.TOO_LOW);
     }
 
     private void create_nullRepeatForDays(String accessToken, RepetitionType repetitionType) {
@@ -522,7 +523,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repeatForDays(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repeatForDays", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repeatForDays", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullRepetitionType(String accessToken) {
@@ -531,7 +532,7 @@ public class CalendarEventValidationTest extends BackEndTest {
             .repetitionType(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionType", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionType", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullArchived(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -540,6 +541,6 @@ public class CalendarEventValidationTest extends BackEndTest {
             .archived(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "archived", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "archived", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

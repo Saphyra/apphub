@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.EventReques
 import com.github.saphyra.apphub.integration.action.backend.calendar.OccurrenceRequestFactory;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceRequest;
@@ -26,7 +27,7 @@ public class CalendarSearchEventsTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getSearchResponse(getServerPort(), accessToken, "aa"), "searchText", "too short");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getSearchResponse(getServerPort(), accessToken, "aa"), "searchText", ValidationConstants.TOO_SHORT);
 
         UUID eventWithMatchingTitle = createEventWithMatchingTitle(accessToken);
         UUID eventWithMatchingContent = createEventWithMatchingContent(accessToken);

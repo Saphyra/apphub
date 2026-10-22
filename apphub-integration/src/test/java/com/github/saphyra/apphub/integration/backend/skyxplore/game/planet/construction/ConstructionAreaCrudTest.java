@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -58,7 +59,7 @@ public class ConstructionAreaCrudTest extends BackEndTest {
     private void construct_nullDataId(String accessToken, UUID planetId) {
         UUID surfaceId = SkyXplorePlanetActions.findOccupiedSurfaceId(getServerPort(), accessToken, planetId);
 
-        ResponseValidator.verifyInvalidParam(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, surfaceId, null), "dataId", "must not be null");
+        ResponseValidator.verifyInvalidParam(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, surfaceId, null), "dataId", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void deconstruct_finish(String accessToken, UUID planetId, UUID surfaceId) {

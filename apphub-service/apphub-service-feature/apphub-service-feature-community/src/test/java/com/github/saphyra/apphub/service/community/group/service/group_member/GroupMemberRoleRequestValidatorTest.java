@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.community.group.service.group_member;
 
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberRoleRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ public class GroupMemberRoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "canInvite", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "canInvite", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -43,7 +44,7 @@ public class GroupMemberRoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "canKick", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "canKick", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class GroupMemberRoleRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "canModifyRoles", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "canModifyRoles", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

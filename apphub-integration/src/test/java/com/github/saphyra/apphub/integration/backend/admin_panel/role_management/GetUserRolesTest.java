@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -36,12 +37,12 @@ public class GetUserRolesTest extends BackEndTest {
 
     private static void nullQueryString(String accessToken) {
         Response nullQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessToken, null);
-        verifyInvalidParam(nullQueryStringResponse, "query", "must not be null");
+        verifyInvalidParam(nullQueryStringResponse, "query", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void tooShortQueryString(String accessToken) {
         Response tooShortQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessToken, "as");
-        verifyInvalidParam(tooShortQueryStringResponse, "query", "too short");
+        verifyInvalidParam(tooShortQueryStringResponse, "query", ValidationConstants.TOO_SHORT);
     }
 
     private static void getUserRoles(RegistrationParameters userData, String accessToken) {

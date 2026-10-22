@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body.body_material;
 
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.journal.NamePercentPair;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class BodyMaterialFactory {
-    private final IdGenerator idGenerator;
-
     public List<BodyMaterial> create(UUID bodyId, NamePercentPair[] materials) {
         return Arrays.stream(materials)
             .map(namePercentPair -> create(bodyId, namePercentPair))
@@ -24,7 +21,6 @@ public class BodyMaterialFactory {
 
     private BodyMaterial create(UUID bodyId, NamePercentPair namePercentPair) {
         return BodyMaterial.builder()
-            .id(idGenerator.randomUuid())
             .bodyId(bodyId)
             .material(namePercentPair.getName())
             .percent(namePercentPair.getPercent())

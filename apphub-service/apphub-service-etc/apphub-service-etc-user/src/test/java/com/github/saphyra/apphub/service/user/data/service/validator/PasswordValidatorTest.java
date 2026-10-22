@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,21 +21,21 @@ public class PasswordValidatorTest {
     public void nullPassword() {
         Throwable ex = catchThrowable(() -> underTest.validatePassword(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void tooShortPassword() {
         Throwable ex = catchThrowable(() -> underTest.validatePassword("aaaaa"));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.TOO_SHORT);
     }
 
     @Test
     public void tooLongPassword() {
         Throwable ex = catchThrowable(() -> underTest.validatePassword(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.TOO_LONG);
     }
 
     @Test

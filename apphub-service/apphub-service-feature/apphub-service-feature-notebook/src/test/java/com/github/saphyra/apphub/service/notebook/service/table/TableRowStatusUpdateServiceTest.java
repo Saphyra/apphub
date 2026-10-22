@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -33,7 +34,7 @@ class TableRowStatusUpdateServiceTest {
     void setRowStatus_statusNull() {
         Throwable ex = catchThrowable(() -> underTest.setRowStatus(LIST_ITEM_ID, ROW_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "status", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "status", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

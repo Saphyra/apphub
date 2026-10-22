@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.chat.cr
 
 import com.github.saphyra.apphub.api.feature.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.player.Player;
@@ -44,7 +45,7 @@ public class CreateChatRoomRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request, game));
 
-        ExceptionValidator.validateInvalidParam(ex, "members", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "members", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -84,7 +85,7 @@ public class CreateChatRoomRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request, game));
 
-        ExceptionValidator.validateInvalidParam(ex, "roomTitle", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "roomTitle", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -98,7 +99,7 @@ public class CreateChatRoomRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request, game));
 
-        ExceptionValidator.validateInvalidParam(ex, "roomTitle", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "roomTitle", ValidationUtil.TOO_SHORT);
     }
 
     @Test
@@ -112,7 +113,7 @@ public class CreateChatRoomRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request, game));
 
-        ExceptionValidator.validateInvalidParam(ex, "roomTitle", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "roomTitle", ValidationUtil.TOO_LONG);
     }
 
     @Test

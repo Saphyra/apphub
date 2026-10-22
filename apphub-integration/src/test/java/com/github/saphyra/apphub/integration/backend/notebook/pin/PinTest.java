@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -33,7 +34,7 @@ public class PinTest extends BackEndTest {
 
     private static void pin_nullPinned(String accessToken, UUID listItemId) {
         Response pin_nullPinnedResponse = PinActions.getPinResponse(getServerPort(), accessToken, listItemId, null);
-        ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "pinned", "must not be null");
+        ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "pinned", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void pin(String accessToken, UUID listItemId) {

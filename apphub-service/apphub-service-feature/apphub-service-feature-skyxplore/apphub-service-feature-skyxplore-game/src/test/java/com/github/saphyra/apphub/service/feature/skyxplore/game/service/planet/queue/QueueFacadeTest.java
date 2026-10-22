@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.QueueResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.QueueItemType;
@@ -94,21 +95,21 @@ public class QueueFacadeTest {
     public void setPriority_invalidType() {
         Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, "asd", ITEM_ID, PRIORITY));
 
-        ExceptionValidator.validateInvalidParam(ex, "type", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "type", ValidationUtil.INVALID_VALUE);
     }
 
     @Test
     public void setPriority_tooLow() {
         Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, 0));
 
-        ExceptionValidator.validateInvalidParam(ex, "priority", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "priority", ValidationUtil.TOO_LOW);
     }
 
     @Test
     public void setPriority_tooHigh() {
         Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.TERRAFORMATION.name(), ITEM_ID, 11));
 
-        ExceptionValidator.validateInvalidParam(ex, "priority", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "priority", ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -154,7 +155,7 @@ public class QueueFacadeTest {
     public void cancelItem_invalidType() {
         Throwable ex = catchThrowable(() -> underTest.cancelItem(USER_ID, PLANET_ID, "asd", ITEM_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "type", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "type", ValidationUtil.INVALID_VALUE);
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.organization.CreateOrganizationRequest;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.organization.OrganizationResponse;
@@ -91,7 +92,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
             .invitedUsers(CollectionUtils.toList(UUID.randomUUID(), null))
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "invitedUsers", "must not contain null values");
+        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "invitedUsers", ValidationConstants.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     private void create_nullInvitedUsers(String accessToken) {
@@ -100,7 +101,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
             .invitedUsers(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "invitedUsers", "must not be null");
+        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "invitedUsers", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_tooLongDescription(String accessToken) {
@@ -109,7 +110,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
             .description("a".repeat(Constants.MAX_ORGANIZATION_DESCRIPTION_LENGTH + 1))
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "description", "too long");
+        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "description", ValidationConstants.TOO_LONG);
     }
 
     private void create_nullDescription(String accessToken) {
@@ -118,7 +119,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
             .description(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "description", "must not be null");
+        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "description", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_tooLongOrganizationName(String accessToken) {
@@ -127,7 +128,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
             .organizationName("a".repeat(Constants.MAX_ORGANIZATION_NAME_LENGTH + 1))
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "organizationName", "too long");
+        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "organizationName", ValidationConstants.TOO_LONG);
     }
 
     private void create_blankOrganizationName(String accessToken) {
@@ -136,7 +137,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
             .organizationName(" ")
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "organizationName", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(TaskManagerOrganizationActions.createOrganizationResponse(getServerPort(), accessToken, request), "organizationName", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private CreateOrganizationRequest validRequest() {

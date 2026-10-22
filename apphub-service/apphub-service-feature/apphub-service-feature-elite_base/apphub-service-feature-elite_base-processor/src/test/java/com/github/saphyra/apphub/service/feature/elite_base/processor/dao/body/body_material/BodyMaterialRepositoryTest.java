@@ -15,10 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Slf4j
 class BodyMaterialRepositoryTest {
-    private static final String ID_1 = "id-1";
-    private static final String ID_2 = "id-2";
     private static final String BODY_ID_1 = "body-id-1";
     private static final String BODY_ID_2 = "body-id-2";
+    private static final String MATERIAL = "material";
 
     @Autowired
     private BodyMaterialRepository underTest;
@@ -31,14 +30,12 @@ class BodyMaterialRepositoryTest {
     @Test
     void getByBodyId() {
         BodyMaterialEntity entity1 = BodyMaterialEntity.builder()
-            .id(ID_1)
-            .bodyId(BODY_ID_1)
+            .id(new BodyMaterialEntityId(BODY_ID_1, MATERIAL))
             .build();
         underTest.save(entity1);
 
         BodyMaterialEntity entity2 = BodyMaterialEntity.builder()
-            .id(ID_2)
-            .bodyId(BODY_ID_2)
+            .id(new BodyMaterialEntityId(BODY_ID_2, MATERIAL))
             .build();
         underTest.save(entity2);
 

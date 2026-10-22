@@ -11,7 +11,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class BodyMaterial {
-    private final UUID id;
     private final UUID bodyId;
     private String material;
     private Double percent;

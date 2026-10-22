@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ class TableCreationRowValidatorTest {
     void nullRows() {
         Throwable ex = catchThrowable(() -> underTest.validateRows(ListItemType.TABLE, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "rows", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "rows", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -43,7 +44,7 @@ class TableCreationRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateRows(ListItemType.TABLE, List.of(rowModel)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.rowIndex", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.rowIndex", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -56,7 +57,7 @@ class TableCreationRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateRows(ListItemType.TABLE, List.of(rowModel)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.columns", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.columns", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -69,7 +70,7 @@ class TableCreationRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateRows(ListItemType.CHECKLIST_TABLE, List.of(rowModel)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.checked", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.checked", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

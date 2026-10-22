@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.construction_area;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItemValidator;
@@ -52,14 +53,14 @@ class ConstructionAreaDataValidatorTest {
 
     @Test
     void emptySupportedSurfaces() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, constructionAreaData)), "supportedSurfaces", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, constructionAreaData)), "supportedSurfaces", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
     void emptySlots() {
         given(constructionAreaData.getSupportedSurfaces()).willReturn(List.of(SurfaceType.CONCRETE));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, constructionAreaData)), "slots", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, constructionAreaData)), "slots", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTableRequest;
@@ -83,7 +84,7 @@ public class CustomTableCheckboxTest extends BackEndTest {
 
         Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, listItemId, row.getRowId(), row.getColumns().getFirst().getColumnId(), null);
 
-        ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "status", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -117,6 +118,6 @@ public class CustomTableCheckboxTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

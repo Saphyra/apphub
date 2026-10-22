@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationRequest;
@@ -37,7 +38,7 @@ public class RegistrationTest extends BackEndTest {
             .build()
             .toRegistrationRequest();
         Response nullLanguageResponse = IndexPageActions.getRegistrationResponse(getServerPort(), nullLanguageRequest);
-        verifyInvalidParam(nullLanguageResponse, "language", "must not be null");;
+        verifyInvalidParam(nullLanguageResponse, "language", ValidationConstants.MUST_NOT_BE_NULL);;
 
         RegistrationRequest unsupportedLanguageRequest = RegistrationParameters.validParameters()
             .toBuilder()
@@ -45,7 +46,7 @@ public class RegistrationTest extends BackEndTest {
             .build()
             .toRegistrationRequest();
         Response unsupportedLanguageResponse = IndexPageActions.getRegistrationResponse(getServerPort(), unsupportedLanguageRequest);
-        verifyInvalidParam(unsupportedLanguageResponse, "language", "must be one of [hu, en]");
+        verifyInvalidParam(unsupportedLanguageResponse, "language", String.format(ValidationConstants.MUST_BE_ONE_OF, List.of("hu", "en")));
     }
 
     private static void invalidEmail() {
@@ -59,28 +60,28 @@ public class RegistrationTest extends BackEndTest {
         RegistrationRequest usernameTooShortRequest = RegistrationParameters.tooShortUsernameParameters()
             .toRegistrationRequest();
         Response usernameTooShortResponse = IndexPageActions.getRegistrationResponse(getServerPort(), usernameTooShortRequest);
-        verifyInvalidParam(usernameTooShortResponse, "username", "too short");
+        verifyInvalidParam(usernameTooShortResponse, "username", ValidationConstants.TOO_SHORT);
     }
 
     private static void usernameTooLong() {
         RegistrationRequest usernameTooLongRequest = RegistrationParameters.tooLongUsernameParameters()
             .toRegistrationRequest();
         Response usernameTooLongResponse = IndexPageActions.getRegistrationResponse(getServerPort(), usernameTooLongRequest);
-        verifyInvalidParam(usernameTooLongResponse, "username", "too long");
+        verifyInvalidParam(usernameTooLongResponse, "username", ValidationConstants.TOO_LONG);
     }
 
     private static void passwordTooShort() {
         RegistrationRequest passwordTooShortRequest = RegistrationParameters.tooShortPasswordParameters()
             .toRegistrationRequest();
         Response passwordTooShortResponse = IndexPageActions.getRegistrationResponse(getServerPort(), passwordTooShortRequest);
-        verifyInvalidParam(passwordTooShortResponse, "password", "too short");
+        verifyInvalidParam(passwordTooShortResponse, "password", ValidationConstants.TOO_SHORT);
     }
 
     private static void passwordTooLong() {
         RegistrationRequest passwordTooLongRequest = RegistrationParameters.tooLongPasswordParameters()
             .toRegistrationRequest();
         Response passwordTooLongResponse = IndexPageActions.getRegistrationResponse(getServerPort(), passwordTooLongRequest);
-        verifyInvalidParam(passwordTooLongResponse, "password", "too long");
+        verifyInvalidParam(passwordTooLongResponse, "password", ValidationConstants.TOO_LONG);
     }
 
     private static RegistrationRequest existingEmail() {

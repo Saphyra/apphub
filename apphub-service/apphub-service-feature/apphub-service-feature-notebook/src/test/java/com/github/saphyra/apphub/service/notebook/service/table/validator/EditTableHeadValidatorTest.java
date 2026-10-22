@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.common.NotebookConstants;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class EditTableHeadValidatorTest {
     void nullTableHeads() {
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "tableHeads", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "tableHeads", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -36,7 +37,7 @@ class EditTableHeadValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "tableHead.columnIndex", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "tableHead.columnIndex", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -48,7 +49,7 @@ class EditTableHeadValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "tableHead.content", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "tableHead.content", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -60,7 +61,7 @@ class EditTableHeadValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "tableHead.content", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "tableHead.content", ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -73,7 +74,7 @@ class EditTableHeadValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "tableHead.type", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "tableHead.type", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -87,7 +88,7 @@ class EditTableHeadValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "tableHead.tableHeadId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "tableHead.tableHeadId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

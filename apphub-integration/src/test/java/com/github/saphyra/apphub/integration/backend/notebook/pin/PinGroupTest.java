@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.PinGroupResponse;
@@ -79,13 +80,13 @@ public class PinGroupTest extends BackEndTest {
     private void rename_tooLongName(String accessToken, UUID pinGroupId) {
         Response response = PinActions.getRenamePinGroupResponse(getServerPort(), accessToken, pinGroupId, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
-        ResponseValidator.verifyInvalidParam(response, "pinGroupName", "too long");
+        ResponseValidator.verifyInvalidParam(response, "pinGroupName", ValidationConstants.TOO_LONG);
     }
 
     private void rename_blankName(String accessToken, UUID pinGroupId) {
         Response response = PinActions.getRenamePinGroupResponse(getServerPort(), accessToken, pinGroupId, " ");
 
-        ResponseValidator.verifyInvalidParam(response, "pinGroupName", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(response, "pinGroupName", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private UUID create(String accessToken) {
@@ -101,12 +102,12 @@ public class PinGroupTest extends BackEndTest {
     private void create_tooLongName(String accessToken) {
         Response response = PinActions.getCreatePinGroupResponse(getServerPort(), accessToken, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
-        ResponseValidator.verifyInvalidParam(response, "pinGroupName", "too long");
+        ResponseValidator.verifyInvalidParam(response, "pinGroupName", ValidationConstants.TOO_LONG);
     }
 
     private void create_blankName(String accessToken) {
         Response response = PinActions.getCreatePinGroupResponse(getServerPort(), accessToken, " ");
 
-        ResponseValidator.verifyInvalidParam(response, "pinGroupName", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(response, "pinGroupName", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 }

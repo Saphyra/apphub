@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
@@ -54,7 +55,7 @@ class PinServiceTest {
     void pinListItem_nullPinned() {
         Throwable ex = catchThrowable(() -> underTest.pinListItem(USER_ID, LIST_ITEM_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "pinned", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "pinned", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

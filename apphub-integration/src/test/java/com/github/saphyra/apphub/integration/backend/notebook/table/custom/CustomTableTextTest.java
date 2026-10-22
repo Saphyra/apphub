@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TableAction
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTableRequest;
@@ -84,7 +85,7 @@ public class CustomTableTextTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "data", "too long");
+        ResponseValidator.verifyInvalidParam(response, "data", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_nullText(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -100,7 +101,7 @@ public class CustomTableTextTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_tooLongText(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -116,7 +117,7 @@ public class CustomTableTextTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "data", "too long");
+        ResponseValidator.verifyInvalidParam(response, "data", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullText(String accessToken) {
@@ -124,6 +125,6 @@ public class CustomTableTextTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

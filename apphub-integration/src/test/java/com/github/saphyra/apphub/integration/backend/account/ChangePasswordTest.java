@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.ChangePasswordRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
@@ -39,7 +40,7 @@ public class ChangePasswordTest extends BackEndTest {
             .deactivateAllSessions(false)
             .build();
         Response nullNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, nullNewPasswordRequest);
-        verifyInvalidParam(nullNewPasswordResponse, "newPassword", "must not be null");
+        verifyInvalidParam(nullNewPasswordResponse, "newPassword", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void tooShortPassword(RegistrationParameters userData, String accessToken) {
@@ -49,7 +50,7 @@ public class ChangePasswordTest extends BackEndTest {
             .deactivateAllSessions(false)
             .build();
         Response tooShortNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, tooShortNewPasswordRequest);
-        verifyInvalidParam(tooShortNewPasswordResponse, "password", "too short");
+        verifyInvalidParam(tooShortNewPasswordResponse, "password", ValidationConstants.TOO_SHORT);
     }
 
     private static void tooLongPassword(RegistrationParameters userData, String accessToken) {
@@ -59,7 +60,7 @@ public class ChangePasswordTest extends BackEndTest {
             .deactivateAllSessions(false)
             .build();
         Response tooLongNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, tooLongNewPasswordRequest);
-        verifyInvalidParam(tooLongNewPasswordResponse, "password", "too long");
+        verifyInvalidParam(tooLongNewPasswordResponse, "password", ValidationConstants.TOO_LONG);
     }
 
     private static void nullPassword(String accessToken) {
@@ -69,7 +70,7 @@ public class ChangePasswordTest extends BackEndTest {
             .deactivateAllSessions(false)
             .build();
         Response nullPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, nullPasswordRequest);
-        verifyInvalidParam(nullPasswordResponse, "password", "must not be null or blank");
+        verifyInvalidParam(nullPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void nullDeactivateAllSessions(String accessToken, RegistrationParameters userData) {
@@ -79,7 +80,7 @@ public class ChangePasswordTest extends BackEndTest {
             .deactivateAllSessions(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, nullPasswordRequest);
-        verifyInvalidParam(nullPasswordResponse, "deactivateAllSessions", "must not be null");
+        verifyInvalidParam(nullPasswordResponse, "deactivateAllSessions", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void incorrectPassword(String accessToken) {

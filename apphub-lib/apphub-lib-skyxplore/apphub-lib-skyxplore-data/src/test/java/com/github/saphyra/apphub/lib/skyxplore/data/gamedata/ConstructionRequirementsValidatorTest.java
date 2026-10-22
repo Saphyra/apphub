@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -22,14 +23,14 @@ class ConstructionRequirementsValidatorTest {
 
     @Test
     void nullConstructionRequirements() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "constructionRequirements", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "constructionRequirements", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void tooLowRequiredWorkPoints() {
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredWorkPoints", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredWorkPoints", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -37,7 +38,7 @@ class ConstructionRequirementsValidatorTest {
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(0);
         given(constructionRequirements.getRequiredEnergy()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredEnergy", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredEnergy", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -46,7 +47,7 @@ class ConstructionRequirementsValidatorTest {
         given(constructionRequirements.getRequiredEnergy()).willReturn(0);
         given(constructionRequirements.getRequiredResources()).willReturn(CollectionUtils.singleValueMap(RESOURCE_DATA_ID, null));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredResources.%s".formatted(RESOURCE_DATA_ID), "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(constructionRequirements), "requiredResources.%s".formatted(RESOURCE_DATA_ID), ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

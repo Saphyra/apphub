@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.Range;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -88,7 +89,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.value", "too low");
+        ResponseValidator.verifyInvalidParam(response, "range.value", ValidationConstants.TOO_LOW);
     }
 
     private void create_tooLowMax(String accessToken) {
@@ -97,7 +98,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.max", "too low");
+        ResponseValidator.verifyInvalidParam(response, "range.max", ValidationConstants.TOO_LOW);
     }
 
     private void create_nullMax(String accessToken) {
@@ -106,7 +107,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.max", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "range.max", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullMin(String accessToken) {
@@ -115,7 +116,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.min", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "range.min", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_tooLowStep(String accessToken) {
@@ -124,7 +125,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.step", "too low");
+        ResponseValidator.verifyInvalidParam(response, "range.step", ValidationConstants.TOO_LOW);
     }
 
     private void create_nullStep(String accessToken) {
@@ -133,7 +134,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.step", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "range.step", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullValue(String accessToken) {
@@ -142,7 +143,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range.value", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "range.value", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_failedToParse(String accessToken) {
@@ -150,7 +151,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range", "failed to parse");
+        ResponseValidator.verifyInvalidParam(response, "range", ValidationConstants.FAILED_TO_PARSE);
     }
 
     private void create_nullData(String accessToken) {
@@ -158,6 +159,6 @@ public class CustomTableRangeTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "range", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "range", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

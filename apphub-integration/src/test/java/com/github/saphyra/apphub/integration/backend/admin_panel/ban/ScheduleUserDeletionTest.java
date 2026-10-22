@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -57,7 +58,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
         Response nullPasswordResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessToken, testUserId, nullPasswordRequest);
 
-        ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void incorrectPassword(String accessToken, UUID testUserId) {
@@ -79,7 +80,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
         Response nullTimeResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessToken, testUserId, nullTimeRequest);
 
-        ResponseValidator.verifyInvalidParam(nullTimeResponse, "markForDeletionAt", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullTimeResponse, "markForDeletionAt", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void incorrectTime(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -90,7 +91,7 @@ public class ScheduleUserDeletionTest extends BackEndTest {
 
         Response incorrectTimeResponse = BanActions.getMarkForDeletionResponse(getServerPort(), accessToken, testUserId, incorrectTimeRequest);
 
-        ResponseValidator.verifyInvalidParam(incorrectTimeResponse, "markForDeletionAt", "failed to parse");
+        ResponseValidator.verifyInvalidParam(incorrectTimeResponse, "markForDeletionAt", ValidationConstants.FAILED_TO_PARSE);
     }
 
     private static void markUserForDeletion(RegistrationParameters userData, String accessToken, UUID testUserId) {

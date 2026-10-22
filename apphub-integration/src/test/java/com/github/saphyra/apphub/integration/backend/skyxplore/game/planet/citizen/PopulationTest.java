@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
@@ -63,12 +64,12 @@ public class PopulationTest extends BackEndTest {
 
     private static void blankName(String accessToken1, CitizenResponse citizen) {
         Response blankNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessToken1, citizen.getCitizenId(), " ");
-        verifyInvalidParam(blankNameResponse, "value", "must not be null or blank");
+        verifyInvalidParam(blankNameResponse, "value", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void tooLongName(String accessToken1, CitizenResponse citizen) {
         Response tooLongNameResponse = SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessToken1, citizen.getCitizenId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        verifyInvalidParam(tooLongNameResponse, "value", "too long");
+        verifyInvalidParam(tooLongNameResponse, "value", ValidationConstants.TOO_LONG);
     }
 
     private static void notFound(String accessToken1) {

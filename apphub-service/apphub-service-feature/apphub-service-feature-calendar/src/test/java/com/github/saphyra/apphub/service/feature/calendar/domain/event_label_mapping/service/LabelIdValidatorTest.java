@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
@@ -31,19 +32,19 @@ class LabelIdValidatorTest {
 
     @Test
     void nullLabels() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, null), "labels", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, null), "labels", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void nullInLabels() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, CollectionUtils.toList(LABEL_ID, null)), "labels", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, CollectionUtils.toList(LABEL_ID, null)), "labels", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
     void doesNotExist() {
         given(labelDao.getByLabelIds(USER_ID, List.of(LABEL_ID))).willReturn(List.of());
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, List.of(LABEL_ID)), "labels", "Unsupported values: " + List.of(LABEL_ID));
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, List.of(LABEL_ID)), "labels", String.format(ValidationUtil.UNSUPPORTED_VALUES, List.of(LABEL_ID)));
     }
 
     @Test

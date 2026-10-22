@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dock;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ShipSize;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.BuildingModuleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -35,7 +36,7 @@ class DockBuildingModuleValidatorTest {
 
     @Test
     void nullSize() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "size", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "size", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.register;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,21 +34,21 @@ public class RegisterProcessorRequestValidatorTest {
     public void blankServiceName() {
         Throwable ex = catchThrowable(() -> underTest.validate(builder.host(" ").build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "serviceName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "serviceName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     public void blankEventName() {
         Throwable ex = catchThrowable(() -> underTest.validate(builder.eventName(" ").build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "eventName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "eventName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     public void nullUrl() {
         Throwable ex = catchThrowable(() -> underTest.validate(builder.url(null).build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "url", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "url", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

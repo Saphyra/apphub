@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.service.m
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.material_trader_override.MaterialTraderOverride;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.material_trader_override.MaterialTraderOverrideDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -40,7 +41,7 @@ class CreateMaterialTraderOverrideRequestValidatorTest {
             .materialType(MaterialType.RAW)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "stationId", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "stationId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -50,7 +51,7 @@ class CreateMaterialTraderOverrideRequestValidatorTest {
             .materialType(null)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "materialType", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "materialType", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @ParameterizedTest

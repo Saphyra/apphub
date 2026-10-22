@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreG
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
@@ -27,6 +28,6 @@ public class GetAvailableConstructionAreasTest extends BackEndTest {
     }
 
     private void invalidSurfaceType(String accessToken) {
-        ResponseValidator.verifyInvalidParam(SkyXploreGameDataActions.getAvailableConstructionAreasResponse(getServerPort(), accessToken, "asd"), "surfaceType", "invalid value");
+        ResponseValidator.verifyInvalidParam(SkyXploreGameDataActions.getAvailableConstructionAreasResponse(getServerPort(), accessToken, "asd"), "surfaceType", ValidationConstants.INVALID_VALUE);
     }
 }

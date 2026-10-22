@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.service.s
 
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.StarSystemSuggestionListCache;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -38,7 +39,7 @@ class StarSystemControllerImplTest {
 
     @Test
     void search_queryTooShort() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.search(new OneParamRequest<>("as"), accessToken), "query", "too short");
+        ExceptionValidator.validateInvalidParam(() -> underTest.search(new OneParamRequest<>("as"), accessToken), "query", ValidationUtil.TOO_SHORT);
     }
 
     @Test

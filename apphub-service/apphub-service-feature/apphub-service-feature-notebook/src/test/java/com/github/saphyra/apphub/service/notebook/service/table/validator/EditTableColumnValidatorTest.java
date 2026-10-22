@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ class EditTableColumnValidatorTest {
 	void nullColumns() {
 		Throwable ex = catchThrowable(() -> underTest.validateColumns(ItemType.EXISTING, null));
 
-		ExceptionValidator.validateInvalidParam(ex, "row.columns", "must not be null");
+		ExceptionValidator.validateInvalidParam(ex, "row.columns", ValidationUtil.MUST_NOT_BE_NULL);
 	}
 
 	@Test
@@ -44,7 +45,7 @@ class EditTableColumnValidatorTest {
 
 		Throwable ex = catchThrowable(() -> underTest.validateColumns(ItemType.EXISTING, List.of(model)));
 
-		ExceptionValidator.validateInvalidParam(ex, "row.column.columnIndex", "must not be null");
+		ExceptionValidator.validateInvalidParam(ex, "row.column.columnIndex", ValidationUtil.MUST_NOT_BE_NULL);
 	}
 
 	@Test
@@ -58,7 +59,7 @@ class EditTableColumnValidatorTest {
 
 		Throwable ex = catchThrowable(() -> underTest.validateColumns(ItemType.EXISTING, List.of(model)));
 
-		ExceptionValidator.validateInvalidParam(ex, "row.column.columnType", "must not be null");
+		ExceptionValidator.validateInvalidParam(ex, "row.column.columnType", ValidationUtil.MUST_NOT_BE_NULL);
 	}
 
 	@Test
@@ -72,7 +73,7 @@ class EditTableColumnValidatorTest {
 
 		Throwable ex = catchThrowable(() -> underTest.validateColumns(ItemType.EXISTING, List.of(model)));
 
-		ExceptionValidator.validateInvalidParam(ex, "row.column.itemType", "must not be null");
+		ExceptionValidator.validateInvalidParam(ex, "row.column.itemType", ValidationUtil.MUST_NOT_BE_NULL);
 	}
 
 	@Test

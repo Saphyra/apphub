@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.Regist
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
@@ -86,7 +87,7 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get("serviceName")).isEqualTo("must not be null or blank");
+        assertThat(errorResponse.getParams().get("serviceName")).isEqualTo(ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -96,7 +97,7 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get("eventName")).isEqualTo("must not be null or blank");
+        assertThat(errorResponse.getParams().get("eventName")).isEqualTo(ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -106,7 +107,7 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get("url")).isEqualTo("must not be null");
+        assertThat(errorResponse.getParams().get("url")).isEqualTo(ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -157,7 +158,7 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get("metadata")).isEqualTo("must not be null");
+        assertThat(errorResponse.getParams().get("metadata")).isEqualTo(ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -176,7 +177,7 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getParams().get("eventName")).isEqualTo("must not be null or blank");
+        assertThat(errorResponse.getParams().get("eventName")).isEqualTo(ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test

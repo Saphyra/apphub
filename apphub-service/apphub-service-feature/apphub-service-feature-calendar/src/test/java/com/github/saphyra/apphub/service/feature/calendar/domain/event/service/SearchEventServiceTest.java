@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
@@ -53,7 +54,7 @@ class SearchEventServiceTest {
     void search_tooShortSearchText() {
         Throwable ex = catchThrowable(() -> underTest.search(USER_ID, "ab"));
 
-        ExceptionValidator.validateInvalidParam(ex, "searchText", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "searchText", ValidationUtil.TOO_SHORT);
         then(eventObjectQueryService).shouldHaveNoInteractions();
         then(occurrenceObjectQueryService).shouldHaveNoInteractions();
         then(eventResponseMapper).shouldHaveNoInteractions();

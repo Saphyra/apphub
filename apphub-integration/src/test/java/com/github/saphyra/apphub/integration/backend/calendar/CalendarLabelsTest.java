@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLab
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -49,11 +50,11 @@ public class CalendarLabelsTest extends BackEndTest {
 
     private void edit_tooLong(String accessToken, UUID labelId) {
         String label = "a".repeat(256);
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, label), "label", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, label), "label", ValidationConstants.TOO_LONG);
     }
 
     private void edit_blank(String accessToken, UUID labelId) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, " "), "label", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, " "), "label", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private void getLabel(String accessToken, UUID labelId) {
@@ -77,10 +78,10 @@ public class CalendarLabelsTest extends BackEndTest {
 
     private void create_tooLong(String accessToken) {
         String label = "a".repeat(256);
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, label), "label", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, label), "label", ValidationConstants.TOO_LONG);
     }
 
     private void create_blank(String accessToken) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, " "), "label", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, " "), "label", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 }

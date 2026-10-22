@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.solar_system;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.SolarSystemModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -74,14 +75,14 @@ public class RenameSolarSystemServiceTest {
     public void blankName() {
         Throwable ex = catchThrowable(() -> underTest.rename(USER_ID, SOLAR_SYSTEM_ID, " "));
 
-        ExceptionValidator.validateInvalidParam(ex, "newName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "newName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     public void tooLongName() {
         Throwable ex = catchThrowable(() -> underTest.rename(USER_ID, SOLAR_SYSTEM_ID, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "newName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "newName", ValidationUtil.TOO_LONG);
     }
 
     @Test

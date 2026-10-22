@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.task_manager.domain.organizati
 
 import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
 import com.github.saphyra.apphub.api.feature.task_manager.model.organization.CreateOrganizationRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.ObjectType;
@@ -61,7 +62,7 @@ class CreateOrganizationServiceTest {
             .organizationName(" ")
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "organizationName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "organizationName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -71,7 +72,7 @@ class CreateOrganizationServiceTest {
             .organizationName("a".repeat(TaskManagerConstants.MAX_ORGANIZATION_NAME_LENGTH + 1))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "organizationName", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "organizationName", ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -81,7 +82,7 @@ class CreateOrganizationServiceTest {
             .description(null)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "description", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "description", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -91,7 +92,7 @@ class CreateOrganizationServiceTest {
             .description("a".repeat(TaskManagerConstants.MAX_ORGANIZATION_DESCRIPTION_LENGTH + 1))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "description", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "description", ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -101,7 +102,7 @@ class CreateOrganizationServiceTest {
             .invitedUsers(null)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "invitedUsers", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "invitedUsers", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -111,7 +112,7 @@ class CreateOrganizationServiceTest {
             .invitedUsers(CollectionUtils.toList(INVITED_USER_ID, null))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "invitedUsers", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "invitedUsers", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test

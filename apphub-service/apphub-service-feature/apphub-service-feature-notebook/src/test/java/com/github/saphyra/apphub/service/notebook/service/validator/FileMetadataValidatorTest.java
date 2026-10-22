@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class FileMetadataValidatorTest {
     void nullMetadata() {
         Throwable ex = catchThrowable(() -> underTest.validate(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "metadata", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "metadata", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -48,7 +49,7 @@ class FileMetadataValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(metadata));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "fileName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -59,7 +60,7 @@ class FileMetadataValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(metadata));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "fileName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -70,7 +71,7 @@ class FileMetadataValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(metadata));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "fileSize", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -84,7 +85,7 @@ class FileMetadataValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(metadata));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileSize", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "fileSize", ValidationUtil.TOO_HIGH);
     }
 
     @Test

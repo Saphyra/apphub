@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.game_data;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStat;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStatsAndSkills;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
@@ -113,7 +114,7 @@ public class GameDataControllerImplTest {
 
     @Test
     void getAvailableConstructionAreas_invalidSurfaceType() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableConstructionAreas("asd"), "surfaceType", "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableConstructionAreas("asd"), "surfaceType", ValidationUtil.INVALID_VALUE);
     }
 
     @Test

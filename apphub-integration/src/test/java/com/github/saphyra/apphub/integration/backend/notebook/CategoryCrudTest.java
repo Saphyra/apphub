@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -48,7 +49,7 @@ public class CategoryCrudTest extends BackEndTest {
             .title(" ")
             .build();
         Response create_emptyTitleResponse = CategoryActions.getCreateCategoryResponse(getServerPort(), accessToken, create_emptyTitleRequest);
-        verifyInvalidParam(create_emptyTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(create_emptyTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static UUID create_addToRoot(String accessToken) {

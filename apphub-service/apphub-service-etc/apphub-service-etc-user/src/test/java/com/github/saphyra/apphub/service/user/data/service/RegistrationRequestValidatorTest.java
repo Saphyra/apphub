@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.data.service.validator.EmailValidator;
 import com.github.saphyra.apphub.service.user.data.service.validator.PasswordValidator;
 import com.github.saphyra.apphub.service.user.data.service.validator.RegistrationRequestValidator;
@@ -43,14 +44,14 @@ public class RegistrationRequestValidatorTest {
     void nullLanguage(){
         given(commonConfigProperties.getSupportedLocales()).willReturn(List.of());
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(EMAIL, USERNAME, PASSWORD, null), "language", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(EMAIL, USERNAME, PASSWORD, null), "language", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void unsupportedLanguage(){
         given(commonConfigProperties.getSupportedLocales()).willReturn(List.of());
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(EMAIL, USERNAME, PASSWORD, LOCALE), "language", "must be one of []");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(EMAIL, USERNAME, PASSWORD, LOCALE), "language", String.format(ValidationUtil.MUST_BE_ONE_OF, List.of()));
     }
 
     @Test

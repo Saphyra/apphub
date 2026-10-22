@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area.building_module;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.BuildingModuleModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
@@ -162,12 +163,12 @@ class ConstructBuildingModuleServiceTest {
 
     @Test
     void nullBuildingModuleDataId() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, null), "buildingModuleDataId", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, null), "buildingModuleDataId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void buildingModuleDataNotFound() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID), "buildingModuleData", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID), "buildingModuleData", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

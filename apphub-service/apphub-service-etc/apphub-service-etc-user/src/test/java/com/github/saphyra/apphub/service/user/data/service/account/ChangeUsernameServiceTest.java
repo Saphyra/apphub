@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeUsernameRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -50,7 +51,7 @@ public class ChangeUsernameServiceTest {
     public void nullPassword() {
         Throwable ex = catchThrowable(() -> underTest.changeUsername(USER_ID, ChangeUsernameRequest.builder().username(USERNAME).build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class OccurrenceRequestValidatorTest {
     void nullDate() {
         given(request.getDate()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "date", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "date", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -36,7 +37,7 @@ class OccurrenceRequestValidatorTest {
         given(request.getDate()).willReturn(DATE);
         given(request.getStatus()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "status", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "status", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -45,7 +46,7 @@ class OccurrenceRequestValidatorTest {
         given(request.getStatus()).willReturn(OccurrenceStatus.DONE);
         given(request.getRemindMeBeforeDays()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -54,7 +55,7 @@ class OccurrenceRequestValidatorTest {
         given(request.getStatus()).willReturn(OccurrenceStatus.DONE);
         given(request.getRemindMeBeforeDays()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -64,7 +65,7 @@ class OccurrenceRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         given(request.getNote()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "note", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "note", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -75,7 +76,7 @@ class OccurrenceRequestValidatorTest {
         given(request.getNote()).willReturn(NOTE);
         given(request.getReminded()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "reminded", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "reminded", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

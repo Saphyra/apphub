@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Number;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class NumberColumnDataServiceTest {
     void validateData_null() {
         Throwable ex = catchThrowable(() -> underTest.validateData(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "number", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "number", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -52,7 +53,7 @@ class NumberColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "number", "failed to parse");
+        ExceptionValidator.validateInvalidParam(ex, "number", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -62,7 +63,7 @@ class NumberColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "number.value", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "number.value", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -72,7 +73,7 @@ class NumberColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "number.step", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "number.step", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -82,7 +83,7 @@ class NumberColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "number.step", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "number.step", ValidationUtil.TOO_LOW);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingModuleCategory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.BuildingModuleData;
@@ -74,12 +75,12 @@ class AvailableBuildingModulesServiceTest {
 
     @Test
     void nullBuildingModuleCategory() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableBuildings(USER_ID, CONSTRUCTION_AREA_ID, null), "buildingModuleCategory", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableBuildings(USER_ID, CONSTRUCTION_AREA_ID, null), "buildingModuleCategory", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void invalidBuildingModuleCategory() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableBuildings(USER_ID, CONSTRUCTION_AREA_ID, "asd"), "buildingModuleCategory", "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> underTest.getAvailableBuildings(USER_ID, CONSTRUCTION_AREA_ID, "asd"), "buildingModuleCategory", ValidationUtil.INVALID_VALUE);
     }
 
     @Test

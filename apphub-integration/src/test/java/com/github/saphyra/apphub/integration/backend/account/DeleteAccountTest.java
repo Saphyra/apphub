@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
@@ -32,7 +33,7 @@ public class DeleteAccountTest extends BackEndTest {
 
     private static void nullPassword(String accessToken) {
         Response nullPasswordResponse = AccountActions.getDeleteAccountResponse(getServerPort(), accessToken, new OneParamRequest<>(null));
-        verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
+        verifyInvalidParam(nullPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static String incorrectPassword(RegistrationParameters userData, String accessToken) {

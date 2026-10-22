@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
@@ -62,7 +63,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
     }
 
     private void editStatus_nullStatus(String accessToken, UUID eventId, UUID occurrenceId) {
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceStatusResponse(getServerPort(), accessToken, eventId, occurrenceId, null), "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceStatusResponse(getServerPort(), accessToken, eventId, occurrenceId, null), "status", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void get(String accessToken, UUID eventId, UUID occurrenceId) {
@@ -105,7 +106,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .reminded(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "reminded", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "reminded", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullNote(String accessToken, UUID eventId, UUID occurrenceId) {
@@ -114,7 +115,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .note(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "note", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "note", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_remindMeBeforeDaysTooLow(String accessToken, UUID eventId, UUID occurrenceId) {
@@ -123,7 +124,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .remindMeBeforeDays(-1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "remindMeBeforeDays", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "remindMeBeforeDays", ValidationConstants.TOO_LOW);
     }
 
     private void edit_nullRemindMeBeforeDays(String accessToken, UUID eventId, UUID occurrenceId) {
@@ -132,7 +133,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .remindMeBeforeDays(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "remindMeBeforeDays", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "remindMeBeforeDays", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullStatus(String accessToken, UUID eventId, UUID occurrenceId) {
@@ -141,7 +142,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .status(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "status", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullDate(String accessToken, UUID eventId, UUID occurrenceId) {
@@ -150,7 +151,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .date(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "date", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, eventId, occurrenceId, request), "date", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private UUID create(String accessToken, UUID eventId) {
@@ -185,7 +186,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .reminded(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "reminded", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "reminded", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullNote(String accessToken, UUID eventId) {
@@ -194,7 +195,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .note(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "note", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "note", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_remindMeBeforeDaysTooLow(String accessToken, UUID eventId) {
@@ -203,7 +204,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .remindMeBeforeDays(-1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", "too low");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", ValidationConstants.TOO_LOW);
     }
 
     private void create_nullRemindMeBeforeDays(String accessToken, UUID eventId) {
@@ -212,7 +213,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .remindMeBeforeDays(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "remindMeBeforeDays", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullStatus(String accessToken, UUID eventId) {
@@ -221,7 +222,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .status(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "status", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullDate(String accessToken, UUID eventId) {
@@ -230,7 +231,7 @@ public class CalendarOccurrenceTest extends BackEndTest {
             .date(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "date", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, eventId, request), "date", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_eventDoesNotExist(String accessToken) {

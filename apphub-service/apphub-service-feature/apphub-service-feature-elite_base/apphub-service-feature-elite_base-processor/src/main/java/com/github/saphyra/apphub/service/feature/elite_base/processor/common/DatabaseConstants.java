@@ -17,7 +17,9 @@ public class DatabaseConstants {
     @Deprecated
     public static final String TABLE_BODY_DATA = "body_data";
     public static final String TABLE_BODY_DATA_V2 = "body_data_v2";
+    @Deprecated
     public static final String TABLE_BODY_MATERIAL = "body_material";
+    public static final String TABLE_BODY_MATERIAL_V2 = "body_material_v2";
     @Deprecated
     public static final String TABLE_BODY_RING = "body_ring";
     public static final String TABLE_BODY_RING_V2 = "body_ring_v2";
@@ -60,6 +62,8 @@ public class DatabaseConstants {
     public static final String COLUMN_DISTANCE_FROM_STAR = "distance_from_star";
     public static final String COLUMN_DISTANCE_FROM_REFERENCE = "distance_from_reference";
     public static final String COLUMN_BODY_ID = "body_id";
+    public static final String COLUMN_MATERIAL = "material";
+    public static final String COLUMN_PERCENT = "percent";
     public static final String COLUMN_SERVICE = "service";
     public static final String COLUMN_ECONOMY = "economy";
     public static final String COLUMN_MATERIAL_TYPE = "material_type";

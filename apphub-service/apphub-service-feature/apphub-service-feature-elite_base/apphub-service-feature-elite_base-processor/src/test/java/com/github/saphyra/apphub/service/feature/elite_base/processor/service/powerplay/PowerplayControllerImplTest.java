@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningM
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.PowerplayActivityType;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.service.powerplay.merit_farm.mining.nakato_kaine.NakatoKaineMeritMinerService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class PowerplayControllerImplTest {
     void meritFarmGetMiningLocations_invalidPower() {
         MiningMeritFarmRequest request = validRequest();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, "invalid", accessToken), "power", "failed to parse");
+        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, "invalid", accessToken), "power", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -58,7 +59,7 @@ class PowerplayControllerImplTest {
         MiningMeritFarmRequest request = validRequest();
         request.setMinimumReserveLevel(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "minimumReserveLevel", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "minimumReserveLevel", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -66,7 +67,7 @@ class PowerplayControllerImplTest {
         MiningMeritFarmRequest request = validRequest();
         request.setMinimumPrice(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "minimumPrice", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "minimumPrice", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -74,7 +75,7 @@ class PowerplayControllerImplTest {
         MiningMeritFarmRequest request = validRequest();
         request.setMinimumDemand(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "minimumDemand", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "minimumDemand", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -82,7 +83,7 @@ class PowerplayControllerImplTest {
         MiningMeritFarmRequest request = validRequest();
         request.setMaxTimeSinceLastUpdated(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "maxTimeSinceLastUpdated", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.meritFarmGetMiningLocations(request, POWER, accessToken), "maxTimeSinceLastUpdated", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

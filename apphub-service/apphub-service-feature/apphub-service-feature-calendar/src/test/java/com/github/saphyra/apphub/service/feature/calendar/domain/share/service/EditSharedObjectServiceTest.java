@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.share.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -36,17 +37,17 @@ class EditSharedObjectServiceTest {
 
     @Test
     void nullGrants() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, null), "grants", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, null), "grants", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void grantsContainsNull() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, CollectionUtils.toSet(Grant.DELETE, null)), "grants", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, CollectionUtils.toSet(Grant.DELETE, null)), "grants", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
     void emptyGrants(){
-        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of()), "grants", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of()), "grants", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test

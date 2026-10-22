@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.RoleRequest;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -63,7 +64,7 @@ public class AddRoleTest extends BackEndTest {
             .password(null)
             .build();
         Response response = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, nullUserIdRequest);
-        verifyInvalidParam(response, "password", "must not be null");
+        verifyInvalidParam(response, "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void nullUserId(String accessToken) {
@@ -72,7 +73,7 @@ public class AddRoleTest extends BackEndTest {
             .role(Constants.ROLE_TEST)
             .build();
         Response nullUserIdResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, nullUserIdRequest);
-        verifyInvalidParam(nullUserIdResponse, "userId", "must not be null");
+        verifyInvalidParam(nullUserIdResponse, "userId", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void nullRole(String accessToken, RegistrationParameters userData) {
@@ -82,7 +83,7 @@ public class AddRoleTest extends BackEndTest {
             .password(userData.getPassword())
             .build();
         Response blankRoleResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, blankRoleRequest);
-        verifyInvalidParam(blankRoleResponse, "role", "must not be null");
+        verifyInvalidParam(blankRoleResponse, "role", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void userNotFound(String accessToken, RegistrationParameters userData) {
