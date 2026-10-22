@@ -40,6 +40,7 @@
                 referencedTableSchemaName="elite_base"
                 referencedTableName="body_v3"
                 referencedColumnNames="id"
+                onDelete="CASCADE"
         />
     </changeSet>
 </databaseChangeLog>

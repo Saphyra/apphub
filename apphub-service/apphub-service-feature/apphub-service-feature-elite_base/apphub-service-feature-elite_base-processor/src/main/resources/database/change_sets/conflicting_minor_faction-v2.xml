@@ -35,6 +35,7 @@
                 referencedTableSchemaName="elite_base"
                 referencedTableName="minor_faction_conflict_v2"
                 referencedColumnNames="id"
+                onDelete="CASCADE"
         />
     </changeSet>
 
@@ -53,6 +54,7 @@
                 referencedTableSchemaName="elite_base"
                 referencedTableName="minor_faction"
                 referencedColumnNames="id"
+                onDelete="CASCADE"
         />
     </changeSet>
 </databaseChangeLog>

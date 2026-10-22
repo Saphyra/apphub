@@ -58,6 +58,7 @@
                 referencedTableSchemaName="elite_base"
                 referencedTableName="body_v3"
                 referencedColumnNames="id"
+                onDelete="CASCADE"
         />
     </changeSet>
 
@@ -76,6 +77,7 @@
                 referencedTableSchemaName="elite_base"
                 referencedTableName="star_system"
                 referencedColumnNames="id"
+                onDelete="CASCADE"
         />
     </changeSet>
 </databaseChangeLog>
