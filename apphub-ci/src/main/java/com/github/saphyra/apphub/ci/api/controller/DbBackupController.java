@@ -54,6 +54,9 @@ class DbBackupController {
     private static final String REQUEST_PARAM_BACKUP_DIRECTORY = "backup_directory";
     private static final String REQUEST_PARAM_BACKUP_LOCATION_S3 = "backup_location_s3";
     private static final String REQUEST_PARAM_BACKUP_LOCATION_LOCAL = "backup_location_local";
+    private static final String REQUEST_PARAM_ACTION = "action";
+    private static final String ACTION_RESTORE = "restore";
+    private static final String ACTION_DOWNLOAD = "download";
 
     private final DbBackupFacade dbBackupFacade;
     private final PropertyDao propertyDao;
@@ -286,6 +289,7 @@ class DbBackupController {
         String bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
         String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
         String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+        String backupDirectory = storedParams.getOrDefault(REQUEST_PARAM_BACKUP_DIRECTORY, defaultProperties.getBackupDirectory());
 
         mav.addObject(REQUEST_PARAM_DB_HOST, dbHost);
         mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
@@ -295,12 +299,14 @@ class DbBackupController {
 
         List<String> tables = dbBackupFacade.getTables(s3AccessKey, s3SecretKey, bucket, database, version, backup);
         mav.addObject(REQUEST_PARAM_TABLES, tables);
+        mav.addObject(REQUEST_PARAM_BACKUP_DIRECTORY, backupDirectory);
 
         return mav;
     }
 
     @PostMapping(PAGE_RESTORE_DATABASE_VERSION_BACKUP)
     String restoreDatabase(
+        @RequestParam(REQUEST_PARAM_ACTION) String action,
         @PathVariable(REQUEST_PARAM_DATABASE) String database,
         @PathVariable(REQUEST_PARAM_VERSION) String version,
         @PathVariable(REQUEST_PARAM_BACKUP) String backup,
@@ -314,8 +320,15 @@ class DbBackupController {
         String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
         String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
         String s3Bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+        String backupDirectory = storedParams.getOrDefault(REQUEST_PARAM_BACKUP_DIRECTORY, defaultProperties.getBackupDirectory());
 
-        taskQueue.add(() -> dbBackupFacade.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
+        if (ACTION_RESTORE.equals(action)) {
+            taskQueue.add(() -> dbBackupFacade.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
+        } else if (ACTION_DOWNLOAD.equals(action)) {
+            taskQueue.add(() -> dbBackupFacade.download(backupDirectory, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
+        } else {
+            return "redirect:" + PAGE_RESTORE_DATABASE_VERSION_BACKUP + "?error=invalid_action";
+        }
 
         return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=restoration_started";
     }

@@ -50,7 +50,8 @@
             </div>
 
             <div>
-                <input type="submit" value="Restore"/>
+                <button type="submit" name="action" value="restore">Restore</button>
+                <button type="submit" name="action" value="download">Download to <span th:text="${backup_directory}"></span></button>
             </div>
         </form>
     </div>

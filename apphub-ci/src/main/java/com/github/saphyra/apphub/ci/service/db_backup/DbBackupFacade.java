@@ -16,6 +16,7 @@ public class DbBackupFacade {
     private final S3ListService s3ListService;
     private final S3DbRestorationService s3DbRestorationService;
     private final LocalDbRestorationService localDbRestorationService;
+    private final DbBackupDownloader dbBackupDownloader;
 
     /**
      * @return all the tables available in the given database
@@ -26,7 +27,8 @@ public class DbBackupFacade {
 
     public void backup(
         String dbHost,
-        String dbName, String username,
+        String dbName,
+        String username,
         String password,
         String s3AccessKey,
         String s3SecretKey,
@@ -67,5 +69,9 @@ public class DbBackupFacade {
 
     public void restoreLocal(String directory, String dbHost, String dbName, String username, String password) {
         localDbRestorationService.restore(directory, dbHost, dbName, username, password);
+    }
+
+    public void download(String backupDirectory, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
+        dbBackupDownloader.downloadBackup(backupDirectory, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables);
     }
 }

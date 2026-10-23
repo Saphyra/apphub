@@ -24,7 +24,7 @@
         <fieldset>
             <legend>Restore from local</legend>
             <form action="/db-backup/restore/local" method="POST">
-                <input type="text" name="backup_directory" placeholder="Directory" required />
+                <input type="text" name="backup_directory" placeholder="Directory" th:value="${backup_directory}" required />
                 <label class="red">
                     <input type="checkbox" required>
                         Restoration truncates the selected (and dependent) tables, and requires downtime.
