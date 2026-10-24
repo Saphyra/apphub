@@ -139,6 +139,11 @@
                 </label>
 
                 <label class="inline">
+                    Max WebDriver cache size:
+                    <input type="number" class="number-input-2-digit" name="max_web_driver_cache_size" required min="0" placeholder="Max WebDriver cache size" th:value="${max_web_driver_cache_size}"/>
+                </label>
+
+                <label class="inline">
                     Retry limit:
                     <input type="number" class="number-input-2-digit" name="retry_count" required min="1" placeholder="Retry limit" th:value="${retry_count}"/>
                 </label>
@@ -151,6 +156,11 @@
                 </label>
 
                 <input type="text" name="test_filter" placeholder="Comma-separated list of tests" th:value="${test_filter}"/>
+
+                <label class="inline">
+                    <input type="checkbox" name="pre_create_drivers_when_filtering" th:value="true"/>
+                    Pre-create WebDrivers when filtering
+                </label>
             </div>
 
             <button type="submit">Run tests</button>

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItemValidator;
@@ -50,7 +51,7 @@ class ResourceValidatorTest {
 
     @Test
     void nullStorageType() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, resourceData)), "storageType", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, resourceData)), "storageType", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
@@ -134,18 +135,18 @@ public class BuildingModuleQueueTest extends BackEndTest {
     private void setPriority_tooHigh(int serverPort, String accessToken, UUID planetId, String type, UUID itemId) {
         Response response = SkyXplorePlanetQueueActions.getSetPriorityResponse(serverPort, accessToken, planetId, type, itemId, 11);
 
-        ResponseValidator.verifyInvalidParam(response, "priority", "too high");
+        ResponseValidator.verifyInvalidParam(response, "priority", ValidationConstants.TOO_HIGH);
     }
 
     private void setPriority_tooLow(int serverPort, String accessToken, UUID planetId, String type, UUID itemId) {
         Response response = SkyXplorePlanetQueueActions.getSetPriorityResponse(serverPort, accessToken, planetId, type, itemId, 0);
 
-        ResponseValidator.verifyInvalidParam(response, "priority", "too low");
+        ResponseValidator.verifyInvalidParam(response, "priority", ValidationConstants.TOO_LOW);
     }
 
     private void setPriority_unknownQueueItemType(int serverPort, String accessToken, UUID planetId, UUID itemId) {
         Response response = SkyXplorePlanetQueueActions.getSetPriorityResponse(serverPort, accessToken, planetId, "asd", itemId, NEW_PRIORITY);
 
-        ResponseValidator.verifyInvalidParam(response, "type", "invalid value");
+        ResponseValidator.verifyInvalidParam(response, "type", ValidationConstants.INVALID_VALUE);
     }
 }

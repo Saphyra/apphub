@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
@@ -76,14 +77,14 @@ public class RenameCitizenServiceTest {
     public void blankCitizenName() {
         Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, CITIZEN_ID, " "));
 
-        ExceptionValidator.validateInvalidParam(ex, "value", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "value", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     public void citizenNameTooLong() {
         Throwable ex = catchThrowable(() -> underTest.renameCitizen(USER_ID, CITIZEN_ID, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "value", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "value", ValidationUtil.TOO_LONG);
     }
 
     @Test

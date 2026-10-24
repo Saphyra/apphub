@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TableAction
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -129,7 +130,7 @@ public class SearchListItemTest extends BackEndTest {
 
     private static void searchTextTooShort(String accessToken) {
         Response response = ListItemActions.getSearchResponse(getServerPort(), accessToken, "as");
-        ResponseValidator.verifyInvalidParam(response, "search", "too short");
+        ResponseValidator.verifyInvalidParam(response, "search", ValidationConstants.TOO_SHORT);
     }
 
     @Test(groups = {"be", "notebook"})

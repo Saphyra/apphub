@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.AddChecklistItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistResponse;
@@ -52,7 +53,7 @@ public class AddItemToChecklistTest extends BackEndTest {
 
         Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessToken, listItemId, request);
 
-        ResponseValidator.verifyInvalidParam(response, "content", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "content", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void nullIndex(String accessToken, UUID listItemId) {
@@ -63,7 +64,7 @@ public class AddItemToChecklistTest extends BackEndTest {
 
         Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessToken, listItemId, request);
 
-        ResponseValidator.verifyInvalidParam(response, "index", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "index", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void addItemToTheStart(String accessToken, UUID listItemId) {

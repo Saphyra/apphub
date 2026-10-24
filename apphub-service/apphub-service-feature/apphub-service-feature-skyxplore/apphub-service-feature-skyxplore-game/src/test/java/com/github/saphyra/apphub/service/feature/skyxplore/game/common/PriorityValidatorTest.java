@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.common;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,21 +18,21 @@ public class PriorityValidatorTest {
     public void nullPriority() {
         Throwable ex = catchThrowable(() -> underTest.validate(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "priority", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "priority", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void priorityTooLow() {
         Throwable ex = catchThrowable(() -> underTest.validate(0));
 
-        ExceptionValidator.validateInvalidParam(ex, "priority", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "priority", ValidationUtil.TOO_LOW);
     }
 
     @Test
     public void priorityTooHigh() {
         Throwable ex = catchThrowable(() -> underTest.validate(11));
 
-        ExceptionValidator.validateInvalidParam(ex, "priority", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "priority", ValidationUtil.TOO_HIGH);
     }
 
     @Test

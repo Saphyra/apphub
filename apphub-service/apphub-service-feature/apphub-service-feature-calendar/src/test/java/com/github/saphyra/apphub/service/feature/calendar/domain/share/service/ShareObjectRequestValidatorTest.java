@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.ShareObjectRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -67,7 +68,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setSharedWith(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "sharedWith", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "sharedWith", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -75,7 +76,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setOwner(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "owner", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "owner", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -83,7 +84,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setObjectId(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "objectId", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "objectId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -91,7 +92,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setType(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "type", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "type", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -99,7 +100,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setGrants(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "grants", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "grants", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -107,7 +108,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setGrants(CollectionUtils.toSet(Grant.DELETE, null, Grant.DELETE_CHILDREN));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "grants", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "grants", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
@@ -115,7 +116,7 @@ class ShareObjectRequestValidatorTest {
         ShareObjectRequest request = createValidRequest();
         request.setParent(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "parent", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "parent", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

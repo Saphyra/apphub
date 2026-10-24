@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.education;
 
 import com.github.saphyra.apphub.lib.common_domain.Range;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -23,21 +24,21 @@ class EducationValidatorTest {
 
     @Test
     void nullEducations() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "educations", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "educations", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void blankId() {
         given(education.getId()).willReturn(" ");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.id", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.id", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     void nullSkill() {
         given(education.getId()).willReturn("id");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.skill", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.skill", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -45,7 +46,7 @@ class EducationValidatorTest {
         given(education.getId()).willReturn("id");
         given(education.getSkill()).willReturn(SkillType.AIMING);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.levelLimit", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.levelLimit", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -54,7 +55,7 @@ class EducationValidatorTest {
         given(education.getSkill()).willReturn(SkillType.AIMING);
         given(education.getLevelLimit()).willReturn(new Range<>(-1, 1));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.levelLimit.min", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.levelLimit.min", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -63,7 +64,7 @@ class EducationValidatorTest {
         given(education.getSkill()).willReturn(SkillType.AIMING);
         given(education.getLevelLimit()).willReturn(new Range<>(0, 0));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.levelLimit.max", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(education)), "education.levelLimit.max", ValidationUtil.TOO_LOW);
     }
 
     @Test

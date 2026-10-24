@@ -1,0 +1,41 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body;
+
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+@ExtendWith(MockitoExtension.class)
+class BodyFactoryTest {
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
+    private static final UUID ID = UUID.randomUUID();
+    private static final Long BODY_ID = 324L;
+    private static final String BODY_NAME = "body-name";
+    private static final Double DISTANCE_FROM_STAR = 132.2;
+
+    @Mock
+    private IdGenerator idGenerator;
+
+    @InjectMocks
+    private BodyFactory underTest;
+
+    @Test
+    void create() {
+        given(idGenerator.randomUuid()).willReturn(ID);
+
+        assertThat(underTest.create(STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR))
+            .returns(ID, Body::getId)
+            .returns(STAR_SYSTEM_ID, Body::getStarSystemId)
+            .returns(BodyType.PLANET, Body::getType)
+            .returns(BODY_ID, Body::getBodyId)
+            .returns(BODY_NAME, Body::getBodyName)
+            .returns(DISTANCE_FROM_STAR, Body::getDistanceFromStar);
+    }
+}

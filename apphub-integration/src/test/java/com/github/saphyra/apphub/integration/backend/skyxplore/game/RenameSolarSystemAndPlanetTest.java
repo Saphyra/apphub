@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.MapSolarSystemResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
@@ -53,14 +54,14 @@ public class RenameSolarSystemAndPlanetTest extends BackEndTest {
 
         Response solarSystem_blankResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId(), " ");
 
-        ResponseValidator.verifyInvalidParam(solarSystem_blankResponse, "newName", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(solarSystem_blankResponse, "newName", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
         return solarSystemResponse;
     }
 
     private static void solarSystem_tooLong(String accessToken1, MapSolarSystemResponse solarSystemResponse) {
         Response solarSystem_tooLongResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
-        ResponseValidator.verifyInvalidParam(solarSystem_tooLongResponse, "newName", "too long");
+        ResponseValidator.verifyInvalidParam(solarSystem_tooLongResponse, "newName", ValidationConstants.TOO_LONG);
     }
 
     private static void solarSystem_rename(String accessToken1, MapSolarSystemResponse solarSystemResponse) {
@@ -74,14 +75,14 @@ public class RenameSolarSystemAndPlanetTest extends BackEndTest {
 
         Response planet_blankResponse = SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessToken1, planetLocationResponse.getPlanetId(), " ");
 
-        ResponseValidator.verifyInvalidParam(planet_blankResponse, "newName", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(planet_blankResponse, "newName", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
         return planetLocationResponse;
     }
 
     private static void planet_tooLong(String accessToken1, PlanetLocationResponse planetLocationResponse) {
         Response planet_tooLongResponse = SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessToken1, planetLocationResponse.getPlanetId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
-        ResponseValidator.verifyInvalidParam(planet_tooLongResponse, "newName", "too long");
+        ResponseValidator.verifyInvalidParam(planet_tooLongResponse, "newName", ValidationConstants.TOO_LONG);
     }
 
     private static void planet_rename(String accessToken1, MapSolarSystemResponse solarSystemResponse, PlanetLocationResponse planetLocationResponse) {

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
+import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +25,23 @@ public class LocalTestService {
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
-    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
+    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount, int maxWebDriverCacheSize) {
         log.info("");
         log.info("Running tests again local environment with test filter: {}, threadCount: {}, preCreatedDriverCount: {}, retryCount: {}", testFilter.isEmpty() ? "All" : testFilter, threadCount, preCreatedDriverCount, retryCount);
 
-        if (testFilter.isEmpty() && !allServicesRunning()) {
-            throw new IllegalStateException("Services are not running.");
-        } else if (!testFilter.isEmpty() && !enabledServicesAreRunning()) {
-            throw new IllegalStateException("Enabled services are not running.");
+        if (testFilter.isEmpty()) {
+            List<String> unreachableServices = allServicesRunning();
+            if (!unreachableServices.isEmpty()) {
+                throw new IllegalStateException("Services are not running. Missing services: " + unreachableServices);
+            }
         } else {
-            log.info("Services are running.");
+            List<String> unreachableServices = enabledServicesAreRunning();
+            if (!unreachableServices.isEmpty()) {
+                throw new IllegalStateException("Enabled services are not running. Missing services: " + unreachableServices);
+            }
         }
+
+        log.info("Services are running.");
 
         Optional<Exception> maybeFrontendFailure = servicePinger.singlePing("http://localhost:3000/");
         if (maybeFrontendFailure.isPresent()) {
@@ -57,23 +64,32 @@ public class LocalTestService {
                 .databaseConnectionCacheEnabled(false)
                 .namespace("")
                 .retryCount(retryCount)
+                .maxWebDriverCacheSize(maxWebDriverCacheSize)
                 .dynamoDbHost("localhost:" + platformProperties.getLocalDynamoDbPort())
                 .build()
         );
     }
 
-    private boolean allServicesRunning() {
+    private List<String> allServicesRunning() {
         return services.getServices()
             .stream()
-            .allMatch(service -> servicePinger.singlePingLocal(service.getPort()).isEmpty());
+            .filter(service -> servicePinger.singlePingLocal(service.getPort()).isPresent())
+            .map(Service::getName)
+            .toList();
     }
 
-    private boolean enabledServicesAreRunning() {
+    /**
+     *
+     * @return missing services
+     */
+    private List<String> enabledServicesAreRunning() {
         List<String> disabledServices = propertyDao.getDisabledServices();
 
         return services.getServices()
             .stream()
             .filter(service -> !disabledServices.contains(service.getName()))
-            .allMatch(service -> servicePinger.singlePingLocal(service.getPort()).isEmpty());
+            .filter(service -> servicePinger.singlePingLocal(service.getPort()).isPresent())
+            .map(Service::getName)
+            .toList();
     }
 }

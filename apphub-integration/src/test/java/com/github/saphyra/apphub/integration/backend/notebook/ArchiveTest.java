@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.NotebookView;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -34,7 +35,7 @@ public class ArchiveTest extends BackEndTest {
 
     private static void archive_nullArchived(String accessToken, UUID listItemId) {
         Response pin_nullPinnedResponse = ListItemActions.getArchiveResponse(getServerPort(), accessToken, listItemId, null);
-        ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "archived", "must not be null");
+        ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "archived", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void archive(String accessToken, UUID listItemId) {

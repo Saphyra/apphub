@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creation;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ public class AllianceNameValidatorTest {
     public void nullAllianceName() {
         Throwable ex = catchThrowable(() -> underTest.validate(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "allianceName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "allianceName", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class AllianceNameValidatorTest {
     public void allianceNameTooLong() {
         Throwable ex = catchThrowable(() -> underTest.validate(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "allianceName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "allianceName", ValidationUtil.TOO_LONG);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerStatus;
@@ -35,9 +36,9 @@ public class CreateLobbyTest extends BackEndTest {
     }
 
     private static void validation(String accessToken1) {
-        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessToken1, null), "lobbyName", "must not be null");
-        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessToken1, "aa"), "lobbyName", "too short");
-        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessToken1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "lobbyName", "too long");
+        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessToken1, null), "lobbyName", ValidationConstants.MUST_NOT_BE_NULL);
+        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessToken1, "aa"), "lobbyName", ValidationConstants.TOO_SHORT);
+        verifyInvalidParam(SkyXploreLobbyActions.getCreateLobbyResponse(getServerPort(), accessToken1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())), "lobbyName", ValidationConstants.TOO_LONG);
 
         assertThat(SkyXploreLobbyActions.isUserInLobby(getServerPort(), accessToken1)).isFalse();
     }

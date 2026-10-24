@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.community.GroupActio
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupListResponse;
@@ -59,7 +60,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getCreateGroupResponse(getServerPort(), accessToken1, null),
             "groupName",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 
@@ -67,7 +68,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getCreateGroupResponse(getServerPort(), accessToken1, "as"),
             "groupName",
-            "too short"
+            ValidationConstants.TOO_SHORT
         );
     }
 
@@ -75,7 +76,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getCreateGroupResponse(getServerPort(), accessToken1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
             "groupName",
-            "too long"
+            ValidationConstants.TOO_LONG
         );
     }
 
@@ -92,7 +93,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getRenameGroupResponse(getServerPort(), accessToken1, group.getGroupId(), null),
             "groupName",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 
@@ -100,7 +101,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getRenameGroupResponse(getServerPort(), accessToken1, group.getGroupId(), "as"),
             "groupName",
-            "too short"
+            ValidationConstants.TOO_SHORT
         );
     }
 
@@ -108,7 +109,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getRenameGroupResponse(getServerPort(), accessToken1, group.getGroupId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining())),
             "groupName",
-            "too long"
+            ValidationConstants.TOO_LONG
         );
     }
 
@@ -129,7 +130,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getChangeInvitationTypeResponse(getServerPort(), accessToken1, group.getGroupId(), null),
             "invitationType",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 
@@ -148,7 +149,7 @@ public class GroupCrudTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(
             GroupActions.getChangeOwnerResponse(getServerPort(), accessToken1, group.getGroupId(), null),
             "groupMemberId",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 

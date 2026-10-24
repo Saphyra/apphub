@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.education;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.BuildingModuleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.AfterEach;
@@ -50,7 +51,7 @@ class EducationBuildingModuleValidatorTest {
     void capacityTooLow() {
         given(buildingModuleData.getCapacity()).willReturn(0);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "capacity", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "capacity", ValidationUtil.TOO_LOW);
     }
 
     @Test

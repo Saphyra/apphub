@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class EmailValidatorTest {
     public void nullEmail() {
         Throwable ex = catchThrowable(() -> underTest.validateEmail(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "email", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "email", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

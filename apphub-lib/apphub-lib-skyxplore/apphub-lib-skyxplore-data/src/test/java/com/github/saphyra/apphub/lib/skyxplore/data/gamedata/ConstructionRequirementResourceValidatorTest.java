@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ class ConstructionRequirementResourceValidatorTest {
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(RESOURCE_DATA_ID, 1));
         given(resourceDataService.containsKey(RESOURCE_DATA_ID)).willReturn(false);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(), "requiredResource=resource-data-id", "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(), "requiredResource=resource-data-id", ValidationUtil.INVALID_VALUE);
     }
 
     @Test

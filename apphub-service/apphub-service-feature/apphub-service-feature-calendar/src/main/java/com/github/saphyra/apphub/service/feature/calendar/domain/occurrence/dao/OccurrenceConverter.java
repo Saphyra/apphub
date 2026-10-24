@@ -27,7 +27,6 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .occurrenceId(occurrenceId)
-            .dateBucket(toDateBucket(domain.getDate()))
             .date(dateTimeConverter.convertDomain(domain.getDate()))
             .time(dateTimeConverter.convertDomain(domain.getTime()))
             .status(domain.getStatus().name())
@@ -66,9 +65,5 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
         }
 
         return savedStatus;
-    }
-
-    private static String toDateBucket(LocalDate date) {
-        return date.getYear() + "-" + date.getMonthValue();
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.common.NotebookConstants;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Link;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -46,7 +47,7 @@ class LinkColumnDataServiceTest {
     void validateData_null() {
         Throwable ex = catchThrowable(() -> underTest.validateData(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "link", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "link", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -55,7 +56,7 @@ class LinkColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "link", "failed to parse");
+        ExceptionValidator.validateInvalidParam(ex, "link", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -65,7 +66,7 @@ class LinkColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "link.label", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "link.label", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -75,7 +76,7 @@ class LinkColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "link.label", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "link.label", ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -85,7 +86,7 @@ class LinkColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "link.url", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "link.url", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -95,7 +96,7 @@ class LinkColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "link.url", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "link.url", ValidationUtil.TOO_LONG);
     }
 
     @Test

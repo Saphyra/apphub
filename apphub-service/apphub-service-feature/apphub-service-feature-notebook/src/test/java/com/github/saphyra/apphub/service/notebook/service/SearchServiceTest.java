@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
@@ -57,7 +58,7 @@ class SearchServiceTest {
 
     @Test
     void searchValueTooShort() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.search(USER_ID, "ab"), "search", "too short");
+        ExceptionValidator.validateInvalidParam(() -> underTest.search(USER_ID, "ab"), "search", ValidationUtil.TOO_SHORT);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrate
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricPropertyModel;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,7 @@ class PutMetricsRequestValidatorTest {
             .properties(PROPERTIES)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "feature", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "feature", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -53,7 +54,7 @@ class PutMetricsRequestValidatorTest {
             .properties(PROPERTIES)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "functionality", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "functionality", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -64,7 +65,7 @@ class PutMetricsRequestValidatorTest {
             .properties(List.of())
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "properties", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "properties", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
@@ -75,7 +76,7 @@ class PutMetricsRequestValidatorTest {
             .properties(List.of(PROPERTY_MODEL.toBuilder().key(" ").build()))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "property.key", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "property.key", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -86,7 +87,7 @@ class PutMetricsRequestValidatorTest {
             .properties(List.of(PROPERTY_MODEL.toBuilder().value(null).build()))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "property.value", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "property.value", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -97,6 +98,6 @@ class PutMetricsRequestValidatorTest {
             .properties(List.of(PROPERTY_MODEL.toBuilder().aggregationStrategy(null).build()))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "property.aggregationStrategy", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "property.aggregationStrategy", ValidationUtil.MUST_NOT_BE_NULL);
     }
 }

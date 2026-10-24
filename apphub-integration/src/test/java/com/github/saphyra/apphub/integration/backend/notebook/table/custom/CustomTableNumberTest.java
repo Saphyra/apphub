@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.Number;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -82,7 +83,7 @@ public class CustomTableNumberTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "number.step", "too low");
+        ResponseValidator.verifyInvalidParam(response, "number.step", ValidationConstants.TOO_LOW);
     }
 
     private void create_nullNumberStep(String accessToken) {
@@ -91,7 +92,7 @@ public class CustomTableNumberTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "number.step", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "number.step", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_nullNumberValue(String accessToken) {
@@ -100,7 +101,7 @@ public class CustomTableNumberTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "number.value", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "number.value", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_failedToParse(String accessToken) {
@@ -108,7 +109,7 @@ public class CustomTableNumberTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "number", "failed to parse");
+        ResponseValidator.verifyInvalidParam(response, "number", ValidationConstants.FAILED_TO_PARSE);
     }
 
     private void create_nullData(String accessToken) {
@@ -116,6 +117,6 @@ public class CustomTableNumberTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "number", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "number", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

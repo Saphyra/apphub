@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
@@ -163,7 +164,7 @@ public class TerraformationServiceTest {
     public void invalidSurfaceType() {
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, "afe"));
 
-        ExceptionValidator.validateInvalidParam(ex, "surfaceType", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "surfaceType", ValidationUtil.INVALID_VALUE);
     }
 
     @Test

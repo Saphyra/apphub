@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.BanDetailsResponse;
@@ -67,7 +68,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_nullBannedUserIdResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_nullBannedUserIdRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_nullBannedUserIdResponse, "bannedUserId", "must not be null");
+        ResponseValidator.verifyInvalidParam(ban_nullBannedUserIdResponse, "bannedUserId", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void ban_nullBannedRole(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -83,7 +84,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_blankBannedRoleResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_blankBannedRoleRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_blankBannedRoleResponse, "bannedRole", "must not be null");
+        ResponseValidator.verifyInvalidParam(ban_blankBannedRoleResponse, "bannedRole", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void ban_nullPermanent(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -99,7 +100,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_nullPermanentResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_nullPermanentRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_nullPermanentResponse, "permanent", "must not be null");
+        ResponseValidator.verifyInvalidParam(ban_nullPermanentResponse, "permanent", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void ban_blankReason(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -115,7 +116,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_blankReasonResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_blankReasonRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_blankReasonResponse, "reason", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(ban_blankReasonResponse, "reason", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void ban_blankPassword(String accessToken, UUID testUserId) {
@@ -131,7 +132,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_blankPasswordResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_blankPasswordRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_blankPasswordResponse, "password", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(ban_blankPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void ban_nullDuration(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -147,7 +148,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_nullDurationResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_nullDurationRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_nullDurationResponse, "duration", "must not be null");
+        ResponseValidator.verifyInvalidParam(ban_nullDurationResponse, "duration", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void ban_durationTooLow(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -163,7 +164,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_durationTooLowResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_durationTooLowRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_durationTooLowResponse, "duration", "too low");
+        ResponseValidator.verifyInvalidParam(ban_durationTooLowResponse, "duration", ValidationConstants.TOO_LOW);
     }
 
     private static void ban_unknownChronoUnit(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -179,7 +180,7 @@ public class BanCrudTest extends BackEndTest {
 
         Response ban_unknownChronoUnitResponse = BanActions.getBanResponse(getServerPort(), accessToken, ban_unknownChronoUnitRequest);
 
-        ResponseValidator.verifyInvalidParam(ban_unknownChronoUnitResponse, "chronoUnit", "invalid value");
+        ResponseValidator.verifyInvalidParam(ban_unknownChronoUnitResponse, "chronoUnit", ValidationConstants.INVALID_VALUE);
     }
 
     private static String ban_incorrectPassword(RegistrationParameters userData, String accessToken, UUID testUserId) {
@@ -247,7 +248,7 @@ public class BanCrudTest extends BackEndTest {
     private static void revokeBan_blankPassword(String accessToken, BanDetailsResponse ban) {
         Response revokeBan_blankPasswordResponse = BanActions.getRevokeBanResponse(getServerPort(), accessToken, ban.getId(), " ");
 
-        ResponseValidator.verifyInvalidParam(revokeBan_blankPasswordResponse, "password", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(revokeBan_blankPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void revokeBan_incorrectPassword(RegistrationParameters userData, String accessToken, UUID testUserId, BanDetailsResponse ban) {

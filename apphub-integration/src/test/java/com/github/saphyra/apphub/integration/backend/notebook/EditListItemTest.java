@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemAct
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditListItemRequest;
@@ -45,7 +46,7 @@ public class EditListItemTest extends BackEndTest {
             .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
             .build();
         Response blankTitleResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, blankTitleRequest, parentCategoryId);
-        verifyInvalidParam(blankTitleResponse, "title", "too long");
+        verifyInvalidParam(blankTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void blankTitle(String accessToken, UUID parentCategoryId) {
@@ -53,7 +54,7 @@ public class EditListItemTest extends BackEndTest {
             .title(" ")
             .build();
         Response blankTitleResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, blankTitleRequest, parentCategoryId);
-        verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void newParentNotFound(String accessToken, UUID parentCategoryId) {

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
@@ -59,14 +60,14 @@ public class StoreFileServiceTest {
     public void createFile_nullFileName() {
         Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, null, FILE_SIZE));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "fileName", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void createFile_nullSize() {
         Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "size", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "size", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -75,7 +76,7 @@ public class StoreFileServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, FILE_SIZE + 2));
 
-        ExceptionValidator.validateInvalidParam(ex, "size", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "size", ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -96,7 +97,7 @@ public class StoreFileServiceTest {
     public void uploadFile_tooBig() {
         Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, FILE_SIZE + 2));
 
-        ExceptionValidator.validateInvalidParam(ex, "size", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "size", ValidationUtil.TOO_HIGH);
     }
 
     @Test

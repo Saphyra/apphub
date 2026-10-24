@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
@@ -54,13 +55,13 @@ public class StorageSettingTest extends BackEndTest {
     }
 
     private void create_validation(String accessToken1, PlanetLocationResponse planet) {
-        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(null).build(), "priority", "must not be null");
-        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(0).build(), "priority", "too low");
-        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(11).build(), "priority", "too high");
-        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().dataId(" ").build(), "dataId", "must not be null or blank");
+        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(null).build(), "priority", ValidationConstants.MUST_NOT_BE_NULL);
+        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(0).build(), "priority", ValidationConstants.TOO_LOW);
+        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().priority(11).build(), "priority", ValidationConstants.TOO_HIGH);
+        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().dataId(" ").build(), "dataId", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
         create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().dataId("asd").build(), "dataId", "unknown resource");
-        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
-        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
+        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(null).build(), "targetAmount", ValidationConstants.MUST_NOT_BE_NULL);
+        create_runValidationTest(accessToken1, planet.getPlanetId(), StorageSettingModel.valid().toBuilder().targetAmount(-1).build(), "targetAmount", ValidationConstants.TOO_LOW);
     }
 
     private static StorageSettingModel createForCrud(String accessToken1, PlanetLocationResponse planet) {
@@ -104,13 +105,13 @@ public class StorageSettingTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("StorageSetting not found."))
             .getStorageSettingId();
 
-        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(null).build(), "priority", "must not be null");
-        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(0).build(), "priority", "too low");
-        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(11).build(), "priority", "too high");
-        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().dataId(" ").build(), "dataId", "must not be null or blank");
+        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(null).build(), "priority", ValidationConstants.MUST_NOT_BE_NULL);
+        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(0).build(), "priority", ValidationConstants.TOO_LOW);
+        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().priority(11).build(), "priority", ValidationConstants.TOO_HIGH);
+        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().dataId(" ").build(), "dataId", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
         edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().dataId("asd").build(), "dataId", "unknown resource");
-        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(null).build(), "targetAmount", "must not be null");
-        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", "too low");
+        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(null).build(), "targetAmount", ValidationConstants.MUST_NOT_BE_NULL);
+        edit_runValidationTest(accessToken1, StorageSettingModel.valid(storageSettingId).toBuilder().targetAmount(-1).build(), "targetAmount", ValidationConstants.TOO_LOW);
         return storageSettingId;
     }
 

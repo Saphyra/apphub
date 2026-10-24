@@ -22,7 +22,9 @@ serviceHosts:
   notebook: localhost:8090
   modules: localhost:8088
   calendar: localhost:8097
-  eliteBase: localhost:8087
+  eliteBaseProcessor: localhost:8087
+  eliteBaseReceiver: localhost:8100
+  eliteBaseDbWriter: localhost:8083
   mainGateway: localhost:8080
   taskManager: localhost:8098
 

@@ -17,7 +17,10 @@ serviceHosts:
   modules: modules:8080
   community: community:8080
   calendar: calendar:8080
-  eliteBase: elite-base:8080
+  eliteBaseProcessor: elite-base-processor:8080
+  eliteBaseReceiver: elite-base-receiver:8080
+  eliteBaseDbWriter: elite-base-db-writer:8080
+  eliteBaseDbReader: elite-base-db-reader:8080
   mainGateway: main-gateway:8080
   taskManager: task-manager:8080
 

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,14 +16,14 @@ class LabelValidatorTest {
 
     @Test
     void blankLabel() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(""), "label", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(""), "label", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     void tooLongLabel() {
         String label = "a".repeat(256);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(label), "label", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(label), "label", ValidationUtil.TOO_LONG);
     }
 
     @Test

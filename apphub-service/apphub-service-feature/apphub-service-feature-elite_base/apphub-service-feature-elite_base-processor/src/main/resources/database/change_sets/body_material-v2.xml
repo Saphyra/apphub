@@ -1,0 +1,100 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_material_v2" author="saphyra" dbms="h2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_material_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_material_v2">
+            <column name="body_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="material" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="percent" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_material_v2" columnNames="body_id, material" constraintName="body_material_v2-pk"/>
+    </changeSet>
+
+    <changeSet id="create-table-body_material_v2" author="saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_material_v2"/>
+            </not>
+        </preConditions>
+
+        <sql>
+            CREATE TABLE elite_base.body_material_v2 (
+                body_id varchar(37) NOT NULL,
+                material varchar(255) NOT NULL,
+                percent numeric,
+                CONSTRAINT body_material_v2_pk PRIMARY KEY (body_id, material)
+            ) PARTITION BY HASH (body_id);
+        </sql>
+
+        <sql>
+            CREATE TABLE elite_base.body_material_v2_p0 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 0);
+            CREATE TABLE elite_base.body_material_v2_p1 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 1);
+            CREATE TABLE elite_base.body_material_v2_p2 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 2);
+            CREATE TABLE elite_base.body_material_v2_p3 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 3);
+            CREATE TABLE elite_base.body_material_v2_p4 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 4);
+            CREATE TABLE elite_base.body_material_v2_p5 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 5);
+            CREATE TABLE elite_base.body_material_v2_p6 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 6);
+            CREATE TABLE elite_base.body_material_v2_p7 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 7);
+            CREATE TABLE elite_base.body_material_v2_p8 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 8);
+            CREATE TABLE elite_base.body_material_v2_p9 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 9);
+            CREATE TABLE elite_base.body_material_v2_p10 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 10);
+            CREATE TABLE elite_base.body_material_v2_p11 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 11);
+            CREATE TABLE elite_base.body_material_v2_p12 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 12);
+            CREATE TABLE elite_base.body_material_v2_p13 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 13);
+            CREATE TABLE elite_base.body_material_v2_p14 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 14);
+            CREATE TABLE elite_base.body_material_v2_p15 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 15);
+            CREATE TABLE elite_base.body_material_v2_p16 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 16);
+            CREATE TABLE elite_base.body_material_v2_p17 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 17);
+            CREATE TABLE elite_base.body_material_v2_p18 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 18);
+            CREATE TABLE elite_base.body_material_v2_p19 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 19);
+            CREATE TABLE elite_base.body_material_v2_p20 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 20);
+            CREATE TABLE elite_base.body_material_v2_p21 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 21);
+            CREATE TABLE elite_base.body_material_v2_p22 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 22);
+            CREATE TABLE elite_base.body_material_v2_p23 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 23);
+            CREATE TABLE elite_base.body_material_v2_p24 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 24);
+            CREATE TABLE elite_base.body_material_v2_p25 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 25);
+            CREATE TABLE elite_base.body_material_v2_p26 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 26);
+            CREATE TABLE elite_base.body_material_v2_p27 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 27);
+            CREATE TABLE elite_base.body_material_v2_p28 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 28);
+            CREATE TABLE elite_base.body_material_v2_p29 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 29);
+            CREATE TABLE elite_base.body_material_v2_p30 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 30);
+            CREATE TABLE elite_base.body_material_v2_p31 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 31);
+            CREATE TABLE elite_base.body_material_v2_p32 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 32);
+            CREATE TABLE elite_base.body_material_v2_p33 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 33);
+            CREATE TABLE elite_base.body_material_v2_p34 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 34);
+            CREATE TABLE elite_base.body_material_v2_p35 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 35);
+            CREATE TABLE elite_base.body_material_v2_p36 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 36);
+            CREATE TABLE elite_base.body_material_v2_p37 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 37);
+            CREATE TABLE elite_base.body_material_v2_p38 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 38);
+            CREATE TABLE elite_base.body_material_v2_p39 PARTITION OF elite_base.body_material_v2 FOR VALUES WITH (MODULUS 40, REMAINDER 39);
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-foreign-key-body_material_v2-body_id" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="body_material_v2-body_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="body_material_v2"
+                baseColumnNames="body_id"
+                constraintName="body_material_v2-body_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="body_v3"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

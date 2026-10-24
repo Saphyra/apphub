@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,14 +18,14 @@ class UserQueryValidatorTest {
     void nullQuery() {
         Throwable ex = catchThrowable(() -> underTest.validateQuery(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "query", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "query", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void tooShortQuery() {
         Throwable ex = catchThrowable(() -> underTest.validateQuery("ab"));
 
-        ExceptionValidator.validateInvalidParam(ex, "query", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "query", ValidationUtil.TOO_SHORT);
     }
 
     @Test

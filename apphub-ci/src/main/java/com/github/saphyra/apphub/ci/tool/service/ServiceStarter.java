@@ -90,40 +90,45 @@ public class ServiceStarter {
 
     @SneakyThrows
     private void startService(Service service, StartupIndicator startupIndicator, Map<String, String> additionalArguments) {
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        log.info("Starting service {}", service.getName());
+        try {
+            Stopwatch stopwatch = Stopwatch.createStarted();
+            log.info("Starting service {}", service.getName());
 
-        List<String> command = new ArrayList<>();
-        command.addAll(List.of(
-            "cmd",
-            "/c",
-            "start",
-            "java",
-            "-Xmx1024m",
-            "-Dfile.encoding=UTF-8"
-        ));
-        command.addAll(mapArguments(getArguments(service.getProperties()), additionalArguments));
-        command.addAll(List.of(
-            "-jar",
-            service.getLocation()
-        ));
+            List<String> command = new ArrayList<>();
+            command.addAll(List.of(
+                "cmd",
+                "/c",
+                "start",
+                "java",
+                "-Xmx1024m",
+                "-Dfile.encoding=UTF-8"
+            ));
+            command.addAll(mapArguments(getArguments(service.getProperties()), additionalArguments));
+            command.addAll(List.of(
+                "-jar",
+                service.getLocation()
+            ));
 
-        new ProcessBuilder(command)
-            .start();
+            new ProcessBuilder(command)
+                .start();
 
-        startupIndicator.startupInitiated(service.getName());
+            startupIndicator.startupInitiated(service.getName());
 
-        Integer port = Optional.ofNullable(service.getHealthCheckPort())
-            .orElse(service.getPort());
+            Integer port = Optional.ofNullable(service.getHealthCheckPort())
+                .orElse(service.getPort());
 
-        servicePinger.pingLocal(port)
-            .ifPresent(e -> {
-                throw new RuntimeException("Failed starting service " + service.getName(), e);
-            });
+            servicePinger.pingLocal(port)
+                .ifPresent(e -> {
+                    throw new RuntimeException("Failed starting service " + service.getName(), e);
+                });
 
-        stopwatch.stop();
-        startupIndicator.startupCompleted(service.getName());
-        log.info("{} successfully started in {}s.", service.getName(), (stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000d));
+            stopwatch.stop();
+            startupIndicator.startupCompleted(service.getName());
+            log.info("{} successfully started in {}s.", service.getName(), (stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000d));
+        } catch (Exception e) {
+            startupIndicator.startupFailed(service.getName());
+            throw e;
+        }
     }
 
     private Map<String, String> getArguments(List<PropertyName> properties) {

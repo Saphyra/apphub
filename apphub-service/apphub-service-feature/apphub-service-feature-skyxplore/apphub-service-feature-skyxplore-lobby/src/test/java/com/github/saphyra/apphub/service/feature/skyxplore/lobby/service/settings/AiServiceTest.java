@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiP
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
@@ -82,7 +83,7 @@ class AiServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createOrModifyAi(USER_ID, aiPlayer));
 
-        ExceptionValidator.validateInvalidParam(ex, "name", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "name", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -93,7 +94,7 @@ class AiServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createOrModifyAi(USER_ID, aiPlayer));
 
-        ExceptionValidator.validateInvalidParam(ex, "name", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "name", ValidationUtil.TOO_SHORT);
     }
 
     @Test
@@ -104,7 +105,7 @@ class AiServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.createOrModifyAi(USER_ID, aiPlayer));
 
-        ExceptionValidator.validateInvalidParam(ex, "name", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "name", ValidationUtil.TOO_LONG);
     }
 
     @Test

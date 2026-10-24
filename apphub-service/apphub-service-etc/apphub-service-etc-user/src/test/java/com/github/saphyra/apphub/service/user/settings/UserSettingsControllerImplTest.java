@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.etc.user.model.SetUserSettingsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.user.settings.dao.UserSetting;
 import com.github.saphyra.apphub.service.user.settings.dao.UserSettingDao;
@@ -97,7 +98,7 @@ public class UserSettingsControllerImplTest {
 
         Throwable ex = catchThrowable(() -> underTest.setUserSettings(request, accessToken));
 
-        ExceptionValidator.validateInvalidParam(ex, "key", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "key", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test

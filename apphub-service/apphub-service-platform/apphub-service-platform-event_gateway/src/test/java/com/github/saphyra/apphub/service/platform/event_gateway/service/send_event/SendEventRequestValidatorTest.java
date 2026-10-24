@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +28,7 @@ public class SendEventRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(sendEventRequest));
 
-        ExceptionValidator.validateInvalidParam(ex, "metadata", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "metadata", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -39,7 +40,7 @@ public class SendEventRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(sendEventRequest));
 
-        ExceptionValidator.validateInvalidParam(ex, "eventName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "eventName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test

@@ -15,6 +15,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -95,5 +96,26 @@ public class ExecutorServiceBean {
 
     public void stop() {
         executor.shutdownNow();
+    }
+
+    public <T> List<ExecutionResult<Void>> execute(List<T> collection, Consumer<T> processor, int threadCount) {
+        Semaphore semaphore = new Semaphore(threadCount);
+        List<FutureWrapper<Void>> futures = collection.stream()
+            .map(item -> {
+                semaphore.acquireUninterruptibly();
+                return execute(() -> {
+
+                    try {
+                        processor.accept(item);
+                    } finally {
+                        semaphore.release();
+                    }
+                });
+            })
+            .toList();
+
+        return futures.stream()
+            .map(FutureWrapper::get)
+            .toList();
     }
 }

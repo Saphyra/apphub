@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionMo
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
@@ -157,12 +158,12 @@ class ConstructConstructionAreaServiceTest {
 
     @Test
     void nullDataId() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, null), "dataId", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, null), "dataId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void invalidDataId() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, "asd"), "dataId", "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, "asd"), "dataId", ValidationUtil.INVALID_VALUE);
     }
 
     @Test

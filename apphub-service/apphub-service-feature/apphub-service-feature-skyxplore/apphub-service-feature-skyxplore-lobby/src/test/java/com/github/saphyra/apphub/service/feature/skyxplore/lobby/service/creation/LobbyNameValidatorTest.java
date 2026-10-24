@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.creation;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,21 +21,21 @@ public class LobbyNameValidatorTest {
     public void nullLobbyName() {
         Throwable ex = catchThrowable(() -> underTest.validate(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "lobbyName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "lobbyName", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void tooShortLobbyName() {
         Throwable ex = catchThrowable(() -> underTest.validate("aa"));
 
-        ExceptionValidator.validateInvalidParam(ex, "lobbyName", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "lobbyName", ValidationUtil.TOO_SHORT);
     }
 
     @Test
     public void tooLongLobbyName() {
         Throwable ex = catchThrowable(() -> underTest.validate(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "lobbyName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "lobbyName", ValidationUtil.TOO_LONG);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Services;
+import com.github.saphyra.apphub.ci.value.Technology;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,19 @@ public class KubernetesNamespaceSetupper {
     private final Services services;
     private final KubernetesSecretHandler kubernetesSecretHandler;
 
-    public void setupNamespace(Environment environment, String namespaceName) {
+    public void setupNamespace(Environment environment, String namespaceName, Technology... technologies) {
         createNamespace(namespaceName);
         createSecrets(environment, namespaceName);
-        deployRabbitMq(namespaceName);
+
+        for (Technology technology : technologies) {
+            switch (technology) {
+                case POSTGRES -> deployPostgres(namespaceName);
+                case DYNAMODB -> deployDynamoDb(namespaceName);
+                case RABBITMQ -> deployRabbitMq(namespaceName);
+            }
+        }
+
+        kubernetesPodStartupWaiter.waitForPods(namespaceName, 30); //Greater wait time is required because sometimes the docker images needs to be pulled first
     }
 
     private void createSecrets(Environment environment, String namespaceName) {
@@ -48,32 +58,26 @@ public class KubernetesNamespaceSetupper {
     }
 
     @SneakyThrows
-    public void deployPostgres(String namespaceName) {
+    private void deployPostgres(String namespaceName) {
         new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-postgres.yaml")
             .inheritIO()
             .start()
             .waitFor();
-
-        kubernetesPodStartupWaiter.waitForPods(namespaceName, 10);
     }
 
     @SneakyThrows
-    public void deployDynamoDb(String namespaceName) {
+    private void deployDynamoDb(String namespaceName) {
         new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-dynamo-db.yaml")
             .inheritIO()
             .start()
             .waitFor();
-
-        kubernetesPodStartupWaiter.waitForPods(namespaceName, 10);
     }
 
     @SneakyThrows
-    public void deployRabbitMq(String namespaceName) {
+    private void deployRabbitMq(String namespaceName) {
         new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-rabbitmq.yaml")
             .inheritIO()
             .start()
             .waitFor();
-
-        kubernetesPodStartupWaiter.waitForPods(namespaceName, 10);
     }
 }

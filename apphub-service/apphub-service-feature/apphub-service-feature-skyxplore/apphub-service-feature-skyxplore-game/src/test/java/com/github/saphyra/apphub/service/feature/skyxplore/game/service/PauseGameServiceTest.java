@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.player.Player;
@@ -45,7 +46,7 @@ public class PauseGameServiceTest {
     public void nullPaused() {
         Throwable ex = catchThrowable(() -> underTest.setPausedStatus(USER_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "isPaused", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "isPaused", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

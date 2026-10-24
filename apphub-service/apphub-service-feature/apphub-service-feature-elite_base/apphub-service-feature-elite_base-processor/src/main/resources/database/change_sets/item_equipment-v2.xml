@@ -1,0 +1,83 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-item_equipment_v2" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="item_equipment_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="item_equipment_v2">
+            <column name="id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_id" type="varchar(37)"/>
+            <column name="fleet_carrier_id" type="varchar(37)"/>
+            <column name="item_name" type="varchar(255)"/>
+            <column name="market_id" type="numeric"/>
+            <column name="star_system_id" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="item_equipment_v2" columnNames="id" constraintName="item_equipment_v2-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="item_equipment_v2" indexName="index-item_equipment_v2-market_id">
+            <column name="market_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-foreign-key-item_equipment_v2-station_id" author="Saphyra" dbms="postgresql">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="item_equipment_v2-station_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="item_equipment_v2"
+                baseColumnNames="station_id"
+                constraintName="item_equipment_v2-station_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="station_v2"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="add-foreign-key-item_equipment_v2-fleet_carrier_id" author="Saphyra" dbms="postgresql">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="item_equipment_v2-fleet_carrier_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="item_equipment_v2"
+                baseColumnNames="fleet_carrier_id"
+                constraintName="item_equipment_v2-fleet_carrier_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="fleet_carrier_v2"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="add-foreign-key-item_equipment_v2-star_system_id" author="Saphyra" dbms="postgresql">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="item_equipment_v2-star_system_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="item_equipment_v2"
+                baseColumnNames="star_system_id"
+                constraintName="item_equipment_v2-star_system_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="star_system"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

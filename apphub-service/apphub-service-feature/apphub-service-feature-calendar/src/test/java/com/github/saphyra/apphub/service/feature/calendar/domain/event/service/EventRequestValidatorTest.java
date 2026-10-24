@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.calendar.config.CalendarProperties;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
@@ -52,7 +53,7 @@ class EventRequestValidatorTest {
     void nullRepetitionType() {
         given(request.getRepetitionType()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionType", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionType", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -60,7 +61,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
         given(request.getRepeatForDays()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repeatForDays", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repeatForDays", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -68,7 +69,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
         given(request.getRepeatForDays()).willReturn(0);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repeatForDays", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repeatForDays", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -77,7 +78,7 @@ class EventRequestValidatorTest {
         given(request.getRepeatForDays()).willReturn(1);
         given(request.getStartDate()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "startDate", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "startDate", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -87,7 +88,7 @@ class EventRequestValidatorTest {
         given(request.getStartDate()).willReturn(LocalDate.now());
         given(request.getTitle()).willReturn(" ");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "title", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "title", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -98,7 +99,7 @@ class EventRequestValidatorTest {
         given(request.getTitle()).willReturn("title");
         given(request.getContent()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "content", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -110,7 +111,7 @@ class EventRequestValidatorTest {
         given(request.getContent()).willReturn("content");
         given(request.getRemindMeBeforeDays()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -122,7 +123,7 @@ class EventRequestValidatorTest {
         given(request.getContent()).willReturn("content");
         given(request.getRemindMeBeforeDays()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "remindMeBeforeDays", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -135,7 +136,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         given(request.getLabels()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "labels", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "labels", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -148,7 +149,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         given(request.getLabels()).willReturn(CollectionUtils.toMap(new BiWrapper<>(null, USER_ID), new BiWrapper<>(LABEL_ID, USER_ID)));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "labels", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "labels", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
@@ -161,7 +162,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         given(request.getLabels()).willReturn(Map.of(LABEL_ID, USER_ID));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "labels", "Unsupported values: " + List.of(LABEL_ID));
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "labels", String.format(ValidationUtil.UNSUPPORTED_VALUES, List.of(LABEL_ID)));
     }
 
     @Test
@@ -174,7 +175,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         given(request.getAutoDone()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "autoDone", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "autoDone", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -199,7 +200,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(request.getRepetitionData()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -207,7 +208,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(request.getRepetitionData()).willReturn("not a number");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "failed to parse");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -215,7 +216,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(request.getRepetitionData()).willReturn(0);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -238,7 +239,7 @@ class EventRequestValidatorTest {
         given(request.getEndDate()).willReturn(LocalDate.now().plusDays(31));
         given(calendarProperties.getMaxEventDurationDays()).willReturn(30);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "eventDuration", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "eventDuration", ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -246,7 +247,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_WEEK);
         given(request.getRepetitionData()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -254,7 +255,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_WEEK);
         given(request.getRepetitionData()).willReturn("not a set of days");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "failed to parse");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -262,7 +263,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_WEEK);
         given(request.getRepetitionData()).willReturn(CollectionUtils.toSet(DayOfWeek.MONDAY, null));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
@@ -270,7 +271,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_WEEK);
         given(request.getRepetitionData()).willReturn(List.of());
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
@@ -320,7 +321,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_MONTH);
         given(request.getRepetitionData()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -328,7 +329,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_MONTH);
         given(request.getRepetitionData()).willReturn("not a list of numbers");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "failed to parse");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -336,7 +337,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_MONTH);
         given(request.getRepetitionData()).willReturn(List.of());
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
@@ -344,7 +345,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_MONTH);
         given(request.getRepetitionData()).willReturn(CollectionUtils.toList(1, null));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
@@ -352,7 +353,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_MONTH);
         given(request.getRepetitionData()).willReturn(CollectionUtils.toList(0));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -360,7 +361,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_MONTH);
         given(request.getRepetitionData()).willReturn(CollectionUtils.toList(32));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", "too high");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "repetitionData", ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -396,6 +397,6 @@ class EventRequestValidatorTest {
         given(label.getLabelId()).willReturn(LABEL_ID);
         given(request.getArchived()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validateEdit(request), "archived", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validateEdit(request), "archived", ValidationUtil.MUST_NOT_BE_NULL);
     }
 }

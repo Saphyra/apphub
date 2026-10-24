@@ -18,4 +18,9 @@ class NoOpStartupIndicator implements StartupIndicator {
     public void scheduleShutdown() {
         log.debug("Shutdown scheduled");
     }
+
+    @Override
+    public void startupFailed(String name) {
+        log.debug("Startup failed: {}", name);
+    }
 }

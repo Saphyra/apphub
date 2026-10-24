@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.etc.admin_panel.error_report.service.r
 
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ErrorReport;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ErrorReportOverview;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportDto;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.service.overview.ErrorReportToOverviewConverter;
@@ -63,7 +64,7 @@ public class ReportErrorServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.saveReport(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "message", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "message", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -75,7 +76,7 @@ public class ReportErrorServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.saveReport(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "service", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "service", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test

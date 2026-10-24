@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: elite-base-receiver
+
+elite-base:
+  message:
+    incoming:
+      publisher:
+        enabled: true #Forward ZeroMQ messages to RabbitMQ
+  messageReceiver:
+    enabled: true
+  executor:
+    scheduled:
+      threadCount: 2
+  incomingMessageTimeout: PT10M
+  incomingMessageCheckInterval: PT30S
+  shutdownEnabled: true

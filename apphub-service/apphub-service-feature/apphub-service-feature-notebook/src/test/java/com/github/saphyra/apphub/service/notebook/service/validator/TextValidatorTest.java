@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateTextRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.common.NotebookConstants;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class TextValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, request));
 
-        ExceptionValidator.validateInvalidParam(ex, "content", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "content", ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -50,7 +51,7 @@ class TextValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, request));
 
-        ExceptionValidator.validateInvalidParam(ex, "content", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -70,7 +71,7 @@ class TextValidatorTest {
     void validate_content_null() {
         Throwable ex = catchThrowable(() -> underTest.validate(null, "fieldName"));
 
-        ExceptionValidator.validateInvalidParam(ex, "fieldName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "fieldName", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

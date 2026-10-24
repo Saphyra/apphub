@@ -5,7 +5,8 @@ import java.util.Arrays;
 enum StartupStatus {
     WAITING,
     IN_PROGRESS,
-    STARTED;
+    STARTED,
+    FAILED;
 
     static int maxLength() {
         return Arrays.stream(values())

@@ -1,0 +1,15 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item;
+
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.UUID;
+
+@Data
+@Builder
+public class ItemDomainId {
+    private final UUID externalReference;
+    private final String itemName;
+    private final ItemLocationType locationType;
+    private final String entityId;
+}

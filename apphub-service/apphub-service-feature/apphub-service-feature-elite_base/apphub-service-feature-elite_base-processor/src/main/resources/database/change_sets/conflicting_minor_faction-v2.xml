@@ -1,0 +1,60 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-conflicting_minor_faction_v2" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="conflicting_minor_faction_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="conflicting_minor_faction_v2">
+            <column name="conflict_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="minor_faction_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="won_days" type="numeric"/>
+            <column name="stake" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="conflicting_minor_faction_v2" columnNames="conflict_id,minor_faction_id" constraintName="conflicting_minor_faction_v2-pk"/>
+    </changeSet>
+
+    <changeSet id="add-foreign-key-conflicting_minor_faction_v2-conflict_id" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="conflicting_minor_faction_v2-conflict_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="conflicting_minor_faction_v2"
+                baseColumnNames="conflict_id"
+                constraintName="conflicting_minor_faction_v2-conflict_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="minor_faction_conflict_v2"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="add-foreign-key-conflicting_minor_faction_v2-minor_faction_id" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="conflicting_minor_faction_v2-minor_faction_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="conflicting_minor_faction_v2"
+                baseColumnNames="minor_faction_id"
+                constraintName="conflicting_minor_faction_v2-minor_faction_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="minor_faction"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

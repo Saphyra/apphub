@@ -6,4 +6,6 @@ public interface StartupIndicator {
     void startupCompleted(String name);
 
     void scheduleShutdown();
+
+    void startupFailed(String name);
 }

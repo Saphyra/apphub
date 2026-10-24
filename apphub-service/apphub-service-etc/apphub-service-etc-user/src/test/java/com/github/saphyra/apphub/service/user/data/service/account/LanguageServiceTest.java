@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -40,7 +41,7 @@ public class LanguageServiceTest {
     public void changeLanguage_nullLanguage() {
         Throwable ex = catchThrowable(() -> underTest.changeLanguage(USER_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "value", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "value", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

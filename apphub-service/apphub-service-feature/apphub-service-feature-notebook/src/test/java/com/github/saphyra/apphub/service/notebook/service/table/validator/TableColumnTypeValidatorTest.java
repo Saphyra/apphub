@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -63,7 +64,7 @@ class TableColumnTypeValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateColumnType(createTableRequest));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.column.data", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.column.data", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -98,7 +99,7 @@ class TableColumnTypeValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateColumnType(createTableRequest));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.column.data", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.column.data", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

@@ -1,0 +1,46 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_ring_v2" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_ring_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_ring_v2">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body_id" type="varchar(37)"/>
+            <column name="name" type="text"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="inner_radius" type="numeric"/>
+            <column name="outer_radius" type="numeric"/>
+            <column name="mass" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_ring_v2" columnNames="id" constraintName="body_ring_v2-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="body_ring_v2" indexName="index-body_ring_v2-body_id">
+            <column name="body_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-foreign-key-body_ring_v2-body_id" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="body_ring_v2-body_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="body_ring_v2"
+                baseColumnNames="body_id"
+                constraintName="body_ring_v2-body_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="body_v3"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

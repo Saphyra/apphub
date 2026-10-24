@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.AddChecklistItemRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemFactory;
@@ -65,7 +66,7 @@ class ChecklistItemCrudServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.addChecklistItem(USER_ID, LIST_ITEM_ID, request));
 
-        ExceptionValidator.validateInvalidParam(ex, "content", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -77,7 +78,7 @@ class ChecklistItemCrudServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.addChecklistItem(USER_ID, LIST_ITEM_ID, request));
 
-        ExceptionValidator.validateInvalidParam(ex, "index", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "index", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -105,7 +106,7 @@ class ChecklistItemCrudServiceTest {
     void updateContent_contentNull() {
         Throwable ex = catchThrowable(() -> underTest.updateContent(LIST_ITEM_ID, CHECKLIST_ITEM_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "content", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -139,7 +140,7 @@ class ChecklistItemCrudServiceTest {
     void updateStatus_statusNull() {
         Throwable ex = catchThrowable(() -> underTest.updateStatus(LIST_ITEM_ID, CHECKLIST_ITEM_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "status", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "status", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

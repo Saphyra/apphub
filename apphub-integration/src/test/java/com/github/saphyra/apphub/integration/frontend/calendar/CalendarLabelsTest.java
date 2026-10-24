@@ -59,7 +59,7 @@ public class CalendarLabelsTest extends SeleniumTest {
 
         //Delete label
         CalendarLabelsPageActions.getLabel(driver, LABEL_2)
-            .delete()
+            .delete(driver)
             .confirmDeletion(driver);
         AwaitilityWrapper.awaitAssert(() -> CustomAssertions.singleListAssertThat(CalendarLabelsPageActions.getLabels(driver)).returns(LABEL_1, CalendarLabel::getLabel));
 

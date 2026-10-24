@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanRequest;
 import com.github.saphyra.apphub.lib.common_domain.Role;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,7 +67,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "bannedUserId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "bannedUserId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -83,7 +84,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "bannedRole", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "bannedRole", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -100,7 +101,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "permanent", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "permanent", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -117,7 +118,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "reason", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "reason", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -134,7 +135,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -151,7 +152,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "duration", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "duration", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -168,7 +169,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "duration", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "duration", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -185,7 +186,7 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "chronoUnit", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "chronoUnit", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -202,6 +203,6 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "chronoUnit", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "chronoUnit", ValidationUtil.INVALID_VALUE);
     }
 }

@@ -1,0 +1,38 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body;
+
+import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+class BodyConverter extends ConverterBase<BodyEntity, Body> {
+    private final UuidConverter uuidConverter;
+
+    @Override
+    protected BodyEntity processDomainConversion(Body domain) {
+        return BodyEntity.builder()
+            .id(uuidConverter.convertDomain(domain.getId()))
+            .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
+            .type(domain.getType())
+            .bodyId(domain.getBodyId())
+            .bodyName(domain.getBodyName())
+            .distanceFromStar(domain.getDistanceFromStar())
+            .build();
+    }
+
+    @Override
+    protected Body processEntityConversion(BodyEntity entity) {
+        return Body.builder()
+            .id(uuidConverter.convertEntity(entity.getId()))
+            .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
+            .type(entity.getType())
+            .bodyId(entity.getBodyId())
+            .bodyName(entity.getBodyName())
+            .distanceFromStar(entity.getDistanceFromStar())
+            .build();
+    }
+}

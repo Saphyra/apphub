@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TableAction
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -85,7 +86,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "link", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "link", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_nullLink(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -106,7 +107,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "link.url", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "link.url", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void edit_tooLongLink(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -127,7 +128,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "link.url", "too long");
+        ResponseValidator.verifyInvalidParam(response, "link.url", ValidationConstants.TOO_LONG);
     }
 
     private void edit_blankLabel(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -148,7 +149,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "link.label", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(response, "link.label", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private void edit_tooLongLabel(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -169,7 +170,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        ResponseValidator.verifyInvalidParam(response, "link.label", "too long");
+        ResponseValidator.verifyInvalidParam(response, "link.label", ValidationConstants.TOO_LONG);
     }
 
     private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -225,7 +226,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "link.label", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(response, "link.label", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private void create_tooLongLabel(String accessToken) {
@@ -238,7 +239,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "link.label", "too long");
+        ResponseValidator.verifyInvalidParam(response, "link.label", ValidationConstants.TOO_LONG);
     }
 
     private void create_nullLink(String accessToken) {
@@ -251,7 +252,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "link.url", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "link.url", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void create_tooLongLink(String accessToken) {
@@ -264,7 +265,7 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "link.url", "too long");
+        ResponseValidator.verifyInvalidParam(response, "link.url", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullData(String accessToken) {
@@ -272,6 +273,6 @@ public class CustomTableLinkTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "link", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "link", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }
