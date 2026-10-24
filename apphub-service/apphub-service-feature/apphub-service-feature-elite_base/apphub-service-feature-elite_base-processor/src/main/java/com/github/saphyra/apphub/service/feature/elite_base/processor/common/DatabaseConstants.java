@@ -35,10 +35,18 @@ public class DatabaseConstants {
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING_V2 = "star_system_power_mapping_v2";
     public static final String TABLE_POWERPLAY_CONFLICT_V2 = "powerplay_conflict_v2";
     public static final String TABLE_ITEM_TYPE = "item_type";
+    @Deprecated
     public static final String TABLE_ITEM_COMMODITY = "item_commodity";
+    public static final String TABLE_ITEM_COMMODITY_V2 = "item_commodity_v2";
+    @Deprecated
     public static final String TABLE_ITEM_FC_MATERIAL = "item_fc_material";
+    public static final String TABLE_ITEM_FC_MATERIAL_V2 = "item_fc_material_v2";
+    @Deprecated
     public static final String TABLE_ITEM_EQUIPMENT = "item_equipment";
+    public static final String TABLE_ITEM_EQUIPMENT_V2 = "item_equipment_v2";
+    @Deprecated
     public static final String TABLE_ITEM_SPACESHIP = "item_spaceship";
+    public static final String TABLE_ITEM_SPACESHIP_V2 = "item_spaceship_v2";
     public static final String TABLE_COMMODITY_AVERAGE_PRICE = "commodity_average_price";
     public static final String TABLE_SETTLEMENT = "settlement";
 
@@ -69,6 +77,7 @@ public class DatabaseConstants {
     public static final String COLUMN_MATERIAL_TYPE = "material_type";
     public static final String COLUMN_VERIFIED = "verified";
     public static final String COLUMN_EXTERNAL_REFERENCE = "external_reference";
+    public static final String COLUMN_FLEET_CARRIER_ID = "fleet_carrier_id";
     public static final String COLUMN_ITEM_NAME = "item_name";
     public static final String COLUMN_LAST_UPDATE = "last_update";
     public static final String COLUMN_COMMODITY_NAME = "commodity_name";
@@ -92,4 +101,3 @@ public class DatabaseConstants {
     public static final String COLUMN_ALLEGIANCE = "allegiance";
     public static final String COLUMN_CONTROLLING_FACTION_ID = "controlling_faction_id";
 }
-

@@ -1,5 +1,5 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet id="create_schema_modules" author="saphyra">
+    <changeSet id="create-schema-elite_base" author="saphyra">
         <sql endDelimiter=";">
             CREATE SCHEMA IF NOT EXISTS elite_base
         </sql>
@@ -47,7 +47,11 @@
     <include file="database/change_sets/powerplay_conflict-v2.xml"/>
     <include file="database/change_sets/item_type.xml"/>
     <include file="database/change_sets/item_commodity.xml"/>
+    <include file="database/change_sets/item_commodity-v2.xml"/>
     <include file="database/change_sets/item_fc_material.xml"/>
+    <include file="database/change_sets/item_fc_material-v2.xml"/>
     <include file="database/change_sets/item_equipment.xml"/>
+    <include file="database/change_sets/item_equipment-v2.xml"/>
     <include file="database/change_sets/item_spaceship.xml"/>
+    <include file="database/change_sets/item_spaceship-v2.xml"/>
 </databaseChangeLog>

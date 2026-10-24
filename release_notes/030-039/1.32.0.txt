@@ -23,6 +23,7 @@
         Migrate conflicting_minor_faction to add fk
         Migrate station to add fk
         Migrate body_material - add fk, replace random uuid pk with composite pk, partition
+        Migrate item_* tables to add fks
 
 ===Manual Release Steps===
     Pre deployment

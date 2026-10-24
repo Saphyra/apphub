@@ -2,27 +2,19 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.DeleteBuffer;
-import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
-import com.github.saphyra.apphub.lib.sql_builder.condition.InCondition;
-import com.github.saphyra.apphub.lib.sql_builder.value.ListValue;
-import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
-import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemDomainId;
-import lombok.extern.slf4j.Slf4j;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemLocationType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
+import java.util.function.Function;
 
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_EXTERNAL_REFERENCE;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_ITEM_NAME;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_ITEM_COMMODITY;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_ITEM_COMMODITY_V2;
 
 @Component
-@Slf4j
 class CommodityDeleteBuffer extends DeleteBuffer<ItemDomainId> {
     private final JdbcTemplate jdbcTemplate;
 
@@ -33,26 +25,20 @@ class CommodityDeleteBuffer extends DeleteBuffer<ItemDomainId> {
 
     @Override
     protected void doSynchronize(Collection<ItemDomainId> domains) {
-        List<UUID> externalReferences = domains.stream()
-            .map(ItemDomainId::getExternalReference)
-            .distinct()
-            .toList();
-        List<String> commodityNames = domains.stream()
-            .map(ItemDomainId::getItemName)
-            .distinct()
-            .toList();
+        List<ItemDomainId> entityIds = domains.stream().filter(domain -> domain.getEntityId() != null).toList();
+        List<ItemDomainId> stations = domains.stream().filter(domain -> domain.getEntityId() == null && domain.getLocationType() == ItemLocationType.STATION).toList();
+        List<ItemDomainId> fleetCarriers = domains.stream().filter(domain -> domain.getEntityId() == null && domain.getLocationType() == ItemLocationType.FLEET_CARRIER).toList();
+        List<ItemDomainId> unknowns = domains.stream().filter(domain -> domain.getEntityId() == null && domain.getLocationType() != ItemLocationType.STATION && domain.getLocationType() != ItemLocationType.FLEET_CARRIER).toList();
 
-        log.debug("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);
+        batchDelete("DELETE FROM %s.%s WHERE id = ?".formatted(SCHEMA, TABLE_ITEM_COMMODITY_V2), entityIds, domain -> new Object[]{domain.getEntityId()});
+        batchDelete("DELETE FROM %s.%s WHERE station_id = ? AND item_name = ?".formatted(SCHEMA, TABLE_ITEM_COMMODITY_V2), stations, domain -> new Object[]{domain.getExternalReference().toString(), domain.getItemName()});
+        batchDelete("DELETE FROM %s.%s WHERE fleet_carrier_id = ? AND item_name = ?".formatted(SCHEMA, TABLE_ITEM_COMMODITY_V2), fleetCarriers, domain -> new Object[]{domain.getExternalReference().toString(), domain.getItemName()});
+        batchDelete("DELETE FROM %s.%s WHERE station_id IS NULL AND fleet_carrier_id IS NULL AND item_name = ?".formatted(SCHEMA, TABLE_ITEM_COMMODITY_V2), unknowns, domain -> new Object[]{domain.getItemName()});
+    }
 
-        String sql = SqlBuilder.delete()
-            .from(new QualifiedTable(SCHEMA, TABLE_ITEM_COMMODITY))
-            .condition(new InCondition(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE), new ListValue(externalReferences)))
-            .and()
-            .condition(new InCondition(new DefaultColumn(COLUMN_ITEM_NAME), new ListValue(commodityNames)))
-            .build();
-
-        log.debug(sql);
-
-        jdbcTemplate.update(sql);
+    private void batchDelete(String sql, List<ItemDomainId> domains, Function<ItemDomainId, Object[]> parameters) {
+        if (!domains.isEmpty()) {
+            jdbcTemplate.batchUpdate(sql, domains.stream().map(parameters).toList());
+        }
     }
 }

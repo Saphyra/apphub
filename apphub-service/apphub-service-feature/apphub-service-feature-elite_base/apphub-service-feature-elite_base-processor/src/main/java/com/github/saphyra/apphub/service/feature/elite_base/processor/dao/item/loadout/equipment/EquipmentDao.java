@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.loadout.equipment;
 
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.ListCachedBufferedDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemDomainId;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.loadout.Loadout;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.loadout.LoadoutDao;
 import com.google.common.cache.Cache;
@@ -11,21 +9,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Component
-public class EquipmentDao extends ListCachedBufferedDao<EquipmentEntity, Equipment, ItemEntityId, Long, ItemDomainId, EquipmentRepository> implements LoadoutDao {
-    private final UuidConverter uuidConverter;
-
+public class EquipmentDao extends ListCachedBufferedDao<EquipmentEntity, Equipment, String, Long, ItemDomainId, EquipmentRepository> implements LoadoutDao {
     EquipmentDao(
         EquipmentConverter converter,
         EquipmentRepository repository,
         Cache<Long, List<Equipment>> readCache,
         EquipmentWriteBuffer writeBuffer,
-        EquipmentDeleteBuffer deleteBuffer,
-        UuidConverter uuidConverter
+        EquipmentDeleteBuffer deleteBuffer
     ) {
         super(converter, repository, readCache, writeBuffer, deleteBuffer);
-        this.uuidConverter = uuidConverter;
     }
 
     @Override
@@ -34,11 +29,11 @@ public class EquipmentDao extends ListCachedBufferedDao<EquipmentEntity, Equipme
     }
 
     @Override
-    protected ItemDomainId toDomainId(ItemEntityId itemEntityId) {
-        return ItemDomainId.builder()
-            .externalReference(uuidConverter.convertEntity(itemEntityId.getExternalReference()))
-            .itemName(itemEntityId.getItemName())
-            .build();
+    protected ItemDomainId toDomainId(String id) {
+        return repository.findById(id)
+            .map(converter::convertEntity)
+            .map(this::getDomainId)
+            .orElseGet(() -> ItemDomainId.builder().entityId(id).build());
     }
 
     @Override
@@ -46,13 +41,15 @@ public class EquipmentDao extends ListCachedBufferedDao<EquipmentEntity, Equipme
         return ItemDomainId.builder()
             .externalReference(equipment.getExternalReference())
             .itemName(equipment.getItemName())
+            .locationType(equipment.getLocationType())
             .build();
     }
 
     @Override
     protected boolean matchesWithId(ItemDomainId domainId, Equipment equipment) {
         return Objects.equals(domainId.getExternalReference(), equipment.getExternalReference())
-            && Objects.equals(domainId.getItemName(), equipment.getItemName());
+            && Objects.equals(domainId.getItemName(), equipment.getItemName())
+            && Objects.equals(domainId.getLocationType(), equipment.getLocationType());
     }
 
     @Override

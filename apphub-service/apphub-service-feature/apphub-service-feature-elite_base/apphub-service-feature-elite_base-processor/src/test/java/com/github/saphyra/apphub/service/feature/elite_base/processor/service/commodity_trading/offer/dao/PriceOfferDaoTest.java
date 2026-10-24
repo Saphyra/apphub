@@ -23,11 +23,11 @@ class PriceOfferDaoTest {
     @Test
     void getOrderByColumn() {
         assertThat(underTest.getOrderByColumn(TradeMode.BUY))
-            .returns(TABLE_ITEM_COMMODITY, QualifiedColumn::getTable)
+            .returns(TABLE_ITEM_COMMODITY_V2, QualifiedColumn::getTable)
             .returns(COLUMN_SELL_PRICE, QualifiedColumn::getColumn);
 
         assertThat(underTest.getOrderByColumn(TradeMode.SELL))
-            .returns(TABLE_ITEM_COMMODITY, QualifiedColumn::getTable)
+            .returns(TABLE_ITEM_COMMODITY_V2, QualifiedColumn::getTable)
             .returns(COLUMN_BUY_PRICE, QualifiedColumn::getColumn);
     }
 

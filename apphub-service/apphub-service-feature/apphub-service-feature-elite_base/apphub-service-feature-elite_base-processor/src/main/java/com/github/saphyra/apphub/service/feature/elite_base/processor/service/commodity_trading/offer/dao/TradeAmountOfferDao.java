@@ -18,8 +18,8 @@ class TradeAmountOfferDao extends OfferDaoBase {
     @Override
     protected QualifiedColumn getOrderByColumn(TradeMode tradeMode) {
         return switch (tradeMode) {
-            case BUY -> new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_STOCK);
-            case SELL -> new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_DEMAND);
+            case BUY -> new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, COLUMN_STOCK);
+            case SELL -> new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, COLUMN_DEMAND);
         };
     }
 

@@ -2,23 +2,28 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemIdAssembler;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemLocationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
 class SpaceshipConverter extends ConverterBase<SpaceshipEntity, Spaceship> {
     private final UuidConverter uuidConverter;
+    private final ItemIdAssembler itemIdAssembler;
 
     @Override
     protected SpaceshipEntity processDomainConversion(Spaceship domain) {
         return SpaceshipEntity.builder()
-            .id(ItemEntityId.builder()
-                .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-                .itemName(domain.getItemName())
-                .build())
-            .locationType(domain.getLocationType())
+            .id(itemIdAssembler.assembleId(domain))
+            .itemName(domain.getItemName())
+            .stationId(uuidConverter.convertDomain(domain.getStationId()))
+            .fleetCarrierId(uuidConverter.convertDomain(domain.getFleetCarrierId()))
             .marketId(domain.getMarketId())
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .build();
@@ -26,10 +31,20 @@ class SpaceshipConverter extends ConverterBase<SpaceshipEntity, Spaceship> {
 
     @Override
     protected Spaceship processEntityConversion(SpaceshipEntity entity) {
+        UUID externalReference = null;
+        ItemLocationType locationType = ItemLocationType.UNKNOWN;
+        if (nonNull(entity.getStationId())) {
+            externalReference = uuidConverter.convertEntity(entity.getStationId());
+            locationType = ItemLocationType.STATION;
+        } else if (nonNull(entity.getFleetCarrierId())) {
+            externalReference = uuidConverter.convertEntity(entity.getFleetCarrierId());
+            locationType = ItemLocationType.FLEET_CARRIER;
+        }
+
         return Spaceship.builder()
-            .externalReference(uuidConverter.convertEntity(entity.getId().getExternalReference()))
-            .itemName(entity.getId().getItemName())
-            .locationType(entity.getLocationType())
+            .externalReference(externalReference)
+            .itemName(entity.getItemName())
+            .locationType(locationType)
             .marketId(entity.getMarketId())
             .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .build();

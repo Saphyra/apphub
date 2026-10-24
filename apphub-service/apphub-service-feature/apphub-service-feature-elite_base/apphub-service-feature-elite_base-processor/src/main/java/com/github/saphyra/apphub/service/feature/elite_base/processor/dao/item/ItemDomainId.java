@@ -10,4 +10,6 @@ import java.util.UUID;
 public class ItemDomainId {
     private final UUID externalReference;
     private final String itemName;
+    private final ItemLocationType locationType;
+    private final String entityId;
 }

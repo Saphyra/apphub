@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.fc_material;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemIdAssembler;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemLocationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +30,9 @@ class FcMaterialConverterTest {
     @Mock
     private UuidConverter uuidConverter;
 
+    @Mock
+    private ItemIdAssembler itemIdAssembler;
+
     @InjectMocks
     private FcMaterialConverter underTest;
 
@@ -48,28 +51,47 @@ class FcMaterialConverterTest {
             .build();
 
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
+        given(uuidConverter.convertDomain((UUID) null)).willReturn(null);
         given(uuidConverter.convertDomain(STAR_SYSTEM_ID)).willReturn(STAR_SYSTEM_ID_STRING);
+        given(itemIdAssembler.assembleId(domain)).willReturn(ITEM_NAME + ":" + EXTERNAL_REFERENCE_STRING + ":");
 
         assertThat(underTest.convertDomain(domain))
-            .returns(EXTERNAL_REFERENCE_STRING, fcMaterialEntity -> fcMaterialEntity.getId().getExternalReference())
-            .returns(ITEM_NAME, fcMaterialEntity -> fcMaterialEntity.getId().getItemName())
-            .returns(ItemLocationType.STATION, FcMaterialEntity::getLocationType)
+            .returns(ITEM_NAME + ":" + EXTERNAL_REFERENCE_STRING + ":", FcMaterialEntity::getId)
+            .returns(ITEM_NAME, FcMaterialEntity::getItemName)
+            .returns(EXTERNAL_REFERENCE_STRING, FcMaterialEntity::getStationId)
+            .returns(null, FcMaterialEntity::getFleetCarrierId)
+            .returns(true, fcMaterialEntity -> fcMaterialEntity.getId() != null)
             .returns(MARKET_ID, FcMaterialEntity::getMarketId)
             .returns(BUY_PRICE, FcMaterialEntity::getBuyPrice)
             .returns(SELL_PRICE, FcMaterialEntity::getSellPrice)
             .returns(DEMAND, FcMaterialEntity::getDemand)
             .returns(STOCK, FcMaterialEntity::getStock)
             .returns(STAR_SYSTEM_ID_STRING, FcMaterialEntity::getStarSystemId);
+
+        FcMaterial fleetCarrierDomain = FcMaterial.builder()
+            .externalReference(EXTERNAL_REFERENCE)
+            .itemName(ITEM_NAME)
+            .locationType(ItemLocationType.FLEET_CARRIER)
+            .marketId(MARKET_ID)
+            .buyPrice(BUY_PRICE)
+            .sellPrice(SELL_PRICE)
+            .demand(DEMAND)
+            .stock(STOCK)
+            .starSystemId(STAR_SYSTEM_ID)
+            .build();
+        given(itemIdAssembler.assembleId(fleetCarrierDomain)).willReturn(ITEM_NAME + "::" + EXTERNAL_REFERENCE_STRING);
+        assertThat(underTest.convertDomain(fleetCarrierDomain))
+            .returns(ITEM_NAME + "::" + EXTERNAL_REFERENCE_STRING, FcMaterialEntity::getId)
+            .returns(EXTERNAL_REFERENCE_STRING, FcMaterialEntity::getFleetCarrierId)
+            .returns(null, FcMaterialEntity::getStationId);
     }
 
     @Test
     void convertEntity() {
         FcMaterialEntity entity = FcMaterialEntity.builder()
-            .id(ItemEntityId.builder()
-                .externalReference(EXTERNAL_REFERENCE_STRING)
-                .itemName(ITEM_NAME)
-                .build())
-            .locationType(ItemLocationType.STATION)
+            .id("previous-id")
+            .itemName(ITEM_NAME)
+            .stationId(EXTERNAL_REFERENCE_STRING)
             .marketId(MARKET_ID)
             .buyPrice(BUY_PRICE)
             .sellPrice(SELL_PRICE)
@@ -91,5 +113,20 @@ class FcMaterialConverterTest {
             .returns(DEMAND, FcMaterial::getDemand)
             .returns(STOCK, FcMaterial::getStock)
             .returns(STAR_SYSTEM_ID, FcMaterial::getStarSystemId);
+
+        FcMaterialEntity fleetCarrierEntity = FcMaterialEntity.builder()
+            .id("previous-id")
+            .itemName(ITEM_NAME)
+            .fleetCarrierId(EXTERNAL_REFERENCE_STRING)
+            .marketId(MARKET_ID)
+            .buyPrice(BUY_PRICE)
+            .sellPrice(SELL_PRICE)
+            .demand(DEMAND)
+            .stock(STOCK)
+            .starSystemId(STAR_SYSTEM_ID_STRING)
+            .build();
+        assertThat(underTest.convertEntity(fleetCarrierEntity))
+            .returns(EXTERNAL_REFERENCE, FcMaterial::getExternalReference)
+            .returns(ItemLocationType.FLEET_CARRIER, FcMaterial::getLocationType);
     }
 }

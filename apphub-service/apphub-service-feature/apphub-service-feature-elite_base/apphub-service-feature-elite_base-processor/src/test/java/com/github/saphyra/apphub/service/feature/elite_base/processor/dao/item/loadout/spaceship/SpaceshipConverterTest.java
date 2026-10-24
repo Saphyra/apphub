@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.loadout.spaceship;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemIdAssembler;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemLocationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +26,9 @@ class SpaceshipConverterTest {
     @Mock
     private UuidConverter uuidConverter;
 
+    @Mock
+    private ItemIdAssembler itemIdAssembler;
+
     @InjectMocks
     private SpaceshipConverter underTest;
 
@@ -40,24 +43,39 @@ class SpaceshipConverterTest {
             .build();
 
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
+        given(uuidConverter.convertDomain((UUID) null)).willReturn(null);
         given(uuidConverter.convertDomain(STAR_SYSTEM_ID)).willReturn(STAR_SYSTEM_ID_STRING);
+        given(itemIdAssembler.assembleId(domain)).willReturn(ITEM_NAME + ":" + EXTERNAL_REFERENCE_STRING + ":");
 
         assertThat(underTest.convertDomain(domain))
-            .returns(EXTERNAL_REFERENCE_STRING, spaceshipEntity -> spaceshipEntity.getId().getExternalReference())
-            .returns(ITEM_NAME, spaceshipEntity -> spaceshipEntity.getId().getItemName())
-            .returns(ItemLocationType.STATION, SpaceshipEntity::getLocationType)
+            .returns(ITEM_NAME + ":" + EXTERNAL_REFERENCE_STRING + ":", SpaceshipEntity::getId)
+            .returns(ITEM_NAME, SpaceshipEntity::getItemName)
+            .returns(EXTERNAL_REFERENCE_STRING, SpaceshipEntity::getStationId)
+            .returns(null, SpaceshipEntity::getFleetCarrierId)
+            .returns(true, spaceshipEntity -> spaceshipEntity.getId() != null)
             .returns(MARKET_ID, SpaceshipEntity::getMarketId)
             .returns(STAR_SYSTEM_ID_STRING, SpaceshipEntity::getStarSystemId);
+
+        Spaceship fleetCarrierDomain = Spaceship.builder()
+            .externalReference(EXTERNAL_REFERENCE)
+            .itemName(ITEM_NAME)
+            .locationType(ItemLocationType.FLEET_CARRIER)
+            .marketId(MARKET_ID)
+            .starSystemId(STAR_SYSTEM_ID)
+            .build();
+        given(itemIdAssembler.assembleId(fleetCarrierDomain)).willReturn(ITEM_NAME + "::" + EXTERNAL_REFERENCE_STRING);
+        assertThat(underTest.convertDomain(fleetCarrierDomain))
+            .returns(ITEM_NAME + "::" + EXTERNAL_REFERENCE_STRING, SpaceshipEntity::getId)
+            .returns(EXTERNAL_REFERENCE_STRING, SpaceshipEntity::getFleetCarrierId)
+            .returns(null, SpaceshipEntity::getStationId);
     }
 
     @Test
     void convertEntity() {
         SpaceshipEntity entity = SpaceshipEntity.builder()
-            .id(ItemEntityId.builder()
-                .externalReference(EXTERNAL_REFERENCE_STRING)
-                .itemName(ITEM_NAME)
-                .build())
-            .locationType(ItemLocationType.STATION)
+            .id("previous-id")
+            .itemName(ITEM_NAME)
+            .stationId(EXTERNAL_REFERENCE_STRING)
             .marketId(MARKET_ID)
             .starSystemId(STAR_SYSTEM_ID_STRING)
             .build();
@@ -71,5 +89,16 @@ class SpaceshipConverterTest {
             .returns(ItemLocationType.STATION, Spaceship::getLocationType)
             .returns(MARKET_ID, Spaceship::getMarketId)
             .returns(STAR_SYSTEM_ID, Spaceship::getStarSystemId);
+
+        SpaceshipEntity fleetCarrierEntity = SpaceshipEntity.builder()
+            .id("previous-id")
+            .itemName(ITEM_NAME)
+            .fleetCarrierId(EXTERNAL_REFERENCE_STRING)
+            .marketId(MARKET_ID)
+            .starSystemId(STAR_SYSTEM_ID_STRING)
+            .build();
+        assertThat(underTest.convertEntity(fleetCarrierEntity))
+            .returns(EXTERNAL_REFERENCE, Spaceship::getExternalReference)
+            .returns(ItemLocationType.FLEET_CARRIER, Spaceship::getLocationType);
     }
 }

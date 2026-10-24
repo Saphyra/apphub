@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.fc_material;
 
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.ListCachedBufferedDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemDomainId;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.TradeableDao;
 import com.google.common.cache.Cache;
@@ -11,22 +9,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Component
 @Slf4j
-public class FcMaterialDao extends ListCachedBufferedDao<FcMaterialEntity, FcMaterial, ItemEntityId, Long, ItemDomainId, FcMaterialRepository> implements TradeableDao {
-    private final UuidConverter uuidConverter;
-
+public class FcMaterialDao extends ListCachedBufferedDao<FcMaterialEntity, FcMaterial, String, Long, ItemDomainId, FcMaterialRepository> implements TradeableDao {
     FcMaterialDao(
         FcMaterialConverter converter,
         FcMaterialRepository repository,
         Cache<Long, List<FcMaterial>> readCache,
         FcMaterialWriteBuffer writeBuffer,
-        FcMaterialDeleteBuffer deleteBuffer,
-        UuidConverter uuidConverter
+        FcMaterialDeleteBuffer deleteBuffer
     ) {
         super(converter, repository, readCache, writeBuffer, deleteBuffer);
-        this.uuidConverter = uuidConverter;
     }
 
     @Override
@@ -35,11 +31,11 @@ public class FcMaterialDao extends ListCachedBufferedDao<FcMaterialEntity, FcMat
     }
 
     @Override
-    protected ItemDomainId toDomainId(ItemEntityId itemEntityId) {
-        return ItemDomainId.builder()
-            .externalReference(uuidConverter.convertEntity(itemEntityId.getExternalReference()))
-            .itemName(itemEntityId.getItemName())
-            .build();
+    protected ItemDomainId toDomainId(String id) {
+        return repository.findById(id)
+            .map(converter::convertEntity)
+            .map(this::getDomainId)
+            .orElseGet(() -> ItemDomainId.builder().entityId(id).build());
     }
 
     @Override
@@ -47,13 +43,15 @@ public class FcMaterialDao extends ListCachedBufferedDao<FcMaterialEntity, FcMat
         return ItemDomainId.builder()
             .externalReference(fcMaterial.getExternalReference())
             .itemName(fcMaterial.getItemName())
+            .locationType(fcMaterial.getLocationType())
             .build();
     }
 
     @Override
     protected boolean matchesWithId(ItemDomainId domainId, FcMaterial fcMaterial) {
-        return fcMaterial.getExternalReference().equals(domainId.getExternalReference())
-            && fcMaterial.getItemName().equals(domainId.getItemName());
+        return Objects.equals(fcMaterial.getExternalReference(), domainId.getExternalReference())
+            && Objects.equals(fcMaterial.getItemName(), domainId.getItemName())
+            && Objects.equals(fcMaterial.getLocationType(), domainId.getLocationType());
     }
 
     @Override

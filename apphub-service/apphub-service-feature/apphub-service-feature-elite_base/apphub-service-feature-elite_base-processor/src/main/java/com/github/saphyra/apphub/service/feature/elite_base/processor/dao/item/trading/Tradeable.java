@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading;
 
-import java.util.UUID;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.Item;
 
-public interface Tradeable {
-    UUID getExternalReference();
+public interface Tradeable extends Item {
 
-    String getItemName();
 }

@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.lib.sql_builder.column.NamedColumn;
 import com.github.saphyra.apphub.lib.sql_builder.value.NumberValue;
 import com.github.saphyra.apphub.lib.sql_builder.operation.Operation;
 import com.github.saphyra.apphub.lib.sql_builder.condition.OperationCondition;
+import com.github.saphyra.apphub.lib.sql_builder.core.DefaultSegmentProvider;
 import com.github.saphyra.apphub.lib.sql_builder.keyword.OrderType;
 import com.github.saphyra.apphub.lib.sql_builder.keyword.PowerSegment;
 import com.github.saphyra.apphub.lib.sql_builder.column.QualifiedColumn;
@@ -42,6 +43,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.processor.com
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_DEMAND;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_DISTANCE_FROM_REFERENCE;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_EXTERNAL_REFERENCE;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_FLEET_CARRIER_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_ITEM_NAME;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_LAST_UPDATE;
@@ -49,13 +51,14 @@ import static com.github.saphyra.apphub.service.feature.elite_base.processor.com
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_SELL_PRICE;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_STAR_NAME;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_STAR_SYSTEM_ID;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_STATION_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_STOCK;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_OBJECT_TYPE;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_X_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_Y_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.COLUMN_Z_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_ITEM_COMMODITY;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_ITEM_COMMODITY_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_LAST_UPDATE_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 
@@ -120,7 +123,7 @@ abstract class OfferDaoBase implements OfferDao {
 
     private String getSql(int offset, OrderType orderType, TradeMode tradeMode, StarSystem referenceSystem, int minTradeAmount, int minPrice, int maxPrice, Duration maxAge, String itemName, int maxDistance) {
         SelectQuery query = SqlBuilder.select()
-            .from(new QualifiedTable(SCHEMA, TABLE_ITEM_COMMODITY));
+            .from(new QualifiedTable(SCHEMA, TABLE_ITEM_COMMODITY_V2));
         addColumns(query, tradeMode, referenceSystem);
         addJoins(query);
         addConditions(query, tradeMode, minTradeAmount, minPrice, maxPrice, maxAge, itemName, maxDistance, referenceSystem);
@@ -137,18 +140,18 @@ abstract class OfferDaoBase implements OfferDao {
     private void addConditions(SelectQuery query, TradeMode tradeMode, int minTradeAmount, int minPrice, int maxPrice, Duration maxAge, String itemName, int maxDistance, StarSystem referenceSystem) {
         query
             .condition(new Equation(
-                new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_ITEM_NAME),
+                new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, COLUMN_ITEM_NAME),
                 new WrappedValue(itemName)
             ))
             .and()
             .condition(new OperationCondition(
-                new QualifiedColumn(TABLE_ITEM_COMMODITY, getAmountColumn(tradeMode)),
+                new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, getAmountColumn(tradeMode)),
                 Operation.GREATER_OR_EQUAL,
                 new NumberValue(minTradeAmount)
             ))
             .and()
             .condition(new BetweenCondition(
-                new QualifiedColumn(TABLE_ITEM_COMMODITY, getPriceColumn(tradeMode)),
+                new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, getPriceColumn(tradeMode)),
                 new NumberValue(minPrice),
                 new NumberValue(maxPrice)
             ))
@@ -170,7 +173,7 @@ abstract class OfferDaoBase implements OfferDao {
         query.innerJoin(
             new QualifiedTable(SCHEMA, TABLE_LAST_UPDATE_V2),
             new Equation(
-                new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_EXTERNAL_REFERENCE),
+                new DefaultSegmentProvider("COALESCE(%s.%s, %s.%s)".formatted(TABLE_ITEM_COMMODITY_V2, COLUMN_FLEET_CARRIER_ID, TABLE_ITEM_COMMODITY_V2, COLUMN_STATION_ID)),
                 new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_EXTERNAL_REFERENCE)
             ),
             new Equation(
@@ -180,20 +183,32 @@ abstract class OfferDaoBase implements OfferDao {
         );
         query.innerJoin(
             new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM),
-            new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_STAR_SYSTEM_ID),
+            new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, COLUMN_STAR_SYSTEM_ID),
             new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID)
         );
     }
 
     private void addColumns(SelectQuery query, TradeMode tradeMode, StarSystem referenceSystem) {
         Stream.of(
-                COLUMN_EXTERNAL_REFERENCE,
-                COLUMN_LOCATION_TYPE,
                 getPriceColumn(tradeMode),
                 getAmountColumn(tradeMode),
                 COLUMN_STAR_SYSTEM_ID
             )
-            .forEach(column -> query.column(new QualifiedColumn(TABLE_ITEM_COMMODITY, column)));
+            .forEach(column -> query.column(new QualifiedColumn(TABLE_ITEM_COMMODITY_V2, column)));
+
+        query.column(new NamedColumn(
+            new DefaultSegmentProvider("COALESCE(%s.%s, %s.%s)".formatted(TABLE_ITEM_COMMODITY_V2, COLUMN_FLEET_CARRIER_ID, TABLE_ITEM_COMMODITY_V2, COLUMN_STATION_ID)),
+            COLUMN_EXTERNAL_REFERENCE
+        ));
+        query.column(new NamedColumn(
+            new DefaultSegmentProvider("CASE WHEN %s.%s IS NOT NULL THEN '%s' ELSE '%s' END".formatted(
+                TABLE_ITEM_COMMODITY_V2,
+                COLUMN_FLEET_CARRIER_ID,
+                ItemLocationType.FLEET_CARRIER.name(),
+                ItemLocationType.STATION.name()
+            )),
+            COLUMN_LOCATION_TYPE
+        ));
 
         query.column(new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_LAST_UPDATE));
         query.column(new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_STAR_NAME));

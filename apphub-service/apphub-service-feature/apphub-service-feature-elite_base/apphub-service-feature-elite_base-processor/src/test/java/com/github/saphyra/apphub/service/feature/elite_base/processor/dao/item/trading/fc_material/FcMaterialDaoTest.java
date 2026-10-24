@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemDomainId;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemLocationType;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.Tradeable;
 import com.google.common.cache.Cache;
 import org.junit.jupiter.api.Test;
@@ -62,22 +62,28 @@ class FcMaterialDaoTest {
 
     @Test
     void toDomainId() {
-        ItemEntityId itemEntityId = ItemEntityId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+        String id = UUID.randomUUID().toString();
+        FcMaterialEntity materialEntity = FcMaterialEntity.builder()
+            .id(id)
             .itemName(ITEM_NAME)
             .build();
+        given(repository.findById(id)).willReturn(java.util.Optional.of(materialEntity));
+        given(converter.convertEntity(materialEntity)).willReturn(domain);
+        given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(domain.getItemName()).willReturn(ITEM_NAME);
+        given(domain.getLocationType()).willReturn(ItemLocationType.STATION);
 
-        given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
-
-        assertThat(underTest.toDomainId(itemEntityId))
+        assertThat(underTest.toDomainId(id))
             .returns(EXTERNAL_REFERENCE, ItemDomainId::getExternalReference)
-            .returns(ITEM_NAME, ItemDomainId::getItemName);
+            .returns(ITEM_NAME, ItemDomainId::getItemName)
+            .returns(ItemLocationType.STATION, ItemDomainId::getLocationType);
     }
 
     @Test
     void getDomainId() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(domain.getItemName()).willReturn(ITEM_NAME);
+        given(domain.getLocationType()).willReturn(ItemLocationType.STATION);
 
         assertThat(underTest.getDomainId(domain))
             .returns(EXTERNAL_REFERENCE, ItemDomainId::getExternalReference)
@@ -89,10 +95,12 @@ class FcMaterialDaoTest {
         ItemDomainId domainId = ItemDomainId.builder()
             .externalReference(EXTERNAL_REFERENCE)
             .itemName(ITEM_NAME)
+            .locationType(ItemLocationType.STATION)
             .build();
 
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(domain.getItemName()).willReturn(ITEM_NAME);
+        given(domain.getLocationType()).willReturn(ItemLocationType.STATION);
 
         assertThat(underTest.matchesWithId(domainId, domain)).isTrue();
     }
@@ -102,6 +110,7 @@ class FcMaterialDaoTest {
         ItemDomainId domainId = ItemDomainId.builder()
             .externalReference(EXTERNAL_REFERENCE)
             .itemName(ITEM_NAME)
+            .locationType(ItemLocationType.STATION)
             .build();
 
         given(domain.getExternalReference()).willReturn(UUID.randomUUID());
@@ -114,6 +123,7 @@ class FcMaterialDaoTest {
         ItemDomainId domainId = ItemDomainId.builder()
             .externalReference(EXTERNAL_REFERENCE)
             .itemName(ITEM_NAME)
+            .locationType(ItemLocationType.STATION)
             .build();
 
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);

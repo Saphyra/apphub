@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.fc_material;
 
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemDomainId;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemEntityId;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.ItemLocationType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,34 +38,38 @@ class FcMaterialDeleteBufferTest {
     @Test
     void synchronize() {
         FcMaterialEntity toDelete = FcMaterialEntity.builder()
-            .id(ItemEntityId.builder()
-                .externalReference(EXTERNAL_REFERENCE_1.toString())
-                .itemName(ITEM_NAME_1)
-                .build())
+            .id(UUID.randomUUID().toString())
+            .itemName(ITEM_NAME_1)
+            .stationId(EXTERNAL_REFERENCE_1.toString())
             .build();
         repository.save(toDelete);
         FcMaterialEntity externalReferenceMismatch = FcMaterialEntity.builder()
-            .id(ItemEntityId.builder()
-                .externalReference(EXTERNAL_REFERENCE_2.toString())
-                .itemName(ITEM_NAME_1)
-                .build())
+            .id(UUID.randomUUID().toString())
+            .itemName(ITEM_NAME_1)
+            .stationId(EXTERNAL_REFERENCE_2.toString())
             .build();
         repository.save(externalReferenceMismatch);
         FcMaterialEntity itemNameMismatch = FcMaterialEntity.builder()
-            .id(ItemEntityId.builder()
-                .externalReference(EXTERNAL_REFERENCE_1.toString())
-                .itemName(ITEM_NAME_2)
-                .build())
+            .id(UUID.randomUUID().toString())
+            .itemName(ITEM_NAME_2)
+            .stationId(EXTERNAL_REFERENCE_1.toString())
             .build();
         repository.save(itemNameMismatch);
+        FcMaterialEntity otherLocation = FcMaterialEntity.builder()
+            .id(UUID.randomUUID().toString())
+            .itemName(ITEM_NAME_1)
+            .fleetCarrierId(EXTERNAL_REFERENCE_1.toString())
+            .build();
+        repository.save(otherLocation);
 
         ItemDomainId domainId = ItemDomainId.builder()
             .externalReference(EXTERNAL_REFERENCE_1)
             .itemName(ITEM_NAME_1)
+            .locationType(ItemLocationType.STATION)
             .build();
 
         underTest.doSynchronize(List.of(domainId));
 
-        assertThat(repository.findAll()).containsExactlyInAnyOrder(externalReferenceMismatch, itemNameMismatch);
+        assertThat(repository.findAll()).containsExactlyInAnyOrder(externalReferenceMismatch, itemNameMismatch, otherLocation);
     }
 }
