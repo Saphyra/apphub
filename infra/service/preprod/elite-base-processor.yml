@@ -49,8 +49,10 @@ spec:
             periodSeconds: 5
             failureThreshold: 1
           resources:
+            requests:
+              memory: 500Mi
             limits:
-              memory: 2048Mi
+              memory: 1000Mi
 ---
 apiVersion: v1
 kind: Service
