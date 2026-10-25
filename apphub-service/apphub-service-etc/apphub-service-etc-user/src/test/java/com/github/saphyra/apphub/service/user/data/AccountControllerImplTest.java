@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.RegistrationService;
@@ -163,7 +164,7 @@ public class AccountControllerImplTest {
 
         Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), false, false, accessToken));
 
-        ExceptionValidator.validateInvalidParam(ex, "value", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "value", ValidationUtil.TOO_SHORT);
     }
 
     @Test

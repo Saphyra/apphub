@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.BuildingModuleValidator;
@@ -38,14 +39,14 @@ class StorageBuildingModuleValidatorTest {
     void emptyStores() {
         given(buildingModuleData.getStores()).willReturn(Map.of());
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "stores", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "stores", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
     void nullInStores() {
         given(buildingModuleData.getStores()).willReturn(CollectionUtils.singleValueMap(StorageType.AMMUNITION, null));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "stores.%s".formatted(StorageType.AMMUNITION), "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Map.of(KEY, buildingModuleData)), "stores.%s".formatted(StorageType.AMMUNITION), ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

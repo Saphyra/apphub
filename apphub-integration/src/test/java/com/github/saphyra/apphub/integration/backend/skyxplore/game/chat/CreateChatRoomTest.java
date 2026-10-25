@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreF
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.ChatRoomCreatedMessage;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.ChatRoomResponse;
@@ -66,7 +67,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(null)
             .build();
         Response nullMembersResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, nullMembersRequest);
-        verifyInvalidParam(nullMembersResponse, "members", "must not be null");
+        verifyInvalidParam(nullMembersResponse, "members", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void membersContainsNull(String accessToken1) {
@@ -93,7 +94,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response nullRoomTitleResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, nullRoomTitleRequest);
-        verifyInvalidParam(nullRoomTitleResponse, "roomTitle", "must not be null");
+        verifyInvalidParam(nullRoomTitleResponse, "roomTitle", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void roomTitleTooShort(String accessToken1) {
@@ -102,7 +103,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooShortResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, roomTitleTooShortRequest);
-        verifyInvalidParam(roomTitleTooShortResponse, "roomTitle", "too short");
+        verifyInvalidParam(roomTitleTooShortResponse, "roomTitle", ValidationConstants.TOO_SHORT);
     }
 
     private static void roomTitleTooLong(String accessToken1) {
@@ -111,7 +112,7 @@ public class CreateChatRoomTest extends BackEndTest {
             .members(Collections.emptyList())
             .build();
         Response roomTitleTooLongResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, roomTitleTooLongRequest);
-        verifyInvalidParam(roomTitleTooLongResponse, "roomTitle", "too long");
+        verifyInvalidParam(roomTitleTooLongResponse, "roomTitle", ValidationConstants.TOO_LONG);
     }
 
     private static void create(String accessToken1, UUID userId2, Map<String, ApphubWsClient> gameWsClients) {

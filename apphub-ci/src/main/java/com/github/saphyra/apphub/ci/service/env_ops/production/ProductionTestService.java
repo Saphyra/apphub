@@ -24,7 +24,7 @@ public class ProductionTestService {
     private final KubernetesPodStartupWaiter kubernetesPodStartupWaiter;
     private final TestRunner testRunner;
 
-    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
+    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount, int maxWebDriverCacheSize) {
         try {
             kubernetesPodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PREPROD, 5);
 
@@ -52,6 +52,7 @@ public class ProductionTestService {
                     .databaseConnectionCacheEnabled(false)
                     .namespace(Constants.NAMESPACE_NAME_PRODUCTION)
                     .retryCount(retryCount)
+                .maxWebDriverCacheSize(maxWebDriverCacheSize)
                     .dynamoDbHost("0")
                     .build()
             );

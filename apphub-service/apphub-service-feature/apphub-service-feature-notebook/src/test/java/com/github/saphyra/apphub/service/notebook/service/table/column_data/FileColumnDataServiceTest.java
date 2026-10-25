@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class FileColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileMetadata", "failed to parse");
+        ExceptionValidator.validateInvalidParam(ex, "fileMetadata", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -82,7 +83,7 @@ class FileColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "fileName", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "fileName", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -92,7 +93,7 @@ class FileColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "size", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "size", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

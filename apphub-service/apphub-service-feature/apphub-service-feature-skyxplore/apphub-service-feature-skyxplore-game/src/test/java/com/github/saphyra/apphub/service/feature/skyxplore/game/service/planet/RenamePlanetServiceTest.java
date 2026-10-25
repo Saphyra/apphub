@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlanetModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
@@ -73,14 +74,14 @@ public class RenamePlanetServiceTest {
     public void blankName() {
         Throwable ex = catchThrowable(() -> underTest.rename(USER_ID, PLANET_ID, " "));
 
-        ExceptionValidator.validateInvalidParam(ex, "newName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "newName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     public void tooLongName() {
         Throwable ex = catchThrowable(() -> underTest.rename(USER_ID, PLANET_ID, Stream.generate(() -> "a").limit(30).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "newName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "newName", ValidationUtil.TOO_LONG);
     }
 
     @Test

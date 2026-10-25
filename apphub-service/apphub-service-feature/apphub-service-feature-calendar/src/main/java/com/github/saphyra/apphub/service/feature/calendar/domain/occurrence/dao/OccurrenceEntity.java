@@ -12,7 +12,6 @@ class OccurrenceEntity {
     private String userId;
     private String eventId;
     private String occurrenceId;
-    private String dateBucket;
     private String date;
     private String time;
     private String status;

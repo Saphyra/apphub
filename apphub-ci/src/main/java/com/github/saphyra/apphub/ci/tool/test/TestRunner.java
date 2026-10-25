@@ -26,36 +26,34 @@ public class TestRunner {
         Map<String, String> dynamoDbProperties = propertyDao.getEnvironmentSpecificProperties(PropertyName.DYNAMO_DB_CONFIGURATION)
             .getForEnvironmentOrDefault(configuration.environment);
 
-        List<String> command = new ArrayList<>();
-        command.addAll(
-            List.of(
-                "cmd",
-                "/c",
-                "cd",
-                "apphub-integration",
-                "&&",
-                "mvn",
-                "-DthreadCount=\"%s\"".formatted(configuration.threadCount),
-                "-DargLine=\"",
-                "-DthreadCount=%s".formatted(configuration.threadCount),
-                "-DserverPort=%s".formatted(configuration.serverPort),
-                "-DdatabasePort=%s".formatted(configuration.databasePort),
-                "-Dheadless=true",
-                "-DretryEnabled=true",
-                "-DrestLoggingEnabled=false",
-                "-DdatabaseName=%s".formatted(configuration.databaseName),
-                "-DintegrationServerEnabled=true",
-                "-DenabledGroups=%s".formatted(configuration.testFilter),
-                "-DdisabledGroups=%s".formatted(configuration.disabledGroups),
-                "-DpreCreateWebDrivers=%s".formatted(configuration.preCreateDrivers),
-                "-DnamespaceName=%s".formatted(configuration.namespace),
-                "-DserverConnectionCacheEnabled=%s".formatted(configuration.serverConnectionCacheEnabled),
-                "-DdatabaseConnectionCacheEnabled=%s".formatted(configuration.databaseConnectionCacheEnabled),
-                "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
-                "-DmaxRetryCount=%s".formatted(configuration.retryCount),
-                "-Denvironment=%s".formatted(configuration.environment.name().toLowerCase())
-            )
-        );
+        List<String> command = new ArrayList<>(List.of(
+            "cmd",
+            "/c",
+            "cd",
+            "apphub-integration",
+            "&&",
+            "mvn",
+            "-DthreadCount=\"%s\"".formatted(configuration.threadCount),
+            "-DargLine=\"",
+            "-DthreadCount=%s".formatted(configuration.threadCount),
+            "-DserverPort=%s".formatted(configuration.serverPort),
+            "-DdatabasePort=%s".formatted(configuration.databasePort),
+            "-Dheadless=true",
+            "-DretryEnabled=true",
+            "-DrestLoggingEnabled=false",
+            "-DdatabaseName=%s".formatted(configuration.databaseName),
+            "-DintegrationServerEnabled=true",
+            "-DenabledGroups=%s".formatted(configuration.testFilter),
+            "-DdisabledGroups=%s".formatted(configuration.disabledGroups),
+            "-DpreCreateWebDrivers=%s".formatted(configuration.preCreateDrivers),
+            "-DnamespaceName=%s".formatted(configuration.namespace),
+            "-DserverConnectionCacheEnabled=%s".formatted(configuration.serverConnectionCacheEnabled),
+            "-DdatabaseConnectionCacheEnabled=%s".formatted(configuration.databaseConnectionCacheEnabled),
+            "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
+            "-DmaxRetryCount=%s".formatted(configuration.retryCount),
+            "-DmaxWebDriverCacheSize=%s".formatted(configuration.maxWebDriverCacheSize),
+            "-Denvironment=%s".formatted(configuration.environment.name().toLowerCase())
+        ));
 
         if (!isBlank(configuration.dynamoDbHost)) {
             command.add("-DdynamoDbHost=%s".formatted(configuration.dynamoDbHost));
@@ -105,6 +103,7 @@ public class TestRunner {
         private final boolean databaseConnectionCacheEnabled;
         private final String namespace;
         private final Integer retryCount;
+        private final Integer maxWebDriverCacheSize;
         private final String dynamoDbHost;
     }
 }

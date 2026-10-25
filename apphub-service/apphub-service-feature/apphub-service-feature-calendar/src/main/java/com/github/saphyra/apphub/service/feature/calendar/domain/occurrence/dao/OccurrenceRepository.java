@@ -17,14 +17,10 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.GSI_USER_ID_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_EVENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_OCCURRENCE;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
 @Slf4j
@@ -86,27 +82,6 @@ class OccurrenceRepository extends DynamoDbRepository {
             .toList();
 
         batchWrite(requests, CalendarMonitoringFunctionality.SAVE_OCCURRENCES);
-    }
-
-    List<OccurrenceEntity> getByBucket(String userId, String bucket) {
-        QueryRequest request = QueryRequest.builder()
-            .tableName(tableName)
-            .indexName(GSI_USER_ID_DATE_BUCKET)
-            .keyConditionExpression("#userId = :userId AND #dateBucket = :bucket")
-            .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
-                "#dateBucket", COLUMN_DATE_BUCKET
-            ))
-            .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":bucket", AttributeValue.builder().s(bucket).build()
-            ))
-            .build();
-
-        return query(request, CalendarMonitoringFunctionality.GET_OCCURRENCE_BY_BUCKET)
-            .stream()
-            .map(mapper::convertEntity)
-            .toList();
     }
 
     /**

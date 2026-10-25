@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.task_manager.model.notification.Not
 import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationStatus;
 import com.github.saphyra.apphub.api.feature.task_manager.model.notification.SetNotificationStatusRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.notification.service.NotificationQueryService;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.notification.service.NotificationService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -72,7 +73,7 @@ class NotificationControllerImplTest {
             .notificationIds(Set.of(NOTIFICATION_ID))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.setNotificationStatus(request, accessToken), "status", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.setNotificationStatus(request, accessToken), "status", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -82,7 +83,7 @@ class NotificationControllerImplTest {
             .notificationIds(null)
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.setNotificationStatus(request, accessToken), "notificationIds", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.setNotificationStatus(request, accessToken), "notificationIds", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -92,7 +93,7 @@ class NotificationControllerImplTest {
             .notificationIds(new HashSet<>(Arrays.asList(NOTIFICATION_ID, null)))
             .build();
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.setNotificationStatus(request, accessToken), "notificationIds", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.setNotificationStatus(request, accessToken), "notificationIds", ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test

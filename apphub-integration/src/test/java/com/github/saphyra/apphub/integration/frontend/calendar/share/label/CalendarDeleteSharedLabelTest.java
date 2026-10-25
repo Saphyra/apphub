@@ -36,7 +36,7 @@ public class CalendarDeleteSharedLabelTest extends SeleniumTest {
         CalendarIndexPageActions.toLabelsPage(sharedWithDriver);
 
         CalendarLabelsPageActions.getLabel(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX)
-            .delete()
+            .delete(sharedWithDriver)
             .confirmDeletion(sharedWithDriver);
 
         //Verify label is deleted
@@ -67,7 +67,7 @@ public class CalendarDeleteSharedLabelTest extends SeleniumTest {
         CalendarIndexPageActions.toLabelsPage(sharedWithDriver);
 
         CalendarLabelsPageActions.getLabel(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX)
-            .delete()
+            .delete(sharedWithDriver)
             .confirmDeletion(sharedWithDriver);
 
         //Verify label is not deleted

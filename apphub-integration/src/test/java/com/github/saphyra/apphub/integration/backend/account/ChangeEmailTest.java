@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.RandomDataProvider;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.ChangeEmailRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
@@ -54,7 +55,7 @@ public class ChangeEmailTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response nullEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, nullEmailRequest);
-        ResponseValidator.verifyInvalidParam(nullEmailResponse, "email", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullEmailResponse, "email", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void invalidEmail(RegistrationParameters userData1, String accessToken1) {
@@ -72,7 +73,7 @@ public class ChangeEmailTest extends BackEndTest {
             .password(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, nullPasswordRequest);
-        ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
+        ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void incorrectPassword(String accessToken1) {

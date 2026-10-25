@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_DISABLED_ROLES_CHANGED;
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_LISTENER_DISABLED_ROLES_CHANGED;
@@ -22,6 +23,7 @@ import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.QU
 
 @Configuration
 @Import(DisabledRolesChangedRabbitMqDefinition.class)
+@Profile("!test")
 @Slf4j
 public class DisabledRolesChangedRabbitMqConsumerConfig {
     @Bean

@@ -1,0 +1,6 @@
+server:
+  port: 8100
+elite-base:
+  messageReceiver:
+    enabled: true
+  shutdownEnabled: false

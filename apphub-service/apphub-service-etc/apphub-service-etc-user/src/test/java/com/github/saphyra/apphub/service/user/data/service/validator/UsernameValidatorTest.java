@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -27,21 +28,21 @@ public class UsernameValidatorTest {
     public void nullUsername() {
         Throwable ex = catchThrowable(() -> underTest.validateUsername(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "username", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "username", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void tooShortUsername() {
         Throwable ex = catchThrowable(() -> underTest.validateUsername("aa"));
 
-        ExceptionValidator.validateInvalidParam(ex, "username", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "username", ValidationUtil.TOO_SHORT);
     }
 
     @Test
     public void tooLongUsername() {
         Throwable ex = catchThrowable(() -> underTest.validateUsername(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "username", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "username", ValidationUtil.TOO_LONG);
     }
 
     @Test

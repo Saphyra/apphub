@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -44,7 +45,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
             .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
             .build();
         Response create_emptyTitleResponse = OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(create_emptyTitleResponse, "title", "too long");
+        verifyInvalidParam(create_emptyTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void create_blankTitle(String accessToken) {
@@ -52,7 +53,7 @@ public class OnlyTitleCrudTest extends BackEndTest {
             .title(" ")
             .build();
         Response create_emptyTitleResponse = OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessToken, create_emptyTitleRequest);
-        verifyInvalidParam(create_emptyTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(create_emptyTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_parentNotFound(String accessToken) {

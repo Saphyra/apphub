@@ -25,4 +25,5 @@ public enum PropertyName {
     TEST_THREAD_COUNT,
     PRE_CREATE_DRIVER_COUNT,
     TEST_RETRY_COUNT,
+    MAX_WEB_DRIVER_CACHE_SIZE,
 }

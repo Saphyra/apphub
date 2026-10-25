@@ -1,0 +1,53 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.service.star_system;
+
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.StarSystemSuggestionListCache;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+
+@ExtendWith(MockitoExtension.class)
+class StarSystemControllerImplTest {
+    private static final String QUERY = "qUery";
+    private static final UUID STAR_ID = UUID.randomUUID();
+    private static final String STAR_NAME = "star-name";
+
+    @Mock
+    private StarSystemSuggestionListCache starSystemSuggestionListCache;
+
+    @InjectMocks
+    private StarSystemControllerImpl underTest;
+
+    @Mock
+    private AccessToken accessToken;
+
+    @Mock
+    private StarSystem starSystem;
+
+    @Test
+    void search_queryTooShort() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.search(new OneParamRequest<>("as"), accessToken), "query", ValidationUtil.TOO_SHORT);
+    }
+
+    @Test
+    void search() {
+        given(starSystemSuggestionListCache.get(QUERY.toLowerCase())).willReturn(Optional.of(List.of(starSystem)));
+        given(starSystem.getId()).willReturn(STAR_ID);
+        given(starSystem.getStarName()).willReturn(STAR_NAME);
+
+        assertThat(underTest.search(new OneParamRequest<>(QUERY), accessToken)).containsEntry(STAR_ID, STAR_NAME);
+    }
+}

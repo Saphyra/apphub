@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.RandomDataProvider;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.user.ChangeUsernameRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
@@ -56,7 +57,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response nullUsernameResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessToken, nullUsernameRequest);
-        verifyInvalidParam(nullUsernameResponse, "username", "must not be null");
+        verifyInvalidParam(nullUsernameResponse, "username", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void tooShortUsername(RegistrationParameters userData1, String accessToken) {
@@ -65,7 +66,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response tooShortUsernameResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessToken, tooShortUsernameRequest);
-        verifyInvalidParam(tooShortUsernameResponse, "username", "too short");
+        verifyInvalidParam(tooShortUsernameResponse, "username", ValidationConstants.TOO_SHORT);
     }
 
     private static void tooLongUsername(RegistrationParameters userData1, String accessToken) {
@@ -74,7 +75,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(userData1.getPassword())
             .build();
         Response tooLongUsernameResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessToken, tooLongUsernameRequest);
-        verifyInvalidParam(tooLongUsernameResponse, "username", "too long");
+        verifyInvalidParam(tooLongUsernameResponse, "username", ValidationConstants.TOO_LONG);
     }
 
     private static void usernameAlreadyExists(RegistrationParameters userData1, String accessToken) {
@@ -95,7 +96,7 @@ public class ChangeUsernameTest extends BackEndTest {
             .password(null)
             .build();
         Response nullPasswordResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessToken, nullPasswordRequest);
-        verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
+        verifyInvalidParam(nullPasswordResponse, "password", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void incorrectPassword(String accessToken) {

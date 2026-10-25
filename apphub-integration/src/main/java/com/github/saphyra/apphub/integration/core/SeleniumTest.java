@@ -45,7 +45,7 @@ public abstract class SeleniumTest extends TestBase {
         }
         log.info("Pre-creating {} drivers...", TestConfiguration.PRE_CREATE_WEB_DRIVERS);
 
-        extractDrivers(TestConfiguration.PRE_CREATE_WEB_DRIVERS);
+        extractDrivers(Math.min(TestConfiguration.PRE_CREATE_WEB_DRIVERS, TestConfiguration.MAX_WEB_DRIVER_CACHE_SIZE));
         driverWrappers.get()
             .forEach(WebDriverProvider::release);
         log.info("Drivers created.");

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -67,7 +68,7 @@ public class UserSettingsTest extends BackEndTest {
 
         Response update_blankKeyResponse = UserSettingsActions.getUpdateUserSettingsResponse(getServerPort(), accessToken, blankKeyRequest);
 
-        ResponseValidator.verifyInvalidParam(update_blankKeyResponse, "key", "must not be null or blank");
+        ResponseValidator.verifyInvalidParam(update_blankKeyResponse, "key", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void update_categoryNotFound(String accessToken) {

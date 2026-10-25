@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
@@ -54,7 +55,7 @@ public class TerraformTest extends BackEndTest {
     private static void invalidSurfaceType(String accessToken, UUID planetId, UUID emptySurfaceId) {
         Response invalidSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessToken, planetId, emptySurfaceId, "asd");
 
-        ResponseValidator.verifyInvalidParam(invalidSurfaceTypeResponse, "surfaceType", "invalid value");
+        ResponseValidator.verifyInvalidParam(invalidSurfaceTypeResponse, "surfaceType", ValidationConstants.INVALID_VALUE);
     }
 
     private void surfaceNotEmpty(String accessToken, UUID planetId) {

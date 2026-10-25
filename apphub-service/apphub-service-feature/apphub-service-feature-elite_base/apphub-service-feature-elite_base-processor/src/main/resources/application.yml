@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: elite-base-processor
+  datasource:
+    hikari:
+      maximumPoolSize: 50
+
+liquibase:
+  schema: elite_base
+
+elite-base:
+  message:
+    incoming:
+      consumer:
+        enabled: true #Change this to false when executing migrations
+    stored:
+      consumer:
+        enabled: true #Process stored messages
+    backfill:
+      publisher:
+        enabled: true #Backfill error messages
+  cache:
+    expireAfterAccess: PT1H
+    bufferSynchronizationInterval: PT1M
+    bufferSynchronizationCheckInterval: PT10S
+    maxBufferSize: 1000
+    cacheReadTimeout: PT5S
+    loadRetryDelay: PT5S
+  executor:
+    messageProcessor:
+      threadCount: 10
+    scheduled:
+      threadCount: 2
+  messageProcessorRetryDelay: PT2H
+  messageProcessorMaxRetryCount: 50
+  searchPageSize: 10

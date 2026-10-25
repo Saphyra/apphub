@@ -3,15 +3,7 @@ import ChecklistItem from "modules/feature/notebook/common/checklist_item/Checkl
 import { moveItem, removeItem, updateItem } from "./ChecklistCrudService";
 
 const getItems = (listItemId, items, searchText, localizationHandler, editingEnabled, setItems, setConfirmationDialogData, setDisplaySpinner) => {
-    if (items.length === 0) {
-        return (
-            <div id="notebook-view-checklist-empty">
-                {localizationHandler.get("checklist-empty")}
-            </div>
-        );
-    }
-
-    return new Stream(items)
+    const result = new Stream(items)
         .sorted((a, b) => a.index - b.index)
         .filter(item => item.content.toLowerCase().includes(searchText.toLowerCase()))
         .map((item, tabIndex) =>
@@ -27,6 +19,16 @@ const getItems = (listItemId, items, searchText, localizationHandler, editingEna
             />
         )
         .toList();
+
+    if (result.length === 0) {
+        return (
+            <div id="notebook-view-checklist-empty">
+                {localizationHandler.get("checklist-empty")}
+            </div>
+        );
+    }
+
+    return result;
 }
 
 export default getItems;

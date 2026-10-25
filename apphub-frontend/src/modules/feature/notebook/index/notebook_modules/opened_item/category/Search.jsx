@@ -29,13 +29,6 @@ const Search = ({
     useEffect(() => loadSearchResult(), [openedListItem.id]);
     useEffect(() => processEvent(), [lastEvent]);
 
-    const isInFocus = useHasFocus();
-    useUpdateEffect(() => {
-        if (isInFocus) {
-            loadSearchResult();
-        }
-    }, [isInFocus]);
-
     const loadSearchResult = () => {
         const fetch = async () => {
             const response = await NOTEBOOK_SEARCH.createRequest({ value: openedListItem.id })

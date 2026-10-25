@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.power_supply;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -32,14 +33,14 @@ class EnergyProductionValidatorTest {
 
     @Test
     void nullProductions() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "productions", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(null), "productions", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void blankId() {
         given(energyProduction.getId()).willReturn(" ");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "id", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "id", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -47,7 +48,7 @@ class EnergyProductionValidatorTest {
         given(energyProduction.getId()).willReturn("id");
         given(energyProduction.getEnergyPerBatch()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "energyPerBatch", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "energyPerBatch", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -56,7 +57,7 @@ class EnergyProductionValidatorTest {
         given(energyProduction.getEnergyPerBatch()).willReturn(0);
         given(energyProduction.getBatchTicks()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "batchTicks", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "batchTicks", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -66,7 +67,7 @@ class EnergyProductionValidatorTest {
         given(energyProduction.getBatchTicks()).willReturn(0);
         given(energyProduction.getFuelLastsForTicks()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "fuelLastsForTicks", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "fuelLastsForTicks", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -77,7 +78,7 @@ class EnergyProductionValidatorTest {
         given(energyProduction.getFuelLastsForTicks()).willReturn(0);
         given(energyProduction.getFuelStorage()).willReturn(-1);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "fuelStorage", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "fuelStorage", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -89,7 +90,7 @@ class EnergyProductionValidatorTest {
         given(energyProduction.getFuelStorage()).willReturn(0);
         given(energyProduction.getHumanPowered()).willReturn(null);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "humanPowered", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "humanPowered", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -102,7 +103,7 @@ class EnergyProductionValidatorTest {
         given(energyProduction.getHumanPowered()).willReturn(false);
         given(energyProduction.getFuel()).willReturn(FUEL);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "fuel=%s".formatted(FUEL), "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(energyProduction)), "fuel=%s".formatted(FUEL), ValidationUtil.INVALID_VALUE);
     }
 
     @Test

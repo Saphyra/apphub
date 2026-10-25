@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
@@ -57,7 +58,7 @@ public class LinkCrudTest extends BackEndTest {
             .url(URL)
             .build();
         Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(create_blankTitleResponse, "title", "too long");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void create_blankTitle(String accessToken) {
@@ -66,7 +67,7 @@ public class LinkCrudTest extends BackEndTest {
             .url(URL)
             .build();
         Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_blankTitleRequest);
-        verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_parentNotCategory(String accessToken) {
@@ -96,7 +97,7 @@ public class LinkCrudTest extends BackEndTest {
             .url("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
             .build();
         Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_nullUrlRequest);
-        verifyInvalidParam(create_nullUrlResponse, "url", "too long");
+        verifyInvalidParam(create_nullUrlResponse, "url", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullUrl(String accessToken) {
@@ -105,7 +106,7 @@ public class LinkCrudTest extends BackEndTest {
             .url(null)
             .build();
         Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_nullUrlRequest);
-        verifyInvalidParam(create_nullUrlResponse, "url", "must not be null");
+        verifyInvalidParam(create_nullUrlResponse, "url", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static UUID create(String accessToken, UUID parentId) {
@@ -132,7 +133,7 @@ public class LinkCrudTest extends BackEndTest {
             .parent(parentId)
             .build();
 
-        ResponseValidator.verifyInvalidParam(ListItemActions.getEditListItemResponse(getServerPort(), accessToken, editLinkRequest, linkId), "value", "too long");
+        ResponseValidator.verifyInvalidParam(ListItemActions.getEditListItemResponse(getServerPort(), accessToken, editLinkRequest, linkId), "value", ValidationConstants.TOO_LONG);
     }
 
     private static void editLink(String accessToken, UUID parentId, UUID linkId) {

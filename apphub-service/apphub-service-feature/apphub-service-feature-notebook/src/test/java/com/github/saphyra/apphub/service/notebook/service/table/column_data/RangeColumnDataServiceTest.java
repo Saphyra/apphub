@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Range;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class RangeColumnDataServiceTest {
     void validateData_null() {
         Throwable ex = catchThrowable(() -> underTest.validateData(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "range", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "range", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -52,7 +53,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range", "failed to parse");
+        ExceptionValidator.validateInvalidParam(ex, "range", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -62,7 +63,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range.step", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "range.step", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -72,7 +73,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range.step", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "range.step", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -82,7 +83,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range.min", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "range.min", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -92,7 +93,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range.max", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "range.max", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -102,7 +103,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range.value", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "range.value", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -112,7 +113,7 @@ class RangeColumnDataServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
-        ExceptionValidator.validateInvalidParam(ex, "range.value", "too high");
+        ExceptionValidator.validateInvalidParam(ex, "range.value", ValidationUtil.TOO_HIGH);
     }
 
     @Test

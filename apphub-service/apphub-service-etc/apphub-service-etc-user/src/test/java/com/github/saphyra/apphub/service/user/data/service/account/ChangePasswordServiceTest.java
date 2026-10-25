@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -65,7 +66,7 @@ public class ChangePasswordServiceTest {
         Throwable ex = catchThrowable(() -> underTest.changePassword(USER_ID, request));
 
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -79,7 +80,7 @@ public class ChangePasswordServiceTest {
         Throwable ex = catchThrowable(() -> underTest.changePassword(USER_ID, request));
 
 
-        ExceptionValidator.validateInvalidParam(ex, "deactivateAllSessions", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "deactivateAllSessions", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

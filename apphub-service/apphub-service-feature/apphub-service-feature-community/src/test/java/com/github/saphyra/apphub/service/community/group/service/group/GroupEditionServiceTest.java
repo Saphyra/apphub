@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.community.group.service.group;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupListResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.community.group.dao.group.Group;
 import com.github.saphyra.apphub.service.community.group.dao.group.GroupDao;
 import com.github.saphyra.apphub.service.community.group.dao.member.GroupMember;
@@ -85,7 +86,7 @@ public class GroupEditionServiceTest {
     public void changeInvitationType_null() {
         Throwable ex = catchThrowable(() -> underTest.changeInvitationType(USER_ID, GROUP_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "invitationType", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "invitationType", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -116,7 +117,7 @@ public class GroupEditionServiceTest {
     public void changeOwner_null() {
         Throwable ex = catchThrowable(() -> underTest.changeOwner(USER_ID, GROUP_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "groupMemberId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "groupMemberId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

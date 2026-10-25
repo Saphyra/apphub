@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.etc.modules.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.etc.modules.config.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
@@ -56,7 +57,7 @@ public class FavoriteUpdateServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.updateFavorite(USER_ID, MODULE, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "value", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "value", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

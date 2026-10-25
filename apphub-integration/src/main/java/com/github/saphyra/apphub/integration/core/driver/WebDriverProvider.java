@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.github.saphyra.apphub.integration.core.TestConfiguration.MAX_WEB_DRIVER_CACHE_SIZE;
+import static com.github.saphyra.apphub.integration.core.TestConfiguration.WEB_DRIVER_CACHE_ENABLED;
 import static com.github.saphyra.apphub.integration.core.driver.WebDriverFactory.numberOfDriversCreated;
 import static com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints.AUTHORIZATION_ROOT;
 
@@ -32,7 +34,6 @@ public class WebDriverProvider {
     private static final GenericObjectPool<WebDriverWrapper> DEFAULT_DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(WebDriverMode.DEFAULT), defaultDriverPoolConfig());
     private static final GenericObjectPool<WebDriverWrapper> HEADED_DRIVER_POOL = new GenericObjectPool<>(new WebDriverFactory(WebDriverMode.HEADED), headedDriverPoolConfig());
 
-    private static final int MAX_DRIVER_COUNT = 300;
     public static final Map<WebDriverMode, GenericObjectPool<WebDriverWrapper>> CACHE_MAP = Map.of(
         WebDriverMode.DEFAULT, DEFAULT_DRIVER_POOL,
         WebDriverMode.HEADED, HEADED_DRIVER_POOL
@@ -42,8 +43,8 @@ public class WebDriverProvider {
     private static GenericObjectPoolConfig<WebDriverWrapper> defaultDriverPoolConfig() {
         GenericObjectPoolConfig<WebDriverWrapper> config = new GenericObjectPoolConfig<>();
 
-        config.setMaxTotal(MAX_DRIVER_COUNT);
-        config.setMaxIdle(MAX_DRIVER_COUNT);
+        config.setMaxTotal(MAX_WEB_DRIVER_CACHE_SIZE);
+        config.setMaxIdle(MAX_WEB_DRIVER_CACHE_SIZE);
         config.setTestOnBorrow(true);
 
         return config;
@@ -64,6 +65,10 @@ public class WebDriverProvider {
     }
 
     public static synchronized List<WebDriverWrapper> getDrivers(int driverCount, WebDriverMode mode) {
+        if(WEB_DRIVER_CACHE_ENABLED && driverCount > MAX_WEB_DRIVER_CACHE_SIZE){
+            throw new IllegalArgumentException("Requested driver count exceeds max cache size. Requested: " + driverCount + ", Max: " + MAX_WEB_DRIVER_CACHE_SIZE);
+        }
+
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<FutureWrapper<WebDriverWrapper>> futures = Stream.generate(() -> TestBase.EXECUTOR_SERVICE.asyncProcess(() -> getDriver(mode)))
             .limit(driverCount)

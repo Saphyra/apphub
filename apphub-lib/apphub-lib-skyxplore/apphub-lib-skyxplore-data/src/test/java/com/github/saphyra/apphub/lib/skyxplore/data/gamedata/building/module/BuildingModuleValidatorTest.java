@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItemValidator;
@@ -46,7 +47,7 @@ class BuildingModuleValidatorTest {
 
     @Test
     void nullCategory() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(buildingModuleData), "category", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(buildingModuleData), "category", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

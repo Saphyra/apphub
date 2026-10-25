@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
@@ -69,19 +70,19 @@ public class TerraformationQueueTest extends BackEndTest {
     private static void updatePriority_invalidType(String accessToken, UUID planetId, QueueResponse queueResponse) {
         Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, planetId, "asd", queueResponse.getItemId(), 4);
 
-        ResponseValidator.verifyInvalidParam(setPriority_invalidTypeResponse, "type", "invalid value");
+        ResponseValidator.verifyInvalidParam(setPriority_invalidTypeResponse, "type", ValidationConstants.INVALID_VALUE);
     }
 
     private static void updatePriority_priorityTooLow(String accessToken, UUID planetId, QueueResponse queueResponse) {
         Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
 
-        ResponseValidator.verifyInvalidParam(setPriority_priorityTooLowResponse, "priority", "too low");
+        ResponseValidator.verifyInvalidParam(setPriority_priorityTooLowResponse, "priority", ValidationConstants.TOO_LOW);
     }
 
     private static void updatePriority_priorityTooHigh(String accessToken, UUID planetId, QueueResponse queueResponse) {
         Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
 
-        ResponseValidator.verifyInvalidParam(setPriority_priorityTooHighResponse, "priority", "too high");
+        ResponseValidator.verifyInvalidParam(setPriority_priorityTooHighResponse, "priority", ValidationConstants.TOO_HIGH);
     }
 
     private QueueResponse updatePriority(String accessToken, UUID planetId, QueueResponse queueResponse) {
@@ -99,7 +100,7 @@ public class TerraformationQueueTest extends BackEndTest {
     private static void cancelConstruction_invalidType(String accessToken, UUID planetId, QueueResponse queueResponse) {
         Response cancelConstruction_invalidTypeResponse = SkyXplorePlanetQueueActions.getCancelItemResponse(getServerPort(), accessToken, planetId, "asd", queueResponse.getItemId());
 
-        ResponseValidator.verifyInvalidParam(cancelConstruction_invalidTypeResponse, "type", "invalid value");
+        ResponseValidator.verifyInvalidParam(cancelConstruction_invalidTypeResponse, "type", ValidationConstants.INVALID_VALUE);
     }
 
     private static void cancelConstruction(String accessToken, UUID planetId, QueueResponse queueResponse, UUID surfaceId) {

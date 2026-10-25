@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.etc.admin_panel.error_report.service.overview;
 
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportStatus;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class GetErrorReportsRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "statusCode", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "statusCode", ValidationUtil.INVALID_VALUE);
     }
 
     @Test
@@ -68,7 +69,7 @@ public class GetErrorReportsRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "status", "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, "status", ValidationUtil.INVALID_VALUE);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class GetErrorReportsRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "pageSize", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "pageSize", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -96,7 +97,7 @@ public class GetErrorReportsRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "pageSize", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "pageSize", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -112,7 +113,7 @@ public class GetErrorReportsRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "page", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "page", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -128,7 +129,7 @@ public class GetErrorReportsRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "page", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "page", ValidationUtil.TOO_LOW);
     }
 
     @Test

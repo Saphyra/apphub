@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreF
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePriorityActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -60,12 +61,12 @@ public class PriorityTest extends BackEndTest {
 
     private static void tooLow(String accessToken1, PlanetLocationResponse planet) {
         Response tooLowResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 0);
-        verifyInvalidParam(tooLowResponse, "priority", "too low");
+        verifyInvalidParam(tooLowResponse, "priority", ValidationConstants.TOO_LOW);
     }
 
     private static void tooHigh(String accessToken1, PlanetLocationResponse planet) {
         Response tooHighResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 11);
-        verifyInvalidParam(tooHighResponse, "priority", "too high");
+        verifyInvalidParam(tooHighResponse, "priority", ValidationConstants.TOO_HIGH);
     }
 
     private static void update(String accessToken1, PlanetLocationResponse planet) {

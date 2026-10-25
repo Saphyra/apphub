@@ -23,14 +23,10 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class OccurrenceDaoTest {
-    private static final UUID USER_ID = UUID.randomUUID();
-    private static final String USER_ID_STRING = "user-id";
     private static final UUID EVENT_ID = UUID.randomUUID();
     private static final String EVENT_ID_STRING = "event-id";
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
     private static final String OCCURRENCE_ID_STRING = "occurrence-id";
-    private static final String BUCKET = "2026-05";
-    private static final String BUCKET_2 = "2026-6";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -112,15 +108,6 @@ class OccurrenceDaoTest {
         given(occurrenceCache.get(eq(EVENT_ID), any())).willReturn(Map.of(OCCURRENCE_ID, occurrence));
 
         assertThat(underTest.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).isEqualTo(occurrence);
-    }
-
-    @Test
-    void getByBuckets() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(repository.getByBucket(USER_ID_STRING, BUCKET)).willReturn(List.of(entity));
-        given(converter.convertEntity(entity)).willReturn(occurrence);
-
-        assertThat(underTest.getByBuckets(USER_ID, List.of(BUCKET, BUCKET_2))).containsExactly(occurrence);
     }
 
     @Test

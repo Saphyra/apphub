@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -105,7 +106,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
     private void changeRowStatus_nullStatus(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Response response = TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, listItemId, tableResponse.getRows().getFirst().getRowId(), null);
 
-        ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "status", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_blankTitle(String accessToken) {
@@ -113,7 +114,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(" ")
             .build();
         Response create_blankTitleResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankTitleRequest);
-        verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_tooLongTitle(String accessToken) {
@@ -121,7 +122,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
             .build();
         Response create_blankTitleResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankTitleRequest);
-        verifyInvalidParam(create_blankTitleResponse, "title", "too long");
+        verifyInvalidParam(create_blankTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullListItemType(String accessToken) {
@@ -129,7 +130,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .listItemType(null)
             .build();
         Response create_nullListItemTypeResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullListItemTypeRequest);
-        verifyInvalidParam(create_nullListItemTypeResponse, "listItemType", "must not be null");
+        verifyInvalidParam(create_nullListItemTypeResponse, "listItemType", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_parentNotFound(String accessToken) {
@@ -154,7 +155,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .tableHeads(List.of(validCreateTableHead().toBuilder().content(" ").build()))
             .build();
         Response create_blankColumnNameResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankColumnNameRequest);
-        verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", "must not be null or blank");
+        verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void create_tooLongColumnName(String accessToken) {
@@ -162,7 +163,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .tableHeads(List.of(validCreateTableHead().toBuilder().content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1)).build()))
             .build();
         Response create_blankColumnNameResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankColumnNameRequest);
-        verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", "too long");
+        verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullRows(String accessToken) {
@@ -170,7 +171,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .rows(null)
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(response, "rows", "must not be null");
+        verifyInvalidParam(response, "rows", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullRowIndex(String accessToken) {
@@ -178,7 +179,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .rows(List.of(validCreateTableRow().toBuilder().rowIndex(null).build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(response, "row.rowIndex", "must not be null");
+        verifyInvalidParam(response, "row.rowIndex", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullColumns(String accessToken) {
@@ -186,7 +187,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .rows(List.of(validCreateTableRow().toBuilder().columns(null).build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(response, "row.columns", "must not be null");
+        verifyInvalidParam(response, "row.columns", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullChecked(String accessToken) {
@@ -194,7 +195,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .rows(List.of(validCreateTableRow().toBuilder().checked(null).build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(response, "row.checked", "must not be null");
+        verifyInvalidParam(response, "row.checked", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_incorrectColumnAmount(String accessToken) {
@@ -213,13 +214,13 @@ public class ChecklistTableCrudTest extends BackEndTest {
     private static void create_nullColumnValue(String accessToken) {
         CreateTableRequest create_nullColumnValueRequest = createRequestWithInvalidColumnData(null);
         Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
-        verifyInvalidParam(create_nullColumnValueResponse, "data", "must not be null");
+        verifyInvalidParam(create_nullColumnValueResponse, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_tooLongColumnValue(String accessToken) {
         CreateTableRequest create_nullColumnValueRequest = createRequestWithInvalidColumnData("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1));
         Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
-        verifyInvalidParam(create_nullColumnValueResponse, "data", "too long");
+        verifyInvalidParam(create_nullColumnValueResponse, "data", ValidationConstants.TOO_LONG);
     }
 
     private static void create_nullColumnType(String accessToken) {
@@ -229,7 +230,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(response, "row.column.columnType", "must not be null");
+        verifyInvalidParam(response, "row.column.columnType", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_nullColumnIndex(String accessToken) {
@@ -239,7 +240,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-        verifyInvalidParam(response, "row.column.columnIndex", "must not be null");
+        verifyInvalidParam(response, "row.column.columnIndex", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static BiWrapper<TableResponse, UUID> create(String accessToken) {
@@ -277,7 +278,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(" ")
             .build();
         Response edit_blankTitleResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankTitleRequest);
-        verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
+        verifyInvalidParam(edit_blankTitleResponse, "title", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void edit_tooLongTitle(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -285,7 +286,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
             .build();
         Response edit_blankTitleResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankTitleRequest);
-        verifyInvalidParam(edit_blankTitleResponse, "title", "too long");
+        verifyInvalidParam(edit_blankTitleResponse, "title", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_blankColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -293,7 +294,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .tableHeads(List.of(validEditTableHead(tableResponse).toBuilder().content(" ").build()))
             .build();
         Response edit_blankColumnNameResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankColumnNameRequest);
-        verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", "must not be null or blank");
+        verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", ValidationConstants.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     private static void edit_tooLongColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -301,7 +302,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .tableHeads(List.of(validEditTableHead(tableResponse).toBuilder().content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1)).build()))
             .build();
         Response edit_blankColumnNameResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankColumnNameRequest);
-        verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", "too long");
+        verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_differentColumnAmount(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -327,19 +328,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .rows(List.of(validEditTableRow(tableResponse).toBuilder().checked(null).build()))
             .build();
         Response edit_differentColumnAmountResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_differentColumnAmountRequest);
-        verifyInvalidParam(edit_differentColumnAmountResponse, "row.checked", "must not be null");
+        verifyInvalidParam(edit_differentColumnAmountResponse, "row.checked", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_nullColumnValue(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_nullColumnValueRequest = createEditRequestWithInvalidColumnData(tableResponse, null);
         Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
-        verifyInvalidParam(edit_nullColumnValueResponse, "data", "must not be null");
+        verifyInvalidParam(edit_nullColumnValueResponse, "data", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void edit_tooLongColumnValue(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_nullColumnValueRequest = createEditRequestWithInvalidColumnData(tableResponse, "a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1));
         Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
-        verifyInvalidParam(edit_nullColumnValueResponse, "data", "too long");
+        verifyInvalidParam(edit_nullColumnValueResponse, "data", ValidationConstants.TOO_LONG);
     }
 
     private static void edit_tableHeadNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {

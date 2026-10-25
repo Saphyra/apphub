@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,7 @@ class EditTableRowValidatorTest {
     void nullRows() {
         Throwable ex = catchThrowable(() -> underTest.validateTableRows(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "rows", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "rows", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -44,7 +45,7 @@ class EditTableRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableRows(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.rowIndex", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.rowIndex", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -56,7 +57,7 @@ class EditTableRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableRows(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.checked", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.checked", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -69,7 +70,7 @@ class EditTableRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableRows(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.itemType", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.itemType", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -83,7 +84,7 @@ class EditTableRowValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateTableRows(List.of(model)));
 
-        ExceptionValidator.validateInvalidParam(ex, "row.rowId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "row.rowId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

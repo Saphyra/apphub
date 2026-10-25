@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -42,7 +43,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
             .name(null)
             .build();
         Response create_nullNameResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessToken1, create_nullNameModel);
-        verifyInvalidParam(create_nullNameResponse, "name", "must not be null");
+        verifyInvalidParam(create_nullNameResponse, "name", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_characterNameTooShort(String accessToken1) {
@@ -50,7 +51,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
             .name("as")
             .build();
         Response create_characterNameTooShortResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessToken1, create_characterNameTooShortModel);
-        verifyInvalidParam(create_characterNameTooShortResponse, "characterName", "too short");
+        verifyInvalidParam(create_characterNameTooShortResponse, "characterName", ValidationConstants.TOO_SHORT);
     }
 
     private static void create_characterNameTooLong(String accessToken1) {
@@ -58,7 +59,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
             .name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining()))
             .build();
         Response create_characterNameTooLongResponse = SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessToken1, create_characterNameTooLongModel);
-        verifyInvalidParam(create_characterNameTooLongResponse, "characterName", "too long");
+        verifyInvalidParam(create_characterNameTooLongResponse, "characterName", ValidationConstants.TOO_LONG);
     }
 
     private static SkyXploreCharacterModel getCreateModel(String accessToken1, UUID userId1) {

@@ -1,0 +1,36 @@
+===FEATURES===
+    Add favico
+    ApphubCI
+        Optionally pre-create WebDrivers when filtering tests
+        Sort tables by approximate size before backing up
+        Limit WebDriver cache size
+    Calendar
+        Search in shared events
+
+===BUGFIXES===
+    ApphubCI
+        StartupIndicator had incorrect height
+
+===PLATFORM CHANGES===
+    Split EliteBase to separate message receiving and processing
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    Setting up a namespace via ApphubCI deploys technologies in batch
+    EliteBase
+        Migrate body_ring to add fk
+        Migrate conflicting_minor_faction to add fk
+        Migrate station to add fk
+        Migrate body_material - add fk, replace random uuid pk with composite pk, partition
+        Migrate item_* tables to add fks
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+        Put EliteBase to migration mode
+    Post deployment
+        Backup Database
+        Delete date_bucket GSI from Calendar
+        Put EliteBase to normal mode

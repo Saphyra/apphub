@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class TableCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, request));
 
-        ExceptionValidator.validateInvalidParam(ex, "listItemType", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "listItemType", ValidationUtil.MUST_NOT_BE_NULL);
 
         then(listItemRequestValidator).should().validate(USER_ID, TITLE, PARENT);
         then(createTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
@@ -83,7 +84,7 @@ class TableCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, request));
 
-        ExceptionValidator.validateInvalidParam(ex, "listItemType", "must be one of [TABLE, CHECKLIST_TABLE, CUSTOM_TABLE]");
+        ExceptionValidator.validateInvalidParam(ex, "listItemType", String.format(ValidationUtil.MUST_BE_ONE_OF, List.of("TABLE", "CHECKLIST_TABLE", "CUSTOM_TABLE")));
 
         then(listItemRequestValidator).should().validate(USER_ID, TITLE, PARENT);
         then(createTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));

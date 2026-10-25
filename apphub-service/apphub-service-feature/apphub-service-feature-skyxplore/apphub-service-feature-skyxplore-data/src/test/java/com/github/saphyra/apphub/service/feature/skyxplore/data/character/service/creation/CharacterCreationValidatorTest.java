@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.character.servi
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.character.dao.SkyXploreCharacter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -37,21 +38,21 @@ public class CharacterCreationValidatorTest {
     public void nullCharacterName() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "name", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "name", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void characterNameTooShort() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name("as").build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "characterName", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "characterName", ValidationUtil.TOO_SHORT);
     }
 
     @Test
     public void characterNameTooLong() {
         Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, SkyXploreCharacterModel.builder().name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())).build()));
 
-        ExceptionValidator.validateInvalidParam(ex, "characterName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "characterName", ValidationUtil.TOO_LONG);
     }
 
     @Test

@@ -99,12 +99,12 @@ public class EnvOpsFacade {
         }
     }
 
-    public void runTests(Environment environment, String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
+    public void runTests(Environment environment, String testFilter, int threadCount, int preCreatedDriverCount, int retryCount, int maxWebDriverCacheSize) {
         switch (environment) {
-            case LOCAL -> localTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
-            case MINIKUBE -> minikubeTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
-            case PREPROD -> preprodTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
-            case PRODUCTION -> productionTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
+            case LOCAL -> localTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount, maxWebDriverCacheSize);
+            case MINIKUBE -> minikubeTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount, maxWebDriverCacheSize);
+            case PREPROD -> preprodTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount, maxWebDriverCacheSize);
+            case PRODUCTION -> productionTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount, maxWebDriverCacheSize);
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }

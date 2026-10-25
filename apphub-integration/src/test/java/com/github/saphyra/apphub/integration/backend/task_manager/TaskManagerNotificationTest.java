@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.NotificationResponse;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.NotificationStatus;
@@ -71,7 +72,7 @@ public class TaskManagerNotificationTest extends BackEndTest {
             .notificationIds(CollectionUtils.toSet(notificationId, null))
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerNotificationActions.setNotificationStatusResponse(getServerPort(), accessToken1, request), "notificationIds", "must not contain null values");
+        ResponseValidator.verifyInvalidParam(TaskManagerNotificationActions.setNotificationStatusResponse(getServerPort(), accessToken1, request), "notificationIds", ValidationConstants.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     private void setStatus_nullNotificationIds(String accessToken1) {
@@ -80,7 +81,7 @@ public class TaskManagerNotificationTest extends BackEndTest {
             .notificationIds(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerNotificationActions.setNotificationStatusResponse(getServerPort(), accessToken1, request), "notificationIds", "must not be null");
+        ResponseValidator.verifyInvalidParam(TaskManagerNotificationActions.setNotificationStatusResponse(getServerPort(), accessToken1, request), "notificationIds", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void setStatus_nullStatus(String accessToken1, UUID notificationId) {
@@ -89,7 +90,7 @@ public class TaskManagerNotificationTest extends BackEndTest {
             .notificationIds(Set.of(notificationId))
             .build();
 
-        ResponseValidator.verifyInvalidParam(TaskManagerNotificationActions.setNotificationStatusResponse(getServerPort(), accessToken1, request), "status", "must not be null");
+        ResponseValidator.verifyInvalidParam(TaskManagerNotificationActions.setNotificationStatusResponse(getServerPort(), accessToken1, request), "status", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private UUID getNotificationId(String accessToken1, UUID organizationId) {

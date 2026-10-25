@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.EventReques
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
@@ -149,7 +150,7 @@ public class ShareObjectTest extends BackEndTest {
             .parent(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "parent", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "parent", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void emptyGrants(String ownerToken, Supplier<ShareObjectRequest.ShareObjectRequestBuilder> builderSupplier) {
@@ -157,7 +158,7 @@ public class ShareObjectTest extends BackEndTest {
             .grants(Set.of())
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "grants", "must not be empty");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "grants", ValidationConstants.MUST_NOT_BE_EMPTY);
     }
 
     private void nullGrants(String ownerToken, Supplier<ShareObjectRequest.ShareObjectRequestBuilder> builderSupplier) {
@@ -165,7 +166,7 @@ public class ShareObjectTest extends BackEndTest {
             .grants(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "grants", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "grants", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void nullType(String ownerToken, Supplier<ShareObjectRequest.ShareObjectRequestBuilder> builderSupplier) {
@@ -173,7 +174,7 @@ public class ShareObjectTest extends BackEndTest {
             .type(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "type", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "type", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void nullObjectId(String ownerToken, Supplier<ShareObjectRequest.ShareObjectRequestBuilder> builderSupplier) {
@@ -181,7 +182,7 @@ public class ShareObjectTest extends BackEndTest {
             .objectId(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "objectId", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "objectId", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void nullOwner(String ownerToken, Supplier<ShareObjectRequest.ShareObjectRequestBuilder> builderSupplier) {
@@ -189,7 +190,7 @@ public class ShareObjectTest extends BackEndTest {
             .owner(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "owner", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "owner", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private void nullSharedWith(String ownerToken, Supplier<ShareObjectRequest.ShareObjectRequestBuilder> builderSupplier) {
@@ -197,7 +198,7 @@ public class ShareObjectTest extends BackEndTest {
             .sharedWith(null)
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "sharedWith", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarShareActions.getShareObjectResponse(getServerPort(), ownerToken, request), "sharedWith", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private ShareObjectRequest.ShareObjectRequestBuilder createBuilder(UUID sharedWith, UUID owner, UUID objectId, UUID parent, SharedObjectType type, Set<Grant> grants) {

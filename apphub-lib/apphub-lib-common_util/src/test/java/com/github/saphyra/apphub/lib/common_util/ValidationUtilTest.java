@@ -15,14 +15,13 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class ValidationUtilTest {
     private static final String FIELD = "field";
-    private static final String KEY = "key";
     private static final String VALUE = "value";
 
     @Test
     public void notNull_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.notNull(null, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -34,7 +33,7 @@ public class ValidationUtilTest {
     public void notBlank_blank() {
         Throwable ex = catchThrowable(() -> ValidationUtil.notBlank(" ", FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -46,14 +45,14 @@ public class ValidationUtilTest {
     public void enumElementExists_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.convertToEnumChecked((String) null, TestEnum::valueOf, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void enumElementExists_elementDoesNotExist() {
         Throwable ex = catchThrowable(() -> ValidationUtil.convertToEnumChecked("asd", TestEnum::valueOf, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "invalid value");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.INVALID_VALUE);
     }
 
     @Test
@@ -65,28 +64,28 @@ public class ValidationUtilTest {
     public void minLength_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.minLength(null, 1, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void minLength_tooShort() {
         Throwable ex = catchThrowable(() -> ValidationUtil.minLength("asd", 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too short");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_SHORT);
     }
 
     @Test
     public void maxLength_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.maximum(null, 1, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void maxLength_tooLong() {
         Throwable ex = catchThrowable(() -> ValidationUtil.maxLength("asd", 2, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too long");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_LONG);
     }
 
     @Test
@@ -98,14 +97,14 @@ public class ValidationUtilTest {
     public void atLeast_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast((Integer) null, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void atLeast_tooLow() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(9, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -117,14 +116,14 @@ public class ValidationUtilTest {
     public void atLeast_long_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast((Long) null, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void atLeast_long_tooLow() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(9L, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -136,14 +135,14 @@ public class ValidationUtilTest {
     public void maximum_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.maximum(null, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void maximum_tooHigh() {
         Throwable ex = catchThrowable(() -> ValidationUtil.maximum(11, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too high");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -155,21 +154,21 @@ public class ValidationUtilTest {
     public void between_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(null, 5d, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void between_tooLow() {
         Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(4, 5, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_LOW);
     }
 
     @Test
     public void between_tooHigh() {
         Throwable ex = catchThrowable(() -> ValidationUtil.betweenInclusive(11, 5, 10, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too high");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_HIGH);
     }
 
     @Test
@@ -181,14 +180,14 @@ public class ValidationUtilTest {
     public void notEmpty_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty((Collection<?>) null, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     public void notEmpty_empty() {
         Throwable ex = catchThrowable(() -> ValidationUtil.notEmpty(Collections.emptyList(), FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be empty");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
@@ -200,7 +199,7 @@ public class ValidationUtilTest {
     public void contains_error() {
         Throwable ex = catchThrowable(() -> ValidationUtil.contains("asd", List.of("dsa"), FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, String.format("must be one of %s", List.of("dsa")));
+        ExceptionValidator.validateInvalidParam(ex, FIELD, String.format(ValidationUtil.MUST_BE_ONE_OF, List.of("dsa")));
     }
 
     @Test
@@ -212,14 +211,14 @@ public class ValidationUtilTest {
     void exactLengthTest_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.length(null, 3, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void exactLengthTest_differentLength() {
         Throwable ex = catchThrowable(() -> ValidationUtil.length("d", 3, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be 3 character(s) long");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, String.format(ValidationUtil.MUST_BE_LENGTH, 3));
     }
 
     @Test
@@ -231,14 +230,14 @@ public class ValidationUtilTest {
     void atLeastInclusive_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeastExclusive(null, 2d, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void atLeastInclusive_tooLow() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeastExclusive(2d, 2d, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -250,14 +249,14 @@ public class ValidationUtilTest {
     void atLeastDouble_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(null, 2d, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void atLeastDouble_tooLow() {
         Throwable ex = catchThrowable(() -> ValidationUtil.atLeast(1d, 2d, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "too low");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -269,7 +268,7 @@ public class ValidationUtilTest {
     void parse_null() {
         Throwable ex = catchThrowable(() -> ValidationUtil.parse(null, Function.identity(), FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -278,7 +277,7 @@ public class ValidationUtilTest {
             throw new RuntimeException();
         }, FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "failed to parse");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test
@@ -297,7 +296,7 @@ public class ValidationUtilTest {
     void equals_doesNotEqual() {
         Throwable ex = catchThrowable(() -> ValidationUtil.equals("b", "a", FIELD));
 
-        ExceptionValidator.validateInvalidParam(ex, FIELD, "must be a");
+        ExceptionValidator.validateInvalidParam(ex, FIELD, String.format(ValidationUtil.MUST_BE, "a"));
     }
 
     @Test
@@ -312,72 +311,72 @@ public class ValidationUtilTest {
 
     @Test
     void notZero_null() {
-        ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(null, FIELD)), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(null, FIELD)), FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void notZero_zero() {
-        ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(0, FIELD)), FIELD, "must not be zero");
+        ExceptionValidator.validateInvalidParam(catchThrowable(() -> ValidationUtil.notZero(0, FIELD)), FIELD, ValidationUtil.MUST_NOT_BE_ZERO);
     }
 
     @Test
     void notEmpty_map_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.notEmpty((Map<String, String>) null, FIELD), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.notEmpty((Map<String, String>) null, FIELD), FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void notEmpty_map_empty() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.notEmpty(Map.of(), FIELD), FIELD, "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.notEmpty(Map.of(), FIELD), FIELD, ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
     void notEmpty_map() {
-        ValidationUtil.notEmpty(Map.of(KEY, VALUE), FIELD);
+        ValidationUtil.notEmpty(Map.of(ValidationUtil.KEY, VALUE), FIELD);
     }
 
     @Test
     void containsKey_nullKey() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(null, Map.of(KEY, VALUE), FIELD), "key", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(null, Map.of(ValidationUtil.KEY, VALUE), FIELD), ValidationUtil.KEY, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void containsKey_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(KEY, null, FIELD), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(ValidationUtil.KEY, null, FIELD), FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void containsKey_doesNotContain() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(KEY, Map.of(VALUE, KEY), FIELD), FIELD, "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsKey(ValidationUtil.KEY, Map.of(VALUE, ValidationUtil.KEY), FIELD), FIELD, ValidationUtil.INVALID_VALUE);
     }
 
     @Test
     void containsKey() {
-        ValidationUtil.containsKey(KEY, Map.of(KEY, VALUE), FIELD);
+        ValidationUtil.containsKey(ValidationUtil.KEY, Map.of(ValidationUtil.KEY, VALUE), FIELD);
     }
 
     @Test
     void mapDoesNotContainNull_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Map<Object, Object>) null, FIELD), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Map<Object, Object>) null, FIELD), FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void mapDoesNotContainNull_containsNull() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.singleValueMap(KEY, null), FIELD), "%s.%s".formatted(FIELD, KEY), "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.singleValueMap(ValidationUtil.KEY, null), FIELD), String.format(ValidationUtil.FIELD_PATH, FIELD, ValidationUtil.KEY), ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void mapDoesNotContainNull() {
-        ValidationUtil.doesNotContainNull(Map.of(KEY, VALUE), FIELD);
+        ValidationUtil.doesNotContainNull(Map.of(ValidationUtil.KEY, VALUE), FIELD);
     }
 
     @Test
     void collectionDoesNotContainNull_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Collection<Object>) null, FIELD), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Collection<Object>) null, FIELD), FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void collectionDoesNotContainNull_containsNull() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.toList("a", null, "b"), FIELD), FIELD, "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.toList("a", null, "b"), FIELD), FIELD, ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
@@ -387,17 +386,17 @@ public class ValidationUtilTest {
 
     @Test
     void containsAll_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(null, () -> List.of("a"), FIELD), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(null, () -> List.of("a"), FIELD), FIELD, ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
     void containsAll_containsNull() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(CollectionUtils.toList("a", null), () -> List.of("a"), FIELD), FIELD, "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(CollectionUtils.toList("a", null), () -> List.of("a"), FIELD), FIELD, ValidationUtil.MUST_NOT_CONTAIN_NULL_VALUES);
     }
 
     @Test
     void containsAll_unsupportedValue() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(List.of("a", "b"), () -> List.of("a"), FIELD), FIELD, "Unsupported values: [b]");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(List.of("a", "b"), () -> List.of("a"), FIELD), FIELD, String.format(ValidationUtil.UNSUPPORTED_VALUES, List.of("b")));
     }
 
     @Test

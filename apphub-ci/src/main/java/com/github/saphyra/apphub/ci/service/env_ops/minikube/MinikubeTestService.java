@@ -19,7 +19,7 @@ public class MinikubeTestService {
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
-    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
+    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount, int maxWebDriverCacheSize) {
         String namespace = namespaceNameProvider.getNamespaceName();
         kubernetesPodStartupWaiter.waitForPods(namespace, 5);
 
@@ -37,6 +37,7 @@ public class MinikubeTestService {
                 .databaseConnectionCacheEnabled(true)
                 .namespace(namespace)
                 .retryCount(retryCount)
+                .maxWebDriverCacheSize(maxWebDriverCacheSize)
                 .dynamoDbHost("localhost:" + platformProperties.getMinikubeDynamoDbPort())
                 .build()
         );

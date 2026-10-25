@@ -20,6 +20,7 @@ public enum CalendarMonitoringFunctionality implements MonitoringFunctionality {
     DELETE_OCCURRENCES,
     SAVE_OCCURRENCES,
     FIND_OCCURRENCE_BY_ID,
+    @Deprecated(since = "1.32.0")
     GET_OCCURRENCE_BY_BUCKET,
 
     //Label

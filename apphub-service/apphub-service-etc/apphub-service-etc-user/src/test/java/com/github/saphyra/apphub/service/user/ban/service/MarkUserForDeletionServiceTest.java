@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
 import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -59,7 +60,7 @@ public class MarkUserForDeletionServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -71,7 +72,7 @@ public class MarkUserForDeletionServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "markForDeletionAt", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "markForDeletionAt", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -84,7 +85,7 @@ public class MarkUserForDeletionServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID));
 
-        ExceptionValidator.validateInvalidParam(ex, "markForDeletionAt", "failed to parse");
+        ExceptionValidator.validateInvalidParam(ex, "markForDeletionAt", ValidationUtil.FAILED_TO_PARSE);
     }
 
     @Test

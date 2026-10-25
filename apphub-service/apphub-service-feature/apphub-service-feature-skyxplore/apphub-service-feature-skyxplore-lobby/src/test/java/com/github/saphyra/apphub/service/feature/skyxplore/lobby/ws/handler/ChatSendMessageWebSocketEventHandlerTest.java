@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterM
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
@@ -78,7 +79,7 @@ public class ChatSendMessageWebSocketEventHandlerTest {
     void handle_messageTooLong() {
         given(receivedEvent.getPayload()).willReturn(Stream.generate(() -> "a").limit(LobbyConstants.MAX_CHAT_MESSAGE_LENGTH + 1).collect(Collectors.joining()));
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.handle(FROM, receivedEvent, lobbyWebSocketHandler), "message", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.handle(FROM, receivedEvent, lobbyWebSocketHandler), "message", ValidationUtil.TOO_LONG);
     }
 
     @Test

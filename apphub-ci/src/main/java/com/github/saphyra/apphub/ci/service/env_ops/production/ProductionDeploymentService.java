@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.ci.value.DockerTag;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
+import com.github.saphyra.apphub.ci.value.Technology;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +46,7 @@ public class ProductionDeploymentService {
             services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
                 .toList();
 
-            kubernetesNamespaceSetupper.setupNamespace(Environment.PRODUCTION, Constants.NAMESPACE_NAME_PRODUCTION);
+            kubernetesNamespaceSetupper.setupNamespace(Environment.PRODUCTION, Constants.NAMESPACE_NAME_PRODUCTION, Technology.RABBITMQ);
         }
 
         kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, services, 30, startupCountLimit);

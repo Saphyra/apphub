@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creatio
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "host", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "host", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -58,7 +59,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "members", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "members", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "alliances", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "alliances", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -125,7 +126,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "gameName", "too short");
+        ExceptionValidator.validateInvalidParam(ex, "gameName", ValidationUtil.TOO_SHORT);
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }
@@ -139,7 +140,7 @@ public class GameCreationRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "gameName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "gameName", ValidationUtil.TOO_LONG);
 
         verify(allianceNameValidator).validate(ALLIANCE_NAME);
     }

@@ -1,0 +1,36 @@
+package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body.body_data;
+
+import com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel;
+import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body.body_material.BodyMaterial;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.body.body_ring.BodyRing;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.List;
+import java.util.UUID;
+
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Data
+@Builder
+@EqualsAndHashCode(exclude = {"materials", "rings"})
+public class BodyData {
+    private final UUID bodyId;
+    private Boolean landable;
+    private Double surfaceGravity;
+    private ReserveLevel reserveLevel;
+    private Boolean hasRing;
+    private LazyLoadedField<List<BodyMaterial>> materials;
+    private LazyLoadedField<List<BodyRing>> rings;
+
+    public List<BodyMaterial> getMaterials() {
+        return materials.get();
+    }
+
+    public List<BodyRing> getRings() {
+        return rings.get();
+    }
+}

@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
+import com.github.saphyra.apphub.ci.value.Technology;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -53,9 +54,7 @@ public class MinikubeDeploymentService {
                     .toList();
             }
 
-            kubernetesNamespaceSetupper.setupNamespace(Environment.MINIKUBE, namespaceName);
-            kubernetesNamespaceSetupper.deployPostgres(namespaceName);
-            kubernetesNamespaceSetupper.deployDynamoDb(namespaceName);
+            kubernetesNamespaceSetupper.setupNamespace(Environment.MINIKUBE, namespaceName, Technology.MINIKUBE);
 
             kubernetesServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, services, 15, startupCountLimit);
 

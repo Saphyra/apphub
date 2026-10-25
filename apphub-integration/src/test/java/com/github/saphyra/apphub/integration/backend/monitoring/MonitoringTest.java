@@ -8,8 +8,11 @@ import com.github.saphyra.apphub.integration.framework.ServiceConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.monitoring.Feature;
+import com.github.saphyra.apphub.integration.structure.api.monitoring.GetMetricsResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,15 +31,20 @@ public class MonitoringTest extends BackEndTest {
         assertThat(MonitoringActions.getServices(getServerPort(), accessToken, Feature.MEMORY_MONITORING, Constants.MONITORING_FUNCTIONALITY_MEMORY_STATUS)).containsAll(ServiceConstants.getServicesForEnvironment());
         ServiceConstants.getServicesForEnvironment()
             .forEach(service ->
-                assertThat(MonitoringActions.getMetrics(
-                    getServerPort(),
-                    accessToken,
-                    Constants.MONITORING_METRIC_TYPE_SECOND,
-                    Feature.MEMORY_MONITORING,
-                    Constants.MONITORING_FUNCTIONALITY_MEMORY_STATUS,
-                    service
-                ))
-                    .isNotEmpty()
+                {
+                    List<GetMetricsResponse> metrics = MonitoringActions.getMetrics(
+                        getServerPort(),
+                        accessToken,
+                        Constants.MONITORING_METRIC_TYPE_SECOND,
+                        Feature.MEMORY_MONITORING,
+                        Constants.MONITORING_FUNCTIONALITY_MEMORY_STATUS,
+                        service
+                    );
+
+                    if(metrics.isEmpty()){
+                        throw new AssertionError("Metrics for service " + service + " is empty");
+                    }
+                }
             );
     }
 }

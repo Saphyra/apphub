@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -31,7 +32,7 @@ class ArchiveEventServiceTest {
 
     @Test
     void nullValue() {
-        ExceptionValidator.validateInvalidParam(catchThrowable(() -> underTest.archive(USER_ID, EVENT_ID, null)), "archived", "must not be null");
+        ExceptionValidator.validateInvalidParam(catchThrowable(() -> underTest.archive(USER_ID, EVENT_ID, null)), "archived", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

@@ -18,7 +18,7 @@ public class PreprodTestService {
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
-    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
+    public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount, int maxWebDriverCacheSize) {
         kubernetesPodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PREPROD, 5);
 
         testRunner.runTests(
@@ -35,6 +35,7 @@ public class PreprodTestService {
                 .databaseConnectionCacheEnabled(false)
                 .namespace(Constants.NAMESPACE_NAME_PREPROD)
                 .retryCount(retryCount)
+                .maxWebDriverCacheSize(maxWebDriverCacheSize)
                 .dynamoDbHost("0")
                 .build()
         );

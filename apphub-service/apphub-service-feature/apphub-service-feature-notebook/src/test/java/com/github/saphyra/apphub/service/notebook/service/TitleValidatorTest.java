@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -25,11 +26,11 @@ public class TitleValidatorTest {
     public void blank() {
         Throwable ex = catchThrowable(() -> underTest.validate(" "));
 
-        ExceptionValidator.validateInvalidParam(ex, "title", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "title", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     void tooLong() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate("a".repeat(1024 * 200 + 1)), "title", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate("a".repeat(1024 * 200 + 1)), "title", ValidationUtil.TOO_LONG);
     }
 }

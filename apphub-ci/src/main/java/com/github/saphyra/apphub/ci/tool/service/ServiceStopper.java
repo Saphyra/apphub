@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.ci.tool.service;
 
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
+import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -15,11 +16,16 @@ public class ServiceStopper {
     private final ProcessKiller processKiller;
     private final PlatformProperties properties;
     private final Services services;
+    private final ExecutorServiceBean executorServiceBean;
 
     public void stopLocalEnv() {
         processKiller.killByPort(properties.getLocalDynamoDbPort());
-        services.getServices()
-            .forEach(this::stopLocalService);
+        executorServiceBean.execute(services.getServices(), this::stopLocalService, 8)
+            .forEach(er -> {
+                if(!er.isSuccess()){
+                    log.error("Error during stopping service:", er.getException());
+                }
+            });
 
         log.info("Local server stopped.");
     }

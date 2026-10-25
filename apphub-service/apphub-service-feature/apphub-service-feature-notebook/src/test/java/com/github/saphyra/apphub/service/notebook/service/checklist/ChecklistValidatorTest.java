@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -55,7 +56,7 @@ class ChecklistValidatorTest {
     void validateNew_itemsNull() {
         Throwable ex = catchThrowable(() -> underTest.validateNew(null));
 
-        ExceptionValidator.validateInvalidParam(ex, "items", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "items", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -68,7 +69,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateNew(List.of(item)));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.content", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -81,7 +82,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateNew(List.of(item)));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.checked", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.checked", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -94,7 +95,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validateNew(List.of(item)));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.index", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.index", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -113,7 +114,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.content", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -127,7 +128,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.checked", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.checked", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -141,7 +142,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.index", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.index", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -155,7 +156,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.type", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.type", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -170,7 +171,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(model));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.checklistItemId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.checklistItemId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -214,7 +215,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.content", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.content", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -233,7 +234,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.checked", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.checked", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -252,7 +253,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.index", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.index", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -271,7 +272,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.type", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.type", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -291,7 +292,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "item.checklistItemId", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "item.checklistItemId", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -303,7 +304,7 @@ class ChecklistValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "items", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "items", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreS
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -99,7 +100,7 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()))
             .build();
 
-        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessToken, settingModel), "data", "too long");
+        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessToken, settingModel), "data", ValidationConstants.TOO_LONG);
     }
 
     private void create_nullType(String accessToken) {
@@ -108,6 +109,6 @@ public class SkyXploreSettingTest extends BackEndTest {
             .data(DATA_1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessToken, settingModel), "type", "must not be null");
+        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessToken, settingModel), "type", ValidationConstants.MUST_NOT_BE_NULL);
     }
 }

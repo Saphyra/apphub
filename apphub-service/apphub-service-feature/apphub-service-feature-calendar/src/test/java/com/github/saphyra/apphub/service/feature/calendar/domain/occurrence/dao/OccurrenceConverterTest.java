@@ -26,7 +26,6 @@ class OccurrenceConverterTest {
     private static final String EVENT_ID_STRING = "event-id";
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
     private static final String OCCURRENCE_ID_STRING = "occurrence-id";
-    private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
     private static final LocalDate DATE = LocalDate.now();
     private static final LocalTime TIME = LocalTime.of(14, 15);
     private static final String NOTE = "note";
@@ -74,7 +73,6 @@ class OccurrenceConverterTest {
             .returns(USER_ID_STRING, OccurrenceEntity::getUserId)
             .returns(EVENT_ID_STRING, OccurrenceEntity::getEventId)
             .returns(OCCURRENCE_ID_STRING, OccurrenceEntity::getOccurrenceId)
-            .returns(DATE.getYear() + "-" + DATE.getMonthValue(), OccurrenceEntity::getDateBucket)
             .returns(DATE_STRING, OccurrenceEntity::getDate)
             .returns(TIME_STRING, OccurrenceEntity::getTime)
             .returns(OccurrenceStatus.DONE.name(), OccurrenceEntity::getStatus)

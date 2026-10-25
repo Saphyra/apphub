@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.util.Objects.nonNull;
 
@@ -21,26 +20,6 @@ import static java.util.Objects.nonNull;
 @Slf4j
 class OccurrenceQueryServiceHelper {
     private final OccurrenceDao occurrenceDao;
-
-    @Deprecated(forRemoval = true)
-    List<Occurrence> getOccurrencesBetween(UUID userId, LocalDate startDate, LocalDate endDate) {
-        List<String> buckets = getBuckets(startDate, endDate);
-
-        return occurrenceDao.getByBuckets(userId, buckets)
-            .stream()
-            .filter(occurrence -> !occurrence.getDate().isBefore(startDate) && !occurrence.getDate().isAfter(endDate))
-            .toList();
-    }
-
-    private List<String> getBuckets(LocalDate startDate, LocalDate endDate) {
-        List<String> buckets = new ArrayList<>();
-        LocalDate date = startDate.withDayOfMonth(1);
-        while (!date.isAfter(endDate)) {
-            buckets.add(date.getYear() + "-" + date.getMonthValue());
-            date = date.plusMonths(1);
-        }
-        return buckets;
-    }
 
     List<Occurrence> getOccurrencesToAdd(Event event, Occurrence occurrence, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
         List<Occurrence> result = new ArrayList<>();

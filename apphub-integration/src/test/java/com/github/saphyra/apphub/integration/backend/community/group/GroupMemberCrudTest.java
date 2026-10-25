@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupListResponse;
@@ -102,7 +103,7 @@ public class GroupMemberCrudTest extends BackEndTest {
 
             GroupActions.getCreateGroupMemberResponse(getServerPort(), accessToken, group.getGroupId(), null),
             "memberUserId",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 
@@ -151,7 +152,7 @@ public class GroupMemberCrudTest extends BackEndTest {
 
             GroupActions.getModifyRolesResponse(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(null, false, false)),
             "canInvite",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 
@@ -160,7 +161,7 @@ public class GroupMemberCrudTest extends BackEndTest {
 
             GroupActions.getModifyRolesResponse(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, null, false)),
             "canKick",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 
@@ -169,7 +170,7 @@ public class GroupMemberCrudTest extends BackEndTest {
 
             GroupActions.getModifyRolesResponse(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, false, null)),
             "canModifyRoles",
-            "must not be null"
+            ValidationConstants.MUST_NOT_BE_NULL
         );
     }
 

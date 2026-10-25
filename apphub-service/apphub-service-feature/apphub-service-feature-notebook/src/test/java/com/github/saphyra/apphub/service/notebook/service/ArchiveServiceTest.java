@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -33,7 +34,7 @@ public class ArchiveServiceTest {
     public void nullValue() {
         Throwable ex = catchThrowable(() -> underTest.archive(USER_ID, LIST_ITEM_ID, null));
 
-        ExceptionValidator.validateInvalidParam(ex, "archived", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "archived", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

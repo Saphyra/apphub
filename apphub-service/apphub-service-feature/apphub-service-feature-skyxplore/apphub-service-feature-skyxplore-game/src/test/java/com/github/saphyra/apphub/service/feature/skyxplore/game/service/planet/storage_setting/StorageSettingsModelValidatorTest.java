@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.PriorityValidator;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.GameData;
@@ -68,7 +69,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
-        ExceptionValidator.validateInvalidParam(ex, "dataId", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "dataId", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
-        ExceptionValidator.validateInvalidParam(ex, "targetAmount", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "targetAmount", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -106,7 +107,7 @@ public class StorageSettingsModelValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(gameData, LOCATION, model));
 
-        ExceptionValidator.validateInvalidParam(ex, "targetAmount", "too low");
+        ExceptionValidator.validateInvalidParam(ex, "targetAmount", ValidationUtil.TOO_LOW);
     }
 
     @Test

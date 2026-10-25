@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreL
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.AiPlayer;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -67,7 +68,7 @@ public class AiSettingsTest extends BackEndTest {
             .build();
         Response response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
-        ResponseValidator.verifyInvalidParam(response, "name", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "name", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void create_tooShortName(String accessToken1) {
@@ -78,7 +79,7 @@ public class AiSettingsTest extends BackEndTest {
             .build();
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
-        ResponseValidator.verifyInvalidParam(response, "name", "too short");
+        ResponseValidator.verifyInvalidParam(response, "name", ValidationConstants.TOO_SHORT);
     }
 
     private static void create_tooLongName(String accessToken1) {
@@ -89,7 +90,7 @@ public class AiSettingsTest extends BackEndTest {
             .build();
         response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
-        ResponseValidator.verifyInvalidParam(response, "name", "too long");
+        ResponseValidator.verifyInvalidParam(response, "name", ValidationConstants.TOO_LONG);
     }
 
     private static void create_allianceDoesNotExist(String accessToken1) {

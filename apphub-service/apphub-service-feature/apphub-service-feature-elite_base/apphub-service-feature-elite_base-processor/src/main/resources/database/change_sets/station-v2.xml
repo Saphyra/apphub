@@ -1,0 +1,83 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-station_v2" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="station_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="station_v2">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body_id" type="varchar(37)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="market_id" type="numeric">
+                <constraints unique="true"/>
+            </column>
+            <column name="station_name" type="varchar(255)"/>
+            <column name="allegiance" type="varchar(255)"/>
+            <column name="economy" type="varchar(255)"/>
+            <column name="controlling_faction_id" type="varchar(37)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="station_v2" columnNames="id" constraintName="station_v2-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="station_v2" indexName="index-station_v2-star_system_id-station_name">
+            <column name="star_system_id"/>
+            <column name="station_name"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="station_v2" indexName="index-station_v2-market_id">
+            <column name="market_id"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="station_v2" indexName="index-station_v2-star_system_id">
+            <column name="star_system_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-foreign-key-station_v2-body_id" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="station_v2-body_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="station_v2"
+                baseColumnNames="body_id"
+                constraintName="station_v2-body_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="body_v3"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="add-foreign-key-station_v2-star_system_id" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="station_v2-star_system_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="station_v2"
+                baseColumnNames="star_system_id"
+                constraintName="station_v2-star_system_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="star_system"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.setting.service
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.setting.SettingProperties;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class SettingValidatorTest {
 
     @Test
     void nullType() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(SettingModel.builder().build()), "type", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(SettingModel.builder().build()), "type", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -39,7 +40,7 @@ class SettingValidatorTest {
 
         given(settingProperties.getMaxDataSize()).willReturn(MAX_DATA_SIZE);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(model), "data", "too long");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(model), "data", ValidationUtil.TOO_LONG);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
@@ -34,14 +35,14 @@ class ProductionValidatorTest {
 
     @Test
     void nullProduces() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Collections.emptyList()), "produces", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(Collections.emptyList()), "produces", ValidationUtil.MUST_NOT_BE_EMPTY);
     }
 
     @Test
     void amountTooLow() {
         given(production.getAmount()).willReturn(0);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "amount", "too low");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "amount", ValidationUtil.TOO_LOW);
     }
 
     @Test
@@ -49,7 +50,7 @@ class ProductionValidatorTest {
         given(production.getAmount()).willReturn(1);
         given(production.getResourceDataId()).willReturn(" ");
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "resourceDataId", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "resourceDataId", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
@@ -57,7 +58,7 @@ class ProductionValidatorTest {
         given(production.getAmount()).willReturn(1);
         given(production.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "resourceDataId=%s".formatted(RESOURCE_DATA_ID), "invalid value");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "resourceDataId=%s".formatted(RESOURCE_DATA_ID), ValidationUtil.INVALID_VALUE);
     }
 
     @Test
@@ -66,7 +67,7 @@ class ProductionValidatorTest {
         given(production.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
         resourceDataService.put(RESOURCE_DATA_ID, resourceData);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "requiredSkill", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(production)), "requiredSkill", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

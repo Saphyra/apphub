@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.EventReques
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.ValidationConstants;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
@@ -54,11 +55,11 @@ public class ExpiredEventTest extends BackEndTest {
     }
 
     private void eventDurationTooLong(String accessToken, UUID eventId) {
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, CURRENT_DATE.plusYears(101)), "eventDuration", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, CURRENT_DATE.plusYears(101)), "eventDuration", ValidationConstants.TOO_LONG);
     }
 
     private void nullExtendUntil(String accessToken, UUID eventId) {
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, null), "endDate", "must not be null");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, null), "endDate", ValidationConstants.MUST_NOT_BE_NULL);
     }
 
     private static void extendExpiredEvent(String accessToken, UUID eventId) {

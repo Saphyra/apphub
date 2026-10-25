@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
@@ -58,7 +59,7 @@ public class RoleToAllServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.addToAll(USER_ID, null, ROLE));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
@@ -84,7 +85,7 @@ public class RoleToAllServiceTest {
 
         Throwable ex = catchThrowable(() -> underTest.removeFromAll(USER_ID, null, ROLE));
 
-        ExceptionValidator.validateInvalidParam(ex, "password", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "password", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test

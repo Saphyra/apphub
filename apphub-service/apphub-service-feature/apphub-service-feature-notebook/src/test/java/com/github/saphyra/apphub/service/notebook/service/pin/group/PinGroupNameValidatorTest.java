@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,14 +21,14 @@ class PinGroupNameValidatorTest {
     void blankName() {
         Throwable ex = catchThrowable(() -> underTest.validate(" "));
 
-        ExceptionValidator.validateInvalidParam(ex, "pinGroupName", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "pinGroupName", ValidationUtil.MUST_NOT_BE_NULL_OR_BLANK);
     }
 
     @Test
     void tooLong() {
         Throwable ex = catchThrowable(() -> underTest.validate(Stream.generate(() -> "a").limit(31).collect(Collectors.joining())));
 
-        ExceptionValidator.validateInvalidParam(ex, "pinGroupName", "too long");
+        ExceptionValidator.validateInvalidParam(ex, "pinGroupName", ValidationUtil.TOO_LONG);
     }
 
     @Test

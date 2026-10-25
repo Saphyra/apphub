@@ -2,6 +2,7 @@ package com.github.saphrya.apphub.service.platform.authorization.service;
 
 import com.github.saphyra.apphub.api.platform.authorization.model.LoginRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,7 +53,7 @@ class LoginRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "rememberMe", "must not be null");
+        ExceptionValidator.validateInvalidParam(ex, "rememberMe", ValidationUtil.MUST_NOT_BE_NULL);
     }
 
     @Test
