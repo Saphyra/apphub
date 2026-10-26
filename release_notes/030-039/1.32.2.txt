@@ -1,0 +1,21 @@
+===FEATURES===
+    ApphubCI
+        Port forward production RabbitMQ
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    EliteBase
+        Ignore ScanOrganic messages
+        Process OutfittingV3 messages
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database

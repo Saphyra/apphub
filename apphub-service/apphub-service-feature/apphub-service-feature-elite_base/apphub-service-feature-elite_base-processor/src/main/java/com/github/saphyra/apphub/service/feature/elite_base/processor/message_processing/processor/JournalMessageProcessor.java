@@ -309,7 +309,7 @@ class JournalMessageProcessor implements MessageProcessor {
         Body body = bodySaver.save(
             message.getTimestamp(),
             starSystem.getId(),
-            BodyType.PLANET,
+            isStar(message) ? BodyType.STAR : BodyType.PLANET,
             message.getBodyId(),
             message.getBodyName(),
             message.getDistanceFromStar()
@@ -325,5 +325,21 @@ class JournalMessageProcessor implements MessageProcessor {
             message.getMaterials(),
             message.getRings()
         );
+    }
+
+    private boolean isStar(ScanJournalMessage message) {
+        if (nonNull(message.getBodyId()) && message.getBodyId() == 0) {
+            return true;
+        }
+
+        if (nonNull(message.getPlanetClass())) {
+            return false;
+        }
+
+        if (nonNull(message.getStarType())) {
+            return true;
+        }
+
+        return false;
     }
 }

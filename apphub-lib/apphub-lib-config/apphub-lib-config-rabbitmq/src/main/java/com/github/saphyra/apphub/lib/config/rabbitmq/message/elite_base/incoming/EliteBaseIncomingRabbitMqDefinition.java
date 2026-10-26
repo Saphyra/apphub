@@ -21,7 +21,7 @@ class EliteBaseIncomingRabbitMqDefinition {
     @Bean
     TopicExchange eliteBaseIncomingExchange() {
         log.info("Creating exchange {}", EXCHANGE_ELITE_BASE_INCOMING);
-        return new TopicExchange(EXCHANGE_ELITE_BASE_INCOMING, false, false);
+        return new TopicExchange(EXCHANGE_ELITE_BASE_INCOMING, true, false);
     }
 
     @Bean

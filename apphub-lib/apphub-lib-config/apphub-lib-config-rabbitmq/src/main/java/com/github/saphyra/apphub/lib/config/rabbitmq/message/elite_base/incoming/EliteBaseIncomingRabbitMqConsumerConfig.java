@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.MESSAGE_LISTENER_ELITE_BASE_INCOMING;
-import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.PLACEHOLDER_SERVICE;
 import static com.github.saphyra.apphub.lib.config.rabbitmq.RabbitMqConstants.QUEUE_ELITE_BASE_INCOMING;
 
 @Configuration
@@ -31,7 +30,7 @@ public class EliteBaseIncomingRabbitMqConsumerConfig {
 
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory);
 
-        String queueName = QUEUE_ELITE_BASE_INCOMING.replace(PLACEHOLDER_SERVICE, serviceName);
+        String queueName = QUEUE_ELITE_BASE_INCOMING;
         log.info("Creating listener container for queue {}", queueName);
 
         container.setQueueNames(queueName);

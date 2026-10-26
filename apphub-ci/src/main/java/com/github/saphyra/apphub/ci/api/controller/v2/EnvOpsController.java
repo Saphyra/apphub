@@ -103,15 +103,15 @@ class EnvOpsController {
             .orElse(defaultProperties.getServiceStartupCountLimit());
         mav.addObject(PARAM_STARTUP_COUNT_LIMIT, startupCountLimit);
 
+        mav.addObject(PARAM_RABBITMQ_PORT, platformProperties.getLocalRabbitMqAdminPort());
+
         //Operations
         if (environment == Environment.MINIKUBE) {
             mav.addObject(PARAM_SERVER_PORT, platformProperties.getMinikubeDevServerPort());
             mav.addObject(PARAM_PSQL_PORT, platformProperties.getMinikubeDatabasePort());
             mav.addObject(PARAM_DYNAMODB_PORT, platformProperties.getMinikubeDynamoDbPort());
-            mav.addObject(PARAM_RABBITMQ_PORT, platformProperties.getRabbitMqAdminPort());
         } else if (environment == Environment.PREPROD) {
             mav.addObject(PARAM_SERVER_PORT, platformProperties.getMinikubePreprodServerPort());
-            mav.addObject(PARAM_RABBITMQ_PORT, platformProperties.getRabbitMqAdminPort());
         }
 
         //Testing

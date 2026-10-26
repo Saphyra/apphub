@@ -198,7 +198,7 @@ class JournalMessageProcessorTest {
         given(objectMapper.readValue(MESSAGE, ScanJournalMessage.class)).willReturn(scanJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION, StarType.A)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
-        given(bodySaver.save(TIMESTAMP, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(body);
+        given(bodySaver.save(TIMESTAMP, STAR_SYSTEM_ID, BodyType.STAR, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(body);
         given(body.getId()).willReturn(INTERNAL_BODY_ID);
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

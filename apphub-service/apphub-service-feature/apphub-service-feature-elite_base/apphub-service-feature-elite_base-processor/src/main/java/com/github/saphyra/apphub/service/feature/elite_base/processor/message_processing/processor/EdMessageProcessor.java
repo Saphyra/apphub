@@ -65,7 +65,7 @@ public class EdMessageProcessor {
     private void processRetry(EdMessage edMessage, String message) {
         if (edMessage.getRetryCount() < properties.getMessageProcessorMaxRetryCount()) {
             edMessage.setRetryCount(edMessage.getRetryCount() + 1);
-            log.info("Processing of message {} is delayed: {}", edMessage.getMessageId(), message);
+            log.info("Processing of {} message {} is delayed: {}", edMessage.getSchemaRef(), edMessage.getMessageId(), message);
             edMessage.setStatus(MessageStatus.ARRIVED);
             edMessage.setCreatedAt(edMessage.getCreatedAt().plus(properties.getMessageProcessorRetryDelay()));
             publish(edMessage);

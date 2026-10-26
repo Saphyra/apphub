@@ -8,6 +8,7 @@ public class SchemaRefs {
     public static final String FSS_ALL_BODIES_FOUND = "https://eddn.edcd.io/schemas/fssallbodiesfound/1";
     public static final String SCAN_BARY_CENTRE = "https://eddn.edcd.io/schemas/scanbarycentre/1";
     public static final String OUTFITTING = "https://eddn.edcd.io/schemas/outfitting/2";
+    public static final String OUTFITTING_V3 = "https://eddn.edcd.io/schemas/outfitting/3";
     public static final String APPROACH_SETTLEMENT = "https://eddn.edcd.io/schemas/approachsettlement/1";
     public static final String FSS_BODY_SIGNALS = "https://eddn.edcd.io/schemas/fssbodysignals/1";
     public static final String NAVROUTE = "https://eddn.edcd.io/schemas/navroute/1";
@@ -18,4 +19,7 @@ public class SchemaRefs {
     public static final String FC_MATERIALS_CAPI = "https://eddn.edcd.io/schemas/fcmaterials_capi/1";
     public static final String FC_MATERIALS_JOURNAL = "https://eddn.edcd.io/schemas/fcmaterials_journal/1";
     public static final String NAV_BEACON_SCAN = "https://eddn.edcd.io/schemas/navbeaconscan/1";
+
+    //Ignored
+    public static final String SCAN_ORGANIC = "https://eddn.edcd.io/schemas/scanorganic/1";
 }
