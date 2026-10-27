@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.ui.startup;
+package com.github.saphyra.apphub.ci.ui.progress;
 
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import lombok.Getter;
@@ -12,21 +12,21 @@ import java.time.LocalDateTime;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-class StartupService {
-    private final StartupIndicatorContext startupIndicatorContext;
+class ProgressService {
+    private final ProgressIndicatorContext progressIndicatorContext;
     private final int maxServiceNameLength;
     private final String serviceName;
 
     @Getter
-    private StartupStatus status = StartupStatus.WAITING;
+    private ProgressStatus status = ProgressStatus.WAITING;
     private LocalDateTime startedAt;
     private volatile LocalDateTime finishedAt;
     @Getter
     private JLabel label;
     private FutureWrapper<Void> futureWrapper;
 
-    StartupService(StartupIndicatorContext startupIndicatorContext, int maxServiceNameLength, String serviceName) {
-        this.startupIndicatorContext = startupIndicatorContext;
+    ProgressService(ProgressIndicatorContext progressIndicatorContext, int maxServiceNameLength, String serviceName) {
+        this.progressIndicatorContext = progressIndicatorContext;
         this.maxServiceNameLength = maxServiceNameLength;
         this.serviceName = serviceName;
         label = new JLabel();
@@ -35,14 +35,14 @@ class StartupService {
     }
 
     public void startupInitiated() {
-        status = StartupStatus.IN_PROGRESS;
+        status = ProgressStatus.IN_PROGRESS;
         startedAt = LocalDateTime.now();
         SwingUtilities.invokeLater(() -> label.setText(getLabelText()));
 
-        futureWrapper = startupIndicatorContext.getExecutorServiceBean()
+        futureWrapper = progressIndicatorContext.getExecutorServiceBean()
             .execute(() -> {
                 while (isNull(finishedAt)) {
-                    startupIndicatorContext.getSleepService().sleep(50);
+                    progressIndicatorContext.getSleepService().sleep(50);
 
                     SwingUtilities.invokeLater(() -> label.setText(getLabelText()));
                 }
@@ -50,7 +50,7 @@ class StartupService {
     }
 
     public void startupCompleted() {
-        status = StartupStatus.STARTED;
+        status = ProgressStatus.COMPLETED;
         finishedAt = LocalDateTime.now();
         label.setText(getLabelText());
         SwingUtilities.invokeLater(() -> label.setText(getLabelText()));
@@ -61,7 +61,7 @@ class StartupService {
         sb.append(" ");
         sb.append(withTrailingSpaces(serviceName, maxServiceNameLength));
         sb.append(" | ");
-        sb.append(withTrailingSpaces(status.name(), StartupStatus.maxLength()));
+        sb.append(withTrailingSpaces(status.name(), ProgressStatus.maxLength()));
         sb.append(" | ");
 
         if (nonNull(startedAt)) {
@@ -83,7 +83,7 @@ class StartupService {
     }
 
     public void startupFailed() {
-        status = StartupStatus.FAILED;
+        status = ProgressStatus.FAILED;
         finishedAt = LocalDateTime.now();
         label.setText(getLabelText());
         SwingUtilities.invokeLater(() -> label.setText(getLabelText()));

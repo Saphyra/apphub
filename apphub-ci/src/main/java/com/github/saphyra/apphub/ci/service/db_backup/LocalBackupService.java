@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicator;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.ci.value.BackupLocation;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -31,6 +34,7 @@ import java.util.zip.GZIPOutputStream;
 class LocalBackupService implements BackupService {
     private final ExecutorServiceBean readerExecutor = new ExecutorServiceBean(Executors.newFixedThreadPool(8));
     private final ExecutorServiceBean writerExecutor;
+    private final ProgressIndicatorFactory progressIndicatorFactory;
 
     @Override
     public BackupLocation getType() {
@@ -40,16 +44,18 @@ class LocalBackupService implements BackupService {
     @Override
     public void backup(String s3AccessKey, String s3SecretKey, List<String> tables, String directory, String dbUrl, String username, String password, String s3Bucket, SnapshotContext snapshot, String backupDirectory) {
         String path = Paths.get(backupDirectory, directory.replace(":", "-")).toString();
+        ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_LOCAL_BACKUP, tables);
 
         List<FutureWrapper<Void>> futures = tables.stream()
-            .map(table -> readerExecutor.execute(() -> exportTable(path, dbUrl, username, password, table, snapshot.snapshotId())))
+            .map(table -> readerExecutor.execute(() -> exportTable(progressIndicator, path, dbUrl, username, password, table, snapshot.snapshotId())))
             .toList();
 
         futures.forEach(fw -> fw.get().getOrThrow());
     }
 
     @SneakyThrows
-    private void exportTable(String directory, String dbUrl, String username, String password, String table, String snapshotId) {
+    private void exportTable(ProgressIndicator progressIndicator, String directory, String dbUrl, String username, String password, String table, String snapshotId) {
+        progressIndicator.started(table);
         Path file = Paths.get(directory, table + ".bin.gz");
         Path parent = file.getParent();
         if (parent != null) {
@@ -84,8 +90,12 @@ class LocalBackupService implements BackupService {
                 conn.commit();
 
                 stopwatch.stop();
+                progressIndicator.completed(table);
                 log.info("Table {} exported successfully in {} seconds.", table, stopwatch.elapsed(TimeUnit.SECONDS));
             }
+        } catch (Exception e) {
+            progressIndicator.failed(table);
+            throw e;
         }
     }
 

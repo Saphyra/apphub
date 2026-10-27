@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Visual indicator of table backup and restoration progress
 
 ===BUGFIXES===
 

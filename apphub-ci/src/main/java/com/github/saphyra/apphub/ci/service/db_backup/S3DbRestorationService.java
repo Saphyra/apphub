@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicator;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,31 +32,37 @@ class S3DbRestorationService {
 
     private final TableBatcher tableBatcher;
     private final ObjectMapper objectMapper;
+    private final ProgressIndicatorFactory progressIndicatorFactory;
 
     @SneakyThrows
     void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
         String dbUrl = DbBackupUtil.getDbUrl(dbHost, dbName);
         log.info("Restoring tables {}", tables);
+        ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_S3_RESTORE, tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<List<String>> tableBatches = tableBatcher.splitIntoDependencyBatches(dbUrl, username, password, tables);
         log.info("Batches: {}", objectMapper.writeValueAsString(tableBatches));
 
-        tableBatches.forEach(batch -> restoreBatch(dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, batch));
+        tableBatches.forEach(batch -> restoreBatch(progressIndicator, dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, batch));
 
         stopwatch.stop();
         log.info("{} tables restored in {} seconds", tables.size(), stopwatch.elapsed(TimeUnit.SECONDS));
     }
 
-    private void restoreBatch(String dbUrl, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
+    private void restoreBatch(ProgressIndicator progressIndicator, String dbUrl, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
         List<FutureWrapper<Void>> futures = tables.stream()
-            .map(table -> workerPool.execute(() -> restore(dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, table)))
+            .map(table -> workerPool.execute(() -> restore(progressIndicator, dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, table)))
             .toList();
 
-        futures.forEach(fw -> fw.get().getOrThrow());
+        futures.stream()
+            .map(FutureWrapper::get)
+            .filter(er -> !er.isSuccess())
+            .forEach(er -> log.error("Failed restoring table", er.getException()));
     }
 
-    private void restore(String dbUrl, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, String table) {
+    private void restore(ProgressIndicator progressIndicator, String dbUrl, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, String table) {
         log.info("Restoring {}/{}/{}/{} to {} from bucket {}", database, version, backup, table, dbUrl, s3Bucket);
+        progressIndicator.started(table);
         Stopwatch stopwatch = Stopwatch.createStarted();
         String key = database + "/" + version + "/" + backup + "/" + table + ".bin.gz";
 
@@ -77,11 +86,13 @@ class S3DbRestorationService {
             copy.copyIn("COPY " + table + " FROM STDIN WITH (FORMAT BINARY)", gzip);
 
             conn.commit();
+
+            progressIndicator.completed(table);
+            stopwatch.stop();
+            log.info("{} restored in {} seconds.", table, stopwatch.elapsed(TimeUnit.SECONDS));
         } catch (Exception ex) {
+            progressIndicator.failed(table);
             throw new RuntimeException("Failed restoring " + table, ex);
         }
-
-        stopwatch.stop();
-        log.info("{} restored in {} seconds.", table, stopwatch.elapsed(TimeUnit.SECONDS));
     }
 }
