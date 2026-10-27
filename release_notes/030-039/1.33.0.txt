@@ -3,6 +3,7 @@
         Visual indicator of table backup and restoration progress
 
 ===BUGFIXES===
+    ApphubCI ignored foreign key dependencies when referring partitioned tables
 
 ===PLATFORM CHANGES===
 

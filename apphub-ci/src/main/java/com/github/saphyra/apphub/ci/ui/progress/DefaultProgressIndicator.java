@@ -112,7 +112,7 @@ class DefaultProgressIndicator implements ProgressIndicator {
 
     private JFrame createFrame(JProgressBar progressBar, JScrollPane serviceList) {
         JFrame frame = new JFrame(panelTitle);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(progressBar, BorderLayout.NORTH);
         frame.add(serviceList, BorderLayout.CENTER);

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import tools.jackson.databind.ObjectMapper;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,7 +30,6 @@ class S3DbRestorationService {
     private final ExecutorServiceBean workerPool = new ExecutorServiceBean(Executors.newFixedThreadPool(4));
 
     private final TableBatcher tableBatcher;
-    private final ObjectMapper objectMapper;
     private final ProgressIndicatorFactory progressIndicatorFactory;
 
     @SneakyThrows
@@ -41,7 +39,6 @@ class S3DbRestorationService {
         ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_S3_RESTORE, tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<List<String>> tableBatches = tableBatcher.splitIntoDependencyBatches(dbUrl, username, password, tables);
-        log.info("Batches: {}", objectMapper.writeValueAsString(tableBatches));
 
         tableBatches.forEach(batch -> restoreBatch(progressIndicator, dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, batch));
 
