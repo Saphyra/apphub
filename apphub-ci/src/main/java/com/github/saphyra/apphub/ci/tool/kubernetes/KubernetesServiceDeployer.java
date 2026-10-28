@@ -24,6 +24,8 @@ public class KubernetesServiceDeployer {
             .stream()
             .sorted(Map.Entry.comparingByKey())
             .forEach(entry -> deploy(namespaceName, serviceDir, entry.getKey(), entry.getValue(), waitCount, batchSize));
+
+        log.info("Services started successfully.");
     }
 
     private void deploy(String namespaceName, String serviceDir, Integer group, List<Service> serviceList, int waitCount, int batchSize) {
