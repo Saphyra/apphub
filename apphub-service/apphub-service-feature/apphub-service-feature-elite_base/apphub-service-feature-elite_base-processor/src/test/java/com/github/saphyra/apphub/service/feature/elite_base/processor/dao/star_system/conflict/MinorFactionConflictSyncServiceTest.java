@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict;
 
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionDao;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionSyncService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,9 @@ class MinorFactionConflictSyncServiceTest {
 
     @Mock
     private ConflictingMinorFactionDao conflictingMinorFactionDao;
+
+    @Mock
+    private ConflictingMinorFactionSyncService conflictingMinorFactionSyncService;
 
     @InjectMocks
     private MinorFactionConflictSyncService underTest;
@@ -58,5 +62,7 @@ class MinorFactionConflictSyncServiceTest {
         then(conflictingMinorFactionDao).should().deleteByConflictId(DEPRECATED_CONFLICT_ID);
         then(minorFactionConflictDao).should().deleteById(DEPRECATED_CONFLICT_ID);
         then(minorFactionConflictDao).should().saveAll(List.of(existingConflict, newConflict));
+        then(conflictingMinorFactionSyncService).should().sync(EXISTING_CONFLICT_ID, existingConflict.getConflictingMinorFactions());
+        then(conflictingMinorFactionSyncService).should().sync(NEW_CONFLICT_ID, newConflict.getConflictingMinorFactions());
     }
 }

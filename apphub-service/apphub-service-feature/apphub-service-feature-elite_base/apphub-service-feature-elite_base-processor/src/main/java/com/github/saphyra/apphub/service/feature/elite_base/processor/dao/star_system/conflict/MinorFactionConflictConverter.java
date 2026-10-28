@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionDao;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,12 +15,9 @@ import java.util.UUID;
 class MinorFactionConflictConverter extends ConverterBase<MinorFactionConflictEntity, MinorFactionConflict> {
     private final UuidConverter uuidConverter;
     private final ConflictingMinorFactionDao conflictingMinorFactionDao;
-    private final ConflictingMinorFactionSyncService conflictingMinorFactionSyncService;
 
     @Override
     protected MinorFactionConflictEntity processDomainConversion(MinorFactionConflict domain) {
-        conflictingMinorFactionSyncService.sync(domain.getId(), domain.getConflictingMinorFactions());
-
         return MinorFactionConflictEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
