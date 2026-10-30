@@ -10,6 +10,8 @@
 ===TECHNICAL DEBTS===
 
 ===ETC===
+    ApphubCI
+        Do not display disabled services inputs for production and preprod environments
 
 ===Manual Release Steps===
     Pre deployment

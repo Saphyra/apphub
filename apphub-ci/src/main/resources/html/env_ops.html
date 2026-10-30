@@ -50,7 +50,7 @@
                     <input type="text" name="user_defined_services" placeholder="Comma-separated list of service names" th:value="${user_defined_services}"/>
                 </div>
 
-                <div>
+                <div th:if="${environment != 'PRODUCTION' and environment != 'PREPROD'}">
                     <fieldset>
                         <legend>Optional services:</legend>
 
