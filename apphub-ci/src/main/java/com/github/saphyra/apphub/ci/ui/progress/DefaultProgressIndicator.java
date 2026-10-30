@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.ui.startup;
+package com.github.saphyra.apphub.ci.ui.progress;
 
 import com.github.saphyra.apphub.ci.ui.utils.ScreenSizeUtils;
 
@@ -14,42 +14,49 @@ import java.awt.Dimension;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-class DefaultStartupIndicator implements StartupIndicator {
+class DefaultProgressIndicator implements ProgressIndicator {
     private static final int PANEL_WIDTH = 500;
 
-    private final Map<String, StartupService> services;
-    private final StartupIndicatorContext startupIndicatorContext;
+    private final Map<String, ProgressService> labels;
+    private final ProgressIndicatorContext progressIndicatorContext;
+    private final String panelTitle;
 
     private JFrame frame;
     private JProgressBar progressBar;
 
-    DefaultStartupIndicator(List<String> serviceNames, StartupIndicatorContext startupIndicatorContext) {
-        this.startupIndicatorContext = startupIndicatorContext;
-        int maxServiceNameLength = serviceNames.stream()
+    DefaultProgressIndicator(String panelTitle, List<String> labels, ProgressIndicatorContext progressIndicatorContext) {
+        this.panelTitle = panelTitle;
+        this.progressIndicatorContext = progressIndicatorContext;
+        int maxServiceNameLength = labels.stream()
             .mapToInt(String::length)
             .max()
             .orElse(0);
 
-        services = serviceNames.stream()
-            .collect(Collectors.toMap(serviceName -> serviceName, serviceName -> new StartupService(startupIndicatorContext, maxServiceNameLength, serviceName)));
+        this.labels = labels.stream()
+            .collect(Collectors.toMap(serviceName -> serviceName, serviceName -> new ProgressService(progressIndicatorContext, maxServiceNameLength, serviceName), (a, _) -> a, TreeMap::new));
     }
 
     @Override
-    public void startupInitiated(String name) {
-        services.get(name)
+    public void started(String name) {
+        labels.get(name)
             .startupInitiated();
     }
 
     @Override
-    public void startupCompleted(String name) {
-        services.get(name)
+    public void completed(String name) {
+        labels.get(name)
             .startupCompleted();
 
-        int finished = (int) services.values()
+        updateProgressBar();
+    }
+
+    private void updateProgressBar() {
+        int finished = (int) labels.values()
             .stream()
-            .filter(startupService -> startupService.getStatus() == StartupStatus.STARTED)
+            .filter(progressService -> progressService.getStatus() == ProgressStatus.COMPLETED || progressService.getStatus() == ProgressStatus.FAILED)
             .count();
 
         SwingUtilities.invokeLater(() -> progressBar.setValue(finished));
@@ -57,33 +64,28 @@ class DefaultStartupIndicator implements StartupIndicator {
 
     @Override
     public void scheduleShutdown() {
-        startupIndicatorContext.getExecutorServiceBean()
+        progressIndicatorContext.getExecutorServiceBean()
             .execute(() -> {
-                startupIndicatorContext.getSleepService().sleep(10000);
+                progressIndicatorContext.getSleepService().sleep(10000);
                 SwingUtilities.invokeLater(() -> frame.dispose());
             });
     }
 
     @Override
-    public void startupFailed(String name) {
-        services.get(name)
+    public void failed(String name) {
+        labels.get(name)
             .startupFailed();
 
-        int finished = (int) services.values()
-            .stream()
-            .filter(startupService -> startupService.getStatus() == StartupStatus.STARTED)
-            .count();
-
-        SwingUtilities.invokeLater(() -> progressBar.setValue(finished));
+        updateProgressBar();
     }
 
-    public StartupIndicator run() {
+    public ProgressIndicator run() {
         SwingUtilities.invokeLater(() -> {
             //Progress Bar
-            progressBar = createProgressBar(services.size());
+            progressBar = createProgressBar(labels.size());
 
             //Service list
-            JScrollPane serviceList = createServiceList(services.values());
+            JScrollPane serviceList = createServiceList(labels.values());
 
             //Frame
             frame = createFrame(progressBar, serviceList);
@@ -92,10 +94,10 @@ class DefaultStartupIndicator implements StartupIndicator {
         return this;
     }
 
-    private static JScrollPane createServiceList(Collection<StartupService> services) {
+    private static JScrollPane createServiceList(Collection<ProgressService> services) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        services.forEach(startupService -> panel.add(startupService.getLabel()));
+        services.forEach(progressService -> panel.add(progressService.getLabel()));
         return new JScrollPane(panel);
     }
 
@@ -108,9 +110,9 @@ class DefaultStartupIndicator implements StartupIndicator {
         return progressBar;
     }
 
-    private static JFrame createFrame(JProgressBar progressBar, JScrollPane serviceList) {
-        JFrame frame = new JFrame("Apphub CI - Startup up services");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private JFrame createFrame(JProgressBar progressBar, JScrollPane serviceList) {
+        JFrame frame = new JFrame(panelTitle);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(progressBar, BorderLayout.NORTH);
         frame.add(serviceList, BorderLayout.CENTER);

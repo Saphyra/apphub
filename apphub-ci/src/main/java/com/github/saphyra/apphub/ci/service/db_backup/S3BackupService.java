@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicator;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.ci.value.BackupLocation;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -43,6 +46,7 @@ import static com.github.saphyra.apphub.ci.service.db_backup.DbBackupUtil.create
 class S3BackupService implements BackupService {
     private final ExecutorServiceBean readerExecutor = new ExecutorServiceBean(Executors.newFixedThreadPool(8));
     private final ExecutorServiceBean writerExecutor;
+    private final ProgressIndicatorFactory progressIndicatorFactory;
 
     @Override
     public BackupLocation getType() {
@@ -51,9 +55,11 @@ class S3BackupService implements BackupService {
 
     @Override
     public void backup(String s3AccessKey, String s3SecretKey, List<String> tables, String directory, String dbUrl, String username, String password, String s3Bucket, SnapshotContext snapshot, String backupDirectory) {
+        ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_S3_BACKUP, tables);
+
         try (S3Client s3Client = createS3Client(s3AccessKey, s3SecretKey)) {
             List<FutureWrapper<Void>> futures = tables.stream()
-                .map(table -> readerExecutor.execute(() -> exportTable(directory, dbUrl, username, password, s3Bucket, s3Client, table, snapshot.snapshotId())))
+                .map(table -> readerExecutor.execute(() -> exportTable(progressIndicator, directory, dbUrl, username, password, s3Bucket, s3Client, table, snapshot.snapshotId())))
                 .toList();
 
             futures.forEach(fw -> fw.get().getOrThrow());
@@ -61,7 +67,8 @@ class S3BackupService implements BackupService {
     }
 
     @SneakyThrows
-    private void exportTable(String directory, String dbUrl, String username, String password, String bucket, S3Client s3Client, String table, String snapshotId) {
+    private void exportTable(ProgressIndicator progressIndicator, String directory, String dbUrl, String username, String password, String bucket, S3Client s3Client, String table, String snapshotId) {
+        progressIndicator.started(table);
         String key = directory + "/" + table + ".bin.gz";
         log.info("Exporting table {} to {}", table, key);
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -91,8 +98,12 @@ class S3BackupService implements BackupService {
                 conn.commit();
 
                 stopwatch.stop();
+                progressIndicator.completed(table);
                 log.info("Table {} exported successfully in {} seconds.", table, stopwatch.elapsed(TimeUnit.SECONDS));
             }
+        } catch (Exception e) {
+            progressIndicator.failed(table);
+            throw e;
         }
     }
 

@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicator;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -34,6 +37,7 @@ public class LocalDbRestorationService {
 
     private final TableBatcher tableBatcher;
     private final ObjectMapper objectMapper;
+    private final ProgressIndicatorFactory progressIndicatorFactory;
 
     @SneakyThrows
     void restore(String directory, String dbHost, String dbName, String username, String password) {
@@ -52,26 +56,31 @@ public class LocalDbRestorationService {
         List<String> tables = tableMap.keySet().stream().sorted().toList();
 
         log.info("Restoring tables {}", tables);
+        ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_LOCAL_RESTORE, tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<List<String>> tableBatches = tableBatcher.splitIntoDependencyBatches(dbUrl, username, password, tables);
         log.info("Batches: {}", objectMapper.writeValueAsString(tableBatches));
 
-        tableBatches.forEach(batch -> restoreBatch(dbUrl, username, password, batch, tableMap));
+        tableBatches.forEach(batch -> restoreBatch(progressIndicator, dbUrl, username, password, batch, tableMap));
 
         stopwatch.stop();
         log.info("{} tables restored in {} seconds", tables.size(), stopwatch.elapsed(TimeUnit.SECONDS));
     }
 
-    private void restoreBatch(String dbUrl, String username, String password, List<String> tables, Map<String, File> tableMap) {
+    private void restoreBatch(ProgressIndicator progressIndicator, String dbUrl, String username, String password, List<String> tables, Map<String, File> tableMap) {
         List<FutureWrapper<Void>> futures = tables.stream()
-            .map(table -> workerPool.execute(() -> restore(dbUrl, username, password, table, tableMap.get(table))))
+            .map(table -> workerPool.execute(() -> restore(progressIndicator, dbUrl, username, password, table, tableMap.get(table))))
             .toList();
 
-        futures.forEach(fw -> fw.get().getOrThrow());
+        futures.stream()
+            .map(FutureWrapper::get)
+            .filter(er -> !er.isSuccess())
+            .forEach(er -> log.error("Failed restoring table: {}", er.getException().getMessage(), er.getException()));
     }
 
-    private void restore(String dbUrl, String username, String password, String table, File file) {
+    private void restore(ProgressIndicator progressIndicator, String dbUrl, String username, String password, String table, File file) {
         log.info("Restoring {} from {} to {}", table, file, dbUrl);
+        progressIndicator.started(table);
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         try (
@@ -89,7 +98,9 @@ public class LocalDbRestorationService {
             copy.copyIn("COPY " + table + " FROM STDIN WITH (FORMAT BINARY)", gzip);
 
             conn.commit();
+            progressIndicator.completed(table);
         } catch (Exception ex) {
+            progressIndicator.failed(table);
             throw new RuntimeException("Failed restoring " + table, ex);
         }
 

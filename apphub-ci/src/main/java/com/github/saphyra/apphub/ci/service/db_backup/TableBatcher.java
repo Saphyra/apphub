@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class TableBatcher {
+    private final ObjectMapper objectMapper;
+
     @SneakyThrows
     List<List<String>> splitIntoDependencyBatches(String dbUrl, String username, String password, List<String> tables) {
         Map<String, List<String>> dependencies = new HashMap<>();
@@ -52,31 +55,46 @@ class TableBatcher {
                     batch.add(tableName);
                     dependencies.remove(tableName);
 
-                    log.debug("Table {} added to batch {}={}", tableName, batchIndex, batch);
+                    log.info("Table {} added to batch {}={}", tableName, batchIndex, batch);
                 });
         }
+
+        String json = objectMapper.writeValueAsString(batches);
+        log.info("Batches:");
+        log.info(json);
 
         return batches;
     }
 
     private Optional<Integer> getBatchIndex(String tableName, List<String> dependencies, List<List<String>> batches, List<String> tables) {
-        int batchIndex = -0;
+        int batchIndex = 0;
 
         for (String dependency : dependencies) {
-            if (tables.contains(dependency)) {
-                for (int i = 0; i < batches.size(); i++) {
-                    if (batches.get(i).contains(dependency)) {
-                        log.debug("{} - Dependent table {} is in batch {}", tableName, dependency, batchIndex);
-                        batchIndex = Math.max(batchIndex, i + 1);
+            boolean matchingTableFound = false;
+            for (String candidate : tables) {
+                //Exact table name match or partitioned table match
+                if (candidate.equals(dependency) || (candidate.startsWith(dependency) && candidate.matches(".*_p\\d+$"))) {
+                    matchingTableFound = true;
+                    int dependencyBatchIndex = -1;
+                    for (int i = 0; i < batches.size(); i++) {
+                        if (batches.get(i).contains(candidate)) {
+                            dependencyBatchIndex = i;
+                            break;
+                        }
                     }
-                }
 
-                if (batchIndex == 0) {
-                    log.debug("{} - Dependent table {} is not added to a batch yet.", tableName, dependency);
-                    return Optional.empty();
+                    if (dependencyBatchIndex == -1) {
+                        log.debug("{} - Dependent table {} is not added to a batch yet.", tableName, candidate);
+                        return Optional.empty();
+                    }
+
+                    log.debug("{} - Dependent table {} is in batch {}", tableName, candidate, dependencyBatchIndex);
+                    batchIndex = Math.max(batchIndex, dependencyBatchIndex + 1);
                 }
-            } else {
-                log.debug("{} - Dependent table {} is not restored.", tableName, dependency);
+            }
+
+            if (!matchingTableFound) {
+                log.warn("{} - Dependent table {} is not restored.", tableName, dependency);
             }
         }
 

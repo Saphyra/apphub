@@ -1,0 +1,19 @@
+===FEATURES===
+    ApphubCI
+        Visual indicator of table backup and restoration progress
+
+===BUGFIXES===
+    ApphubCI ignored foreign key dependencies when referring partitioned tables
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database
