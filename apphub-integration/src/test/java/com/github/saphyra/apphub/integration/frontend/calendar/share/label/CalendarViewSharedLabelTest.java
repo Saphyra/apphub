@@ -53,7 +53,7 @@ public class CalendarViewSharedLabelTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify label is not visible
         CalendarIndexPageActions.toLabelsPage(sharedWithDriver);

@@ -7,22 +7,21 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import useQueryParams from "common/hook/UseQueryParams";
 import { hasValue, isNull } from "common/js/Utils";
-import { CALENDAR_GET_SHARED_OBJECT, CALENDAR_PAGE } from "../CalendarEndpoints";
+import { CALENDAR_GET_SHARED_OBJECT, CALENDAR_PAGE, CALENDAR_SHARE_OBJECT } from "../CalendarEndpoints";
 import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import useLoader from "common/hook/Loader";
-import ShareWith from "./share_with/ShareWith";
+import ShareWith from "../common/share_with/ShareWith";
 import SharedWith from "./shared_with/SharedWith";
 import "./calendar_share.css";
 import useRefresh from "common/hook/Refresh";
+import Stream from "common/js/collection/Stream";
 
 const CalendarSharePage = () => {
     const { type, id, parent } = useParams();
 
     const queryParams = useQueryParams();
-
-    console.log(null == parent, parent)
 
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title", { type: localizationHandler.get(type) });
@@ -32,6 +31,8 @@ const CalendarSharePage = () => {
     const [refreshCounter, refresh] = useRefresh();
 
     const [objectData, setObjectData] = useState(null);
+
+    console.log(objectData)
 
     useLoader({
         request: CALENDAR_GET_SHARED_OBJECT.createRequest(null, { type: type, id: id }, isNull(parent) ? null : { parent: parent }),
@@ -58,13 +59,14 @@ const CalendarSharePage = () => {
             }
 
             <main>
-                <ShareWith
-                    localizationHandler={localizationHandler}
-                    type={type}
-                    setDisplaySpinner={setDisplaySpinner}
-                    objectData={objectData}
-                    refresh={refresh}
-                />
+                {hasValue(objectData) &&
+                    <ShareWith
+                        type={type}
+                        setDisplaySpinner={setDisplaySpinner}
+                        shareCallback={share}
+                        existingUserIds={new Stream(objectData.sharedWith).map(user => user.userId).toList()}
+                    />
+                }
 
                 {hasValue(objectData) &&
                     <SharedWith
@@ -103,6 +105,22 @@ const CalendarSharePage = () => {
             {displaySpinner > 0 && <Spinner />}
         </div>
     );
+
+    async function share(selectedUserId, selectedGrants) {
+        const payload = {
+            sharedWith: selectedUserId,
+            owner: objectData.owner,
+            parent: objectData.parent,
+            objectId: objectData.objectId,
+            type: type,
+            grants: selectedGrants
+        }
+
+        await CALENDAR_SHARE_OBJECT.createRequest(payload)
+            .send(setDisplaySpinner);
+
+        refresh();
+    }
 }
 
 export default CalendarSharePage;

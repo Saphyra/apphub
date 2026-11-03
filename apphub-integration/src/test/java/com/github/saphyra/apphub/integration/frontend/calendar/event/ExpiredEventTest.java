@@ -116,7 +116,7 @@ public class ExpiredEventTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, email);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
         CalendarEventPageActions.backFromEdit(ownerDriver);
     }

@@ -42,7 +42,7 @@ public class CalendarViewSharedOccurrenceTest extends SeleniumTest {
             CalendarOccurrencePageActions.share(ownerDriver);
             CalendarSharePageActions.selectUser(ownerDriver, testContext.sharedWithUserData().getEmail());
             CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-            CalendarSharePageActions.share(ownerDriver);
+            CalendarSharePageActions.shareExistingObject(ownerDriver);
             CalendarSharePageActions.back(ownerDriver);
         }
         CalendarOccurrencePageActions.setNote(ownerDriver, NOTE);

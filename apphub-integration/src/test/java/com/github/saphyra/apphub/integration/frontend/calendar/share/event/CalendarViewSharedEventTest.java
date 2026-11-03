@@ -105,7 +105,7 @@ public class CalendarViewSharedEventTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithEmail);
         grantSetup.accept(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
     }
 
     private void assertOccurrenceTitle(WebDriver sharedWithDriver, CreateEventParameters parameters, boolean seeOnly) {

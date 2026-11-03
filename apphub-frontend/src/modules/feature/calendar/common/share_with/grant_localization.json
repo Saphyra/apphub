@@ -1,0 +1,46 @@
+{
+    "SEE_CHILDREN": {
+        "en": "Can see children of this {type}, but with dummy data.",
+        "hu": "Láthatja a {type} gyermek elemeit, de valótlan adatokkal."
+    },
+    "VIEW_CHILDREN": {
+        "en": "Can see children of this {type} with real data.",
+        "hu": "Láthatja a {type} gyermek elemeit valós adatokkal."
+    },
+    "EDIT_CHILDREN": {
+        "en": "Can edit children of this {type}.",
+        "hu": "Szerkesztheti a {type} gyermek elemeit."
+    },
+    "DELETE_CHILDREN": {
+        "en": "Can delete children of this {type}.",
+        "hu": "Törölheti a {type} gyermek elemeit."
+    },
+    "SEE": {
+        "en": "Can see this {type}, but with dummy data.",
+        "hu": "Láthatja ezt a {type}-t, de valótlan adatokkal."
+    },
+    "VIEW": {
+        "en": "Can see this {type} with real data.",
+        "hu": "Láthatja ezt a {type}-t valós adatokkal."
+    },
+    "EDIT": {
+        "en": "Can edit this {type}.",
+        "hu": "Szerkesztheti ezt a {type}-t."
+    },
+    "DELETE": {
+        "en": "Can delete this {type}.",
+        "hu": "Törölheti ezt a {type}-t."
+    },
+    "SHARE": {
+        "en": "Can share this {type}.",
+        "hu": "Megoszthatja ezt a {type}-t."
+    },
+    "SHARE_CHILDREN": {
+        "en": "Can share children of this {type}.",
+        "hu": "Megoszthatja a {type} gyermekeit."
+    },
+    "EDIT_OPERATIONS": {
+        "en": "Can edit operations of this {type}.",
+        "hu": "Szerkesztheti a {type} műveleteit."
+    }
+}

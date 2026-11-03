@@ -49,7 +49,7 @@ public class CreateOccurrenceTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarSharePageActions.back(ownerDriver);
         CalendarEventPageActions.backFromEdit(ownerDriver);

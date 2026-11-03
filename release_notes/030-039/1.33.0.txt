@@ -1,6 +1,8 @@
 ===FEATURES===
     ApphubCI
         Visual indicator of table backup and restoration progress
+    Calendar
+        Instantly share newly created events
 
 ===BUGFIXES===
     ApphubCI ignored foreign key dependencies when referring partitioned tables

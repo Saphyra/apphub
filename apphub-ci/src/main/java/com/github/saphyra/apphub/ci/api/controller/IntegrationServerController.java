@@ -73,7 +73,7 @@ class IntegrationServerController {
 
         displayedName += suffix;
 
-        log.info("TestCase {} {} in {}ms", displayedName, request.getStatus(), request.getDuration());
+        log.debug("TestCase {} {} in {}ms", displayedName, request.getStatus(), request.getDuration());
     }
 
     private String parse(String testCaseId) {

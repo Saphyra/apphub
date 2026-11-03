@@ -28,18 +28,33 @@ public class CalendarSharePageActions {
             .click();
     }
 
-    public static void share(WebDriver driver) {
-        int originalSize = getSharedWith(driver).size();
+    public static void shareExistingObject(WebDriver driver) {
+        int originalSize = getSharedWithExistingObject(driver).size();
 
         driver.findElement(By.id("calendar-share-with-selected-user-share-button"))
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> getSharedWith(driver).size() > originalSize)
+            .until(() -> getSharedWithExistingObject(driver).size() > originalSize)
             .assertTrue("Item is not shared with user.");
     }
 
-    public static List<WebElement> getSharedWith(WebDriver driver) {
+    public static void shareNewEvent(WebDriver driver) {
+        int originalSize = getSharedWithNewEvent(driver).size();
+
+        driver.findElement(By.id("calendar-share-with-selected-user-share-button"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> getSharedWithNewEvent(driver).size() > originalSize)
+            .assertTrue("Item is not shared with user.");
+    }
+
+    private static List<WebElement> getSharedWithNewEvent(WebDriver driver) {
+        return driver.findElements(By.className("shared-user-item"));
+    }
+
+    public static List<WebElement> getSharedWithExistingObject(WebDriver driver) {
         return driver.findElements(By.cssSelector("#calendar-shared-with-list .shared-with-user"));
     }
 

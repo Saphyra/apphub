@@ -49,7 +49,7 @@ public class ShareCrudTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate()))
@@ -72,7 +72,7 @@ public class ShareCrudTest extends SeleniumTest {
             .orElseThrow()
             .unshare(ownerDriver);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarSharePageActions.getSharedWith(ownerDriver)).isEmpty());
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarSharePageActions.getSharedWithExistingObject(ownerDriver)).isEmpty());
 
         sharedWithDriver.navigate().refresh();
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())).isEmpty());
