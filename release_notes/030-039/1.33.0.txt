@@ -8,6 +8,9 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    ApphubCI
+        Truncate all first, then restore to avoid waiting for locks when importing partitions parallel
+        Restore to local file does not create database / timestamp directories
 
 ===ETC===
     ApphubCI

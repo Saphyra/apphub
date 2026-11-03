@@ -9,17 +9,14 @@ import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.PGConnection;
-import org.postgresql.copy.CopyManager;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +24,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
 
 @Component
 @RequiredArgsConstructor
@@ -38,6 +34,7 @@ public class LocalDbRestorationService {
     private final TableBatcher tableBatcher;
     private final ObjectMapper objectMapper;
     private final ProgressIndicatorFactory progressIndicatorFactory;
+    private final TableRestorer tableRestorer;
 
     @SneakyThrows
     void restore(String directory, String dbHost, String dbName, String username, String password) {
@@ -59,7 +56,8 @@ public class LocalDbRestorationService {
         ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_LOCAL_RESTORE, tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<List<String>> tableBatches = tableBatcher.splitIntoDependencyBatches(dbUrl, username, password, tables);
-        log.info("Batches: {}", objectMapper.writeValueAsString(tableBatches));
+
+        tableRestorer.truncate(dbUrl, username, password, tables);
 
         tableBatches.forEach(batch -> restoreBatch(progressIndicator, dbUrl, username, password, batch, tableMap));
 
@@ -80,32 +78,13 @@ public class LocalDbRestorationService {
 
     private void restore(ProgressIndicator progressIndicator, String dbUrl, String username, String password, String table, File file) {
         log.info("Restoring {} from {} to {}", table, file, dbUrl);
-        progressIndicator.started(table);
-        Stopwatch stopwatch = Stopwatch.createStarted();
 
-        try (
-            Connection conn = DriverManager.getConnection(dbUrl, username, password);
-            InputStream fileStream = Files.newInputStream(file.toPath());
-            GZIPInputStream gzip = new GZIPInputStream(fileStream)
-        ) {
-            conn.setAutoCommit(false);
-            conn.createStatement()
-                .execute("TRUNCATE TABLE " + table + " CASCADE");
-
-            PGConnection pg = conn.unwrap(PGConnection.class);
-            CopyManager copy = pg.getCopyAPI();
-
-            copy.copyIn("COPY " + table + " FROM STDIN WITH (FORMAT BINARY)", gzip);
-
-            conn.commit();
-            progressIndicator.completed(table);
-        } catch (Exception ex) {
+        try (InputStream fileStream = Files.newInputStream(file.toPath())) {
+            tableRestorer.restore(progressIndicator, dbUrl, username, password, table, fileStream);
+        } catch (IOException ex) {
             progressIndicator.failed(table);
             throw new RuntimeException("Failed restoring " + table, ex);
         }
-
-        stopwatch.stop();
-        log.info("{} restored in {} seconds.", table, stopwatch.elapsed(TimeUnit.SECONDS));
     }
 
     private String getTableName(File file) {

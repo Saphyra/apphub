@@ -9,19 +9,14 @@ import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.PGConnection;
-import org.postgresql.copy.CopyManager;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.GZIPInputStream;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +26,7 @@ class S3DbRestorationService {
 
     private final TableBatcher tableBatcher;
     private final ProgressIndicatorFactory progressIndicatorFactory;
+    private final TableRestorer tableRestorer;
 
     @SneakyThrows
     void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
@@ -39,6 +35,8 @@ class S3DbRestorationService {
         ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_S3_RESTORE, tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<List<String>> tableBatches = tableBatcher.splitIntoDependencyBatches(dbUrl, username, password, tables);
+
+        tableRestorer.truncate(dbUrl, username, password, tables);
 
         tableBatches.forEach(batch -> restoreBatch(progressIndicator, dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, batch));
 
@@ -59,34 +57,17 @@ class S3DbRestorationService {
 
     private void restore(ProgressIndicator progressIndicator, String dbUrl, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, String table) {
         log.info("Restoring {}/{}/{}/{} to {} from bucket {}", database, version, backup, table, dbUrl, s3Bucket);
-        progressIndicator.started(table);
-        Stopwatch stopwatch = Stopwatch.createStarted();
         String key = database + "/" + version + "/" + backup + "/" + table + ".bin.gz";
 
         try (
-            Connection conn = DriverManager.getConnection(dbUrl, username, password);
             S3Client s3Client = DbBackupUtil.createS3Client(s3AccessKey, s3SecretKey);
             ResponseInputStream<?> s3Stream = s3Client.getObject(
                 GetObjectRequest.builder()
                     .bucket(s3Bucket)
                     .key(key)
-                    .build());
-            GZIPInputStream gzip = new GZIPInputStream(s3Stream)
+                    .build())
         ) {
-            conn.setAutoCommit(false);
-            conn.createStatement()
-                .execute("TRUNCATE TABLE " + table + " CASCADE");
-
-            PGConnection pg = conn.unwrap(PGConnection.class);
-            CopyManager copy = pg.getCopyAPI();
-
-            copy.copyIn("COPY " + table + " FROM STDIN WITH (FORMAT BINARY)", gzip);
-
-            conn.commit();
-
-            progressIndicator.completed(table);
-            stopwatch.stop();
-            log.info("{} restored in {} seconds.", table, stopwatch.elapsed(TimeUnit.SECONDS));
+            tableRestorer.restore(progressIndicator, dbUrl, username, password, table, s3Stream);
         } catch (Exception ex) {
             progressIndicator.failed(table);
             throw new RuntimeException("Failed restoring " + table, ex);

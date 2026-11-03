@@ -43,11 +43,10 @@ class LocalBackupService implements BackupService {
 
     @Override
     public void backup(String s3AccessKey, String s3SecretKey, List<String> tables, String directory, String dbUrl, String username, String password, String s3Bucket, SnapshotContext snapshot, String backupDirectory) {
-        String path = Paths.get(backupDirectory, directory.replace(":", "-")).toString();
         ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_LOCAL_BACKUP, tables);
 
         List<FutureWrapper<Void>> futures = tables.stream()
-            .map(table -> readerExecutor.execute(() -> exportTable(progressIndicator, path, dbUrl, username, password, table, snapshot.snapshotId())))
+            .map(table -> readerExecutor.execute(() -> exportTable(progressIndicator, backupDirectory, dbUrl, username, password, table, snapshot.snapshotId())))
             .toList();
 
         futures.forEach(fw -> fw.get().getOrThrow());
@@ -60,6 +59,11 @@ class LocalBackupService implements BackupService {
         Path parent = file.getParent();
         if (parent != null) {
             Files.createDirectories(parent);
+        }
+
+        if (file.toFile().exists()) {
+            log.warn("File {} already exists. Deleting it.", file);
+            Files.delete(file);
         }
 
         log.info("Exporting table {} to {}", table, file);
