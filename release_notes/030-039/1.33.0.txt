@@ -15,6 +15,7 @@
 ===ETC===
     ApphubCI
         Do not display disabled services inputs for production and preprod environments
+        Multi-select list for start/stop selected services
 
 ===Manual Release Steps===
     Pre deployment

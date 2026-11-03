@@ -38,60 +38,70 @@
         <legend>Deployment</legend>
 
         <form th:action="@{|/v2/env-ops/${environment}/build-and-deploy|}" method="POST">
-            <fieldset>
-                <legend>Services</legend>
-
-                <div>
-                    <label class="inline">
-                        <input type="checkbox" name="start_user_defined_services" value="true"/>
-                        Start only services:
-                    </label>
-
-                    <input type="text" name="user_defined_services" placeholder="Comma-separated list of service names" th:value="${user_defined_services}"/>
-                </div>
-
-                <div th:if="${environment != 'PRODUCTION' and environment != 'PREPROD'}">
-                    <fieldset>
-                        <legend>Optional services:</legend>
-
-                        <span th:each="service : ${services}">
-                        <label class="inline-block nowrap" style="border: 1px solid white; margin: 3px; padding: 3px;">
-                            <input type="checkbox" th:name="'enabled_service_' + ${service}" th:checked="${!disabled_services.contains(service)}" th:value="${service}"/>
-                            <span th:text="${service}"></span>
-                        </label>
-                    </span>
-                    </fieldset>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Execution</legend>
-
-                <label class="inline">
-                    Build thread count:
-                    <input type="number" class="number-input-2-digit" name="build_thread_count" required min="1" placeholder="Build thread count" th:value="${build_thread_count}"/>
-                </label>
-
-                <label class="inline">
-                    Service startup count limit:
-                    <input type="number" class="number-input-2-digit" name="startup_count_limit" required min="1" placeholder="Service startup count limit" th:value="${startup_count_limit}"/>
-                </label>
-
-                <label class="inline">
-                    <input type="checkbox" name="skip_tests" value="true">
-                    Skip tests
-                </label>
-            </fieldset>
-
-            <div>
+            <div style="display: flex; flex-direction: row; gap: 10px;">
                 <fieldset>
-                    <legend>Actions</legend>
+                    <legend>
+                        <label>
+                            <input type="checkbox" name="start_user_defined_services" value="true"/>
+                            Start only services:
+                        </label>
+                    </legend>
 
-                    <button type="submit" name="action" value="BUILD_AND_DEPLOY">Build and Deploy</button>
-                    <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="BUILD">Build</button>
-                    <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="DEPLOY">Deploy</button>
-                    <button th:if="${environment} == 'LOCAL' or ${environment} == 'MINIKUBE'" type="submit" name="action" value="DEPLOY_PLATFORM">Deploy platform</button>
+                    <select name="user_defined_services" multiple="multiple" th:size="${all_services.size()}">
+                        <option
+                                th:each="service : ${all_services}"
+                                th:value="${service}"
+                                th:text="${service}"
+                                th:selected="${user_defined_services != null and #strings.contains(',' + user_defined_services + ',', ',' + service + ',')}"
+                        >
+                        </option>
+                    </select>
                 </fieldset>
+
+                <div style="display: flex; flex-direction: column; justify-content: space-evenly">
+                    <div th:if="${environment != 'PRODUCTION' and environment != 'PREPROD'}">
+                        <fieldset>
+                            <legend>Optional services:</legend>
+
+                            <span th:each="service : ${services}">
+                                <label class="inline-block nowrap" style="border: 1px solid white; margin: 3px; padding: 3px;">
+                                    <input type="checkbox" th:name="'enabled_service_' + ${service}" th:checked="${!disabled_services.contains(service)}" th:value="${service}"/>
+                                    <span th:text="${service}"></span>
+                                </label>
+                            </span>
+                        </fieldset>
+                    </div>
+
+                    <fieldset>
+                        <legend>Execution</legend>
+
+                        <label class="inline">
+                            Build thread count:
+                            <input type="number" class="number-input-2-digit" name="build_thread_count" required min="1" placeholder="Build thread count" th:value="${build_thread_count}"/>
+                        </label>
+
+                        <label class="inline">
+                            Service startup count limit:
+                            <input type="number" class="number-input-2-digit" name="startup_count_limit" required min="1" placeholder="Service startup count limit" th:value="${startup_count_limit}"/>
+                        </label>
+
+                        <label class="inline">
+                            <input type="checkbox" name="skip_tests" value="true">
+                            Skip tests
+                        </label>
+                    </fieldset>
+
+                    <div>
+                        <fieldset>
+                            <legend>Actions</legend>
+
+                            <button type="submit" name="action" value="BUILD_AND_DEPLOY">Build and Deploy</button>
+                            <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="BUILD">Build</button>
+                            <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="DEPLOY">Deploy</button>
+                            <button th:if="${environment} == 'LOCAL' or ${environment} == 'MINIKUBE'" type="submit" name="action" value="DEPLOY_PLATFORM">Deploy platform</button>
+                        </fieldset>
+                    </div>
+                </div>
             </div>
         </form>
     </fieldset>
@@ -172,12 +182,17 @@
 
         <form method="POST" th:action="@{|/v2/env-ops/${environment}/stop|}">
             <div>
-                <label class="inline">
+                <label>
                     <input type="checkbox" name="stop_user_defined_services" value="true"/>
                     Stop only services:
                 </label>
 
-                <input type="text" name="user_defined_services" placeholder="Comma-separated list of service names" th:value="${user_defined_services}"/>
+                <select name="user_defined_services" multiple="multiple" size="10">
+                    <option th:each="service : ${all_services}"
+                            th:value="${service}"
+                            th:text="${service}"
+                            th:selected="${user_defined_services != null and #strings.contains(',' + user_defined_services + ',', ',' + service + ',')}"></option>
+                </select>
             </div>
 
             <button type="submit">Stop</button>
