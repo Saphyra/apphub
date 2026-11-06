@@ -18,6 +18,8 @@
     ApphubCI
         Do not display disabled services inputs for production and preprod environments
         Multi-select list for start/stop selected services
+    EliteBase
+        Copyable system and station names in merit miner search results
 
 ===Manual Release Steps===
     Pre deployment
