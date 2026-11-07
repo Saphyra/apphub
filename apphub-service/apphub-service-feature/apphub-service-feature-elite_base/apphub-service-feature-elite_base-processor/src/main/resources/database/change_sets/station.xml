@@ -60,4 +60,12 @@
             <column name="star_system_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-station" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="station"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="station"/>
+    </changeSet>
 </databaseChangeLog>
