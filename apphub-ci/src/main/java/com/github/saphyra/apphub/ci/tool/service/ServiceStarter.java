@@ -2,11 +2,12 @@ package com.github.saphyra.apphub.ci.tool.service;
 
 import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.property.PropertyName;
-import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
-import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicator;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.ci.value.BiWrapper;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.google.common.base.Stopwatch;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ServiceStarter {
-    private final StartupIndicatorFactory startupIndicatorFactory;
+    private final ProgressIndicatorFactory progressIndicatorFactory;
     private final ServicePinger servicePinger;
     private final PropertyDao propertyDao;
 
@@ -46,7 +47,7 @@ public class ServiceStarter {
         List<String> serviceNames = services.stream()
             .map(Service::getName)
             .toList();
-        StartupIndicator startupIndicator = startupIndicatorFactory.createFromServiceNames(serviceNames);
+        ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_STARTUP_INDICATOR, serviceNames);
 
         List<BiWrapper<Integer, List<Service>>> groupedServices = services.stream()
             .collect(Collectors.groupingBy(Service::getGroup))
@@ -56,12 +57,12 @@ public class ServiceStarter {
             .sorted(Comparator.comparingInt(BiWrapper::getEntity1))
             .toList();
 
-        groupedServices.forEach(group -> startServiceGroup(startupIndicator, group.getEntity1(), group.getEntity2(), startupCountLimit, additionalArguments));
+        groupedServices.forEach(group -> startServiceGroup(progressIndicator, group.getEntity1(), group.getEntity2(), startupCountLimit, additionalArguments));
 
-        startupIndicator.scheduleShutdown();
+        progressIndicator.scheduleShutdown();
     }
 
-    private void startServiceGroup(StartupIndicator startupIndicator, Integer group, List<Service> groupMembers, int startupCountLimit, Map<String, String> additionalArguments) {
+    private void startServiceGroup(ProgressIndicator progressIndicator, Integer group, List<Service> groupMembers, int startupCountLimit, Map<String, String> additionalArguments) {
         log.info("");
         log.info("Starting up serviceGroup {}", group);
 
@@ -69,7 +70,7 @@ public class ServiceStarter {
 
         try {
             Map<Service, FutureWrapper<Void>> executionResults = groupMembers.stream()
-                .collect(Collectors.toMap(Function.identity(), service -> executorServiceBean.execute(() -> startService(service, startupIndicator, additionalArguments))));
+                .collect(Collectors.toMap(Function.identity(), service -> executorServiceBean.execute(() -> startService(service, progressIndicator, additionalArguments))));
 
             executionResults.forEach((service, voidFutureWrapper) -> {
                 try {
@@ -84,12 +85,12 @@ public class ServiceStarter {
         }
     }
 
-    public void startService(Service service, StartupIndicator startupIndicator) {
-        startService(service, startupIndicator, Map.of());
+    public void startService(Service service, ProgressIndicator progressIndicator) {
+        startService(service, progressIndicator, Map.of());
     }
 
     @SneakyThrows
-    private void startService(Service service, StartupIndicator startupIndicator, Map<String, String> additionalArguments) {
+    private void startService(Service service, ProgressIndicator progressIndicator, Map<String, String> additionalArguments) {
         try {
             Stopwatch stopwatch = Stopwatch.createStarted();
             log.info("Starting service {}", service.getName());
@@ -112,7 +113,7 @@ public class ServiceStarter {
             new ProcessBuilder(command)
                 .start();
 
-            startupIndicator.startupInitiated(service.getName());
+            progressIndicator.started(service.getName());
 
             Integer port = Optional.ofNullable(service.getHealthCheckPort())
                 .orElse(service.getPort());
@@ -123,10 +124,10 @@ public class ServiceStarter {
                 });
 
             stopwatch.stop();
-            startupIndicator.startupCompleted(service.getName());
+            progressIndicator.completed(service.getName());
             log.info("{} successfully started in {}s.", service.getName(), (stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000d));
         } catch (Exception e) {
-            startupIndicator.startupFailed(service.getName());
+            progressIndicator.failed(service.getName());
             throw e;
         }
     }

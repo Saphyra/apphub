@@ -53,7 +53,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify shared label displayed
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
@@ -94,7 +94,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify shared event displayed
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
@@ -133,7 +133,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify shared event displayed
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());

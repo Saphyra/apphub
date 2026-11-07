@@ -1,11 +1,11 @@
-package com.github.saphyra.apphub.ci.ui.startup;
+package com.github.saphyra.apphub.ci.ui.progress;
 
 import java.util.Arrays;
 
-enum StartupStatus {
+enum ProgressStatus {
     WAITING,
     IN_PROGRESS,
-    STARTED,
+    COMPLETED,
     FAILED;
 
     static int maxLength() {

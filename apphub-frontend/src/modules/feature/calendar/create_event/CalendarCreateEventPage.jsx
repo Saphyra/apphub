@@ -3,7 +3,7 @@ import localizationData from "./create_event_page_localization.json";
 import { useEffect, useState } from "react";
 import NotificationService from "common/js/notification/NotificationService";
 import useQueryParams from "common/hook/UseQueryParams";
-import { hasValue, nullIfEmpty } from "common/js/Utils";
+import { addAndSet, hasValue, nullIfEmpty } from "common/js/Utils";
 import LocalDate from "common/js/date/LocalDate";
 import { REPETITION_TYPE_ONE_TIME } from "../common/repetition_type/RepetitionType";
 import Header from "common/component/Header";
@@ -16,11 +16,13 @@ import EventLabels from "../common/event/EventLabels";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import createEvent from "./createEvent";
+import ShareWith from "../common/share_with/ShareWith";
 import Optional from "common/js/collection/Optional";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
 import { CALENDAR_PAGE } from "../CalendarEndpoints";
 import EventAutoDone from "../common/event/EventAutoDone";
+import CreateEventShareWith from "./CreateEventShareWith";
 
 const CalendarCreateEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -31,6 +33,7 @@ const CalendarCreateEventPage = () => {
     const queryParams = useQueryParams();
 
     const [displaySpinner, setDisplaySpinner] = useState(0);
+    const [objectData, setObjectData] = useState(null);
 
     const [startDate, setStartDate] = useState(hasValue(queryParams.startDate) ? LocalDate.parse(queryParams.startDate) : LocalDate.now());
     const [endDate, setEndDate] = useState(null);
@@ -45,6 +48,8 @@ const CalendarCreateEventPage = () => {
 
     const [existingLabels, setExistingLabels] = useState([]);
     const [newLabels, setNewLabels] = useState([]);
+
+    const [shareWith, setShareWith] = useState([]);
 
     return (
         <div id="calendar-create-event" className="main-page">
@@ -117,6 +122,26 @@ const CalendarCreateEventPage = () => {
                         setNewLabels={setNewLabels}
                     />
                 </fieldset>
+
+                <fieldset>
+                    <legend>{localizationHandler.get("share")}</legend>
+
+                    <ShareWith
+                        type="EVENT"
+                        setDisplaySpinner={setDisplaySpinner}
+                        shareCallback={addToShare}
+                                            existingUserIds={shareWith.map(s=>s.userId)}
+                                        />
+
+                    {shareWith.length > 0 &&
+                        <CreateEventShareWith
+                            localizationHandler={localizationHandler}
+                            shareWith={shareWith}
+                            setShareWith={setShareWith}
+                        />
+                    }
+                </fieldset>
+
             </main>
 
             <Footer
@@ -139,7 +164,8 @@ const CalendarCreateEventPage = () => {
                             },
                             existingLabels,
                             setDisplaySpinner,
-                            newLabels
+                            newLabels,
+                            shareWith
                         )}
                         label={localizationHandler.get("create")}
                     />
@@ -159,6 +185,10 @@ const CalendarCreateEventPage = () => {
             <ToastContainer />
         </div>
     );
+
+    function addToShare(selectedUserId, selectedGrants, selectedUser) {
+        addAndSet(shareWith, { userId: selectedUserId, grants: selectedGrants, user: selectedUser }, setShareWith);
+    }
 }
 
 export default CalendarCreateEventPage;

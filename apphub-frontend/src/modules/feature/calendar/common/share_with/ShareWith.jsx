@@ -1,15 +1,21 @@
 import Button from "common/component/input/Button";
+import LocalizationHandler from "common/js/LocalizationHandler";
 import InputField from "common/component/input/InputField";
 import Stream from "common/js/collection/Stream";
 import { USER_DATA_SEARCH_ACCOUNT } from "common/js/GenericEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import { hasValue } from "common/js/Utils";
 import { useState } from "react";
-import { CALENDAR_GET_GRANTS, CALENDAR_SHARE_OBJECT } from "../../CalendarEndpoints";
+import { CALENDAR_GET_GRANTS } from "../../CalendarEndpoints";
 import useCache from "common/hook/Cache";
 import { MultiSelect, SelectOption } from "common/component/input/SelectInput";
+import localizationData from "./share_with_localization.json";
+import grantLocalizationData from "./grant_localization.json";
 
-const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, refresh }) => {
+const ShareWith = ({ type, setDisplaySpinner, shareCallback, existingUserIds = [] }) => {
+    const localizationHandler = new LocalizationHandler(localizationData);
+    const grantLocalizationHandler = new LocalizationHandler(grantLocalizationData);
+
     const [searchText, setSearchText] = useState("");
     const [searchResult, setSearchResult] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -75,50 +81,39 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
         const response = await USER_DATA_SEARCH_ACCOUNT.createRequest({ value: searchText })
             .send(setDisplaySpinner);
 
-        setSearchResult(response);
+        const filtered = response.filter(user => !existingUserIds.includes(user.userId));
+        setSearchResult(filtered);
     }
 
-    function getSearchResultList() {
-        return new Stream(searchResult)
-            .map(user => <Button
-                key={user.userId}
-                className="calendar-share-with-search-result-item"
-                label={user.username + " (" + user.email + ")"}
-                onclick={() => selectUser(user)}
-            />
-            )
-            .toList();
-    }
+function getSearchResultList() {
+    return new Stream(searchResult)
+        .map(user => <Button
+            key={user.userId}
+            className="calendar-share-with-search-result-item"
+            label={user.username + " (" + user.email + ")"}
+            onclick={() => selectUser(user)}
+        />
+        )
+        .toList();
+}
 
-    function selectUser(user) {
-        setSelectedUser(user);
-        setSearchResult(null);
-    }
+function selectUser(user) {
+    setSelectedUser(user);
+    setSearchResult(null);
+}
 
-    function getGrantOptions() {
-        return new Stream(grants)
-            .map(grant => new SelectOption(localizationHandler.get(grant, { type: localizationHandler.get(type) }), grant))
-            .toList();
-    }
+function getGrantOptions() {
+    return new Stream(grants)
+        .map(grant => new SelectOption(grantLocalizationHandler.get(grant, { type: localizationHandler.get(type) }), grant))
+        .toList();
+}
 
-    async function share() {
-        const payload = {
-            sharedWith: selectedUser.userId,
-            owner: objectData.owner,
-            parent: objectData.parent,
-            objectId: objectData.objectId,
-            type: type,
-            grants: selectedGrants
-        }
-
-        await CALENDAR_SHARE_OBJECT.createRequest(payload)
-            .send(setDisplaySpinner);
-
-        refresh();
-        setSelectedUser(null);
-        setSelectedGrants([]);
-        setSearchText("");
-    }
+async function share() {
+    shareCallback(selectedUser.userId, selectedGrants, selectedUser);
+    setSelectedUser(null);
+    setSelectedGrants([]);
+    setSearchText("");
+}
 }
 
 export default ShareWith;

@@ -29,6 +29,10 @@ option {
     background: black;
 }
 
+option:checked {
+    color: lime;
+}
+
 a {
     text-decoration: none;
 }

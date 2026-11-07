@@ -35,7 +35,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
 
@@ -74,12 +74,12 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), false);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         shareEventFromOpenedLabel(ownerDriver, parameters.getTitle(), testContext.sharedWithUserData().getEmail(), false);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
 
@@ -110,7 +110,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
 
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
 
@@ -143,7 +143,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
@@ -179,7 +179,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), true);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarFlow.openSharedLabelEvent(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX, parameters.getTitle() + Constants.SHARED_SUFFIX);
         AwaitilityWrapper.retry(() -> CalendarLabelsPageActions.editOpenedEvent(sharedWithDriver));
@@ -224,7 +224,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
 
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), true);
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarSharePageActions.back(ownerDriver);
         CalendarLabelsPageActions.back(ownerDriver);
@@ -232,7 +232,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         CalendarFlow.openSharedLabelEvent(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX, parameters.getTitle() + Constants.SHARED_SUFFIX);
@@ -266,7 +266,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
 
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), true);
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarSharePageActions.back(ownerDriver);
         CalendarLabelsPageActions.back(ownerDriver);
@@ -274,7 +274,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         CalendarFlow.openSharedLabelEvent(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX, parameters.getTitle() + Constants.SHARED_SUFFIX);

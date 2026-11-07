@@ -49,4 +49,12 @@
             INCLUDE(external_reference, star_system_id, buy_price, sell_price, demand, stock);
         </sql>
     </changeSet>
+
+    <changeSet id="drop-table-item_commodity" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="item_commodity"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="item_commodity"/>
+    </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,29 @@
+===FEATURES===
+    ApphubCI
+        Visual indicator of table backup and restoration progress
+    Calendar
+        Instantly share newly created events
+
+===BUGFIXES===
+    ApphubCI ignored foreign key dependencies when referring partitioned tables
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    ApphubCI
+        Truncate all first, then restore to avoid waiting for locks when importing partitions parallel
+        Restore to local file does not create database / timestamp directories
+
+===ETC===
+    ApphubCI
+        Do not display disabled services inputs for production and preprod environments
+        Multi-select list for start/stop selected services
+    EliteBase
+        Copyable system and station names in merit miner search results
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database

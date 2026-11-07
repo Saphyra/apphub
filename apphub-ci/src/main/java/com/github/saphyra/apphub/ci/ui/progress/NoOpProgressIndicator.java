@@ -1,16 +1,16 @@
-package com.github.saphyra.apphub.ci.ui.startup;
+package com.github.saphyra.apphub.ci.ui.progress;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class NoOpStartupIndicator implements StartupIndicator {
+class NoOpProgressIndicator implements ProgressIndicator {
     @Override
-    public void startupInitiated(String name) {
+    public void started(String name) {
         log.debug("Startup initiated: {}", name);
     }
 
     @Override
-    public void startupCompleted(String name) {
+    public void completed(String name) {
         log.debug("Startup completed: {}", name);
     }
 
@@ -20,7 +20,7 @@ class NoOpStartupIndicator implements StartupIndicator {
     }
 
     @Override
-    public void startupFailed(String name) {
+    public void failed(String name) {
         log.debug("Startup failed: {}", name);
     }
 }

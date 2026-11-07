@@ -25,6 +25,7 @@ public class ApiConstants {
     public static final String PARAM_SKIP_TESTS = "skip_tests";
     public static final String PARAM_DISABLED_SERVICES = "disabled_services";
     public static final String PARAM_SERVICES = "services";
+    public static final String PARAM_ALL_SERVICES = "all_services";
     public static final String PARAM_FILTER_TESTS = "filter_tests";
     public static final String PARAM_TEST_FILTER = "test_filter";
     public static final String PARAM_TEST_THREAD_COUNT = "test_thread_count";
