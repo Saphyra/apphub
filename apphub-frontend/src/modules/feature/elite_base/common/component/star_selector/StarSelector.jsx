@@ -9,7 +9,7 @@ import MapStream from "../../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./star_selector.css";
 
-const StarSelector = ({ starId, setStarId }) => {
+const StarSelector = ({ id, starId, setStarId, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [selectedStar, setSelectedStar] = useState(new DataListInputEntry(starId, hasValue(sessionStorage.eliteBaseStarSelectorStarName) ? sessionStorage.eliteBaseStarSelectorStarName : ""));
@@ -25,6 +25,7 @@ const StarSelector = ({ starId, setStarId }) => {
                 preLabel={localizationHandler.get("pre-label")}
                 postLabel={localizationHandler.get("post-label")}
                 inputField={<DataListInputField
+                    id={id}
                     className={"elite-base-star-selector" + (hasValue(starId) ? " locked" : "")}
                     value={selectedStar}
                     setValue={setSelectedStar}
@@ -58,7 +59,7 @@ const StarSelector = ({ starId, setStarId }) => {
             }
 
             const response = await ELITE_BASE_STAR_SYSTEMS_SEARCH.createRequest({ value: selectedStar.value })
-                .send();
+                .send(setDisplaySpinner);
 
             const mapped = new MapStream(response)
                 .toList((key, value) => new DataListInputEntry(key, value));

@@ -20,6 +20,7 @@
         Multi-select list for start/stop selected services
     EliteBase
         Copyable system and station names in merit miner search results
+        Integration test for pages
 
 ===Manual Release Steps===
     Pre deployment

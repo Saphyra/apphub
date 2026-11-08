@@ -66,7 +66,7 @@ const TradeCommoditiesResult = ({ localizationHandler, searchResult, order, setO
             .sorted((a, b) => Order[order].sorter(OrderBy[orderBy].compare(a, b)))
             .map((offer, index) => {
                 return (
-                    <tr key={index}>
+                    <tr key={index} className="elite-base-ct-search-result-item">
                         <td className="right">{formatNumber(offer.starSystemDistance, 2)} ly</td>
                         <td>{offer.starName}</td>
                         <td>{offer.locationName}</td>

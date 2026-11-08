@@ -31,7 +31,7 @@ import Order from "./Order";
 export const CACHE_KEY_ORDER = "eliteBaseCommodityTradingResultOrder";
 export const CACHE_KEY_ORDER_BY = "eliteBaseCommodityTradingResultOrderBy";
 
-const TradeCommoditiesPage = ({ tradeMode }) => {
+const TradeCommoditiesPage = ({ tradeMode, setDisplaySpinner }) => {
     const CACHE_KEY_MIN_PRICE = "eliteBaseCommodityTradingMinPrice";
     const CACHE_KEY_MAX_PRICE = "eliteBaseCommodityTradingMaxPrice";
     const CACHE_KEY_MAX_STAR_SYSTEM_DISTANCE = "eliteBaseCommodityTradingMaxStarSystemDistance";
@@ -52,7 +52,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
     const localizationHandler = new LocalizationHandler(localizationData);
     const [powerplayStates, setPowerplayStates] = useState([]);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [starId, setStarId] = useState(null);
     const [commodity, setCommodity] = useState(null);
@@ -105,6 +104,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 <legend>{localizationHandler.get("offer")}</legend>
 
                 <CommoditySelector
+                    id="elite-base-trade-commodity-selector"
                     commodity={commodity}
                     setCommodity={setCommodity}
                 />
@@ -162,8 +162,10 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 <legend>{localizationHandler.get("location")}</legend>
 
                 <StarSelector
+                    id="elite-base-trade-star-selector"
                     starId={starId}
                     setStarId={setStarId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div>
@@ -284,8 +286,9 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 </div>
             </fieldset>
 
-            <div id="elite-base-ct-trade-commodities-search-button-wrapper">
+            <div id="elite-base-ct-search-button-wrapper">
                 <Button
+                    id="elite-base-ct-search-button"
                     label={localizationHandler.get("search")}
                     onclick={search}
                 />
@@ -304,7 +307,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 />
             }
 
-            {displaySpinner && <Spinner />}
         </div>
     );
 

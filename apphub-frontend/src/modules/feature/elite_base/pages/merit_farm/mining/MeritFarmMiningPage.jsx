@@ -108,6 +108,7 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
                 </div>
 
                 <Button
+                    id="elite-base-merit-miner-display-more-button"
                     onclick={() => refresh()}
                     label={localizationHandler.get("load")}
                 />
@@ -119,7 +120,11 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
                 </div>
             }
 
-            <table className="formatted-table" style={{ margin: "auto" }}>
+            <table
+                id="elite-base-merit-miner-search-result"
+                className="formatted-table"
+                style={{ margin: "auto" }}
+            >
                 <thead>
                     <tr>
                         <th>{localizationHandler.get("mine-in")}</th>
@@ -140,6 +145,7 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
 
             {offers.length > displaySize &&
                 <Button
+                    id="elite-base-merit-miner-display-more-button-bottom"
                     label={localizationHandler.get("display-more")}
                     onclick={() => setDisplaySize(displaySize + DISPLAY_SIZE)}
                 />
@@ -151,7 +157,10 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
         return new Stream(offers)
             .sorted((a, b) => b.price - a.price)
             .map(offer => (
-                <tr key={offer.sourceStarSystemId + offer.targetStarSystemId + offer.stationId + offer.commodityName}>
+                <tr
+                    key={offer.sourceStarSystemId + offer.targetStarSystemId + offer.stationId + offer.commodityName}
+                    className="elite-base-merit-miner-search-result-item"
+                >
                     <td className="selectable">
                         {offer.sourceStarSystemName}
                         <CopyButton text={offer.sourceStarSystemName} />

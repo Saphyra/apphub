@@ -44,9 +44,13 @@ const MenuItem = ({ data, openedPage, setOpenedPage, openedCategories, setOpened
     const menuLocalizationHandler = new LocalizationHandler(menuLocalizationData);
 
     return (
-        <div className="elite-base-navigation-menu-item">
+        <div
+            id={"elite-base-navigation-item-" + data.id.toLowerCase()}
+            className="elite-base-navigation-menu-item"
+        >
             <div
-                className={"button" + (openedPage == data.id ? " opened" : " asd") + (data.clickable ? "" : " disabled")}
+                id={"elite-base-navigation-button-" + data.id.toLowerCase()}
+                className={"button" + (openedPage == data.id ? " opened" : "") + (data.clickable ? "" : " disabled")}
                 onClick={openPage}
             >
                 {getToggleButton()}
@@ -63,11 +67,13 @@ const MenuItem = ({ data, openedPage, setOpenedPage, openedCategories, setOpened
 
         if (isOpened()) {
             return <Button
+                className="elite-base-navigation-toggle-button opened"
                 label={"^"}
                 onclick={closeItem}
             />
         } else {
             return <Button
+                className="elite-base-navigation-toggle-button closed"
                 label={"v"}
                 onclick={openItem}
             />

@@ -103,6 +103,94 @@ public class DatabaseUtil {
         }
     }
 
+    public static boolean materialTraderExists() {
+        String sql = "SELECT count(*) FROM elite_base.station_service WHERE service='MATERIAL_TRADER' limit 1";
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    if (rs.next()) {
+                        return rs.getInt(1) > 0;
+                    }
+
+                    throw new IllegalStateException("Query returned no results");
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying material trader existence", e);
+        }
+    }
+
+    public static String anyStarSystemName() {
+        String sql = "SELECT star_name FROM elite_base.star_system limit 1";
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    if (rs.next()) {
+                        return rs.getString(1);
+                    }
+
+                    throw new IllegalStateException("Star system does not exist");
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying any star system name", e);
+        }
+    }
+
+    public static Optional<String> starSystemSellingCommodity(String commodity) {
+        String sql = """
+            SELECT star_name from elite_base.item_commodity_v2
+            INNER JOIN elite_base.station_v2 on item_commodity_v2.station_id = station_v2.id
+            INNER JOIN elite_base.star_system on station_v2.star_system_id = star_system.id
+            WHERE item_name='%s' AND stock > 0
+            limit 1
+            """.formatted(commodity);
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    if (rs.next()) {
+                        return Optional.of(rs.getString(1));
+                    }
+
+                    return Optional.empty();
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying star system selling commodity: " + commodity, e);
+        }
+    }
+
+    public static Optional<String> starSystemBuyingCommodity(String commodity) {
+        String sql = """
+            SELECT star_name from elite_base.item_commodity_v2
+            INNER JOIN elite_base.station_v2 on item_commodity_v2.station_id = station_v2.id
+            INNER JOIN elite_base.star_system on station_v2.star_system_id = star_system.id
+            WHERE item_name='%s' AND demand > 0
+            limit 1
+            """.formatted(commodity);
+
+        try {
+            return query(
+                sql,
+                rs -> {
+                    if (rs.next()) {
+                        return Optional.of(rs.getString(1));
+                    }
+
+                    return Optional.empty();
+                }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed querying star system selling commodity: " + commodity, e);
+        }
+    }
+
     private interface Mapper<T> {
         T map(ResultSet rs) throws SQLException;
     }

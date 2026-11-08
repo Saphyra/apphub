@@ -1,4 +1,4 @@
-#elite-base-ct-trade-commodities-search-button-wrapper {
+#elite-base-ct-search-button-wrapper {
     text-align: center;
 }
 
@@ -9,8 +9,6 @@
 #elite-base-ct-trade-commodities-search-result-table {
     margin: auto;
 }
-
-#elite-base-ct-trade-commodities-search-result-number-of-result {}
 
 #elite-base-ct-trade-commodities-search-result-table td {
     white-space: nowrap;
