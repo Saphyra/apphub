@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFaction;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionDao;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionSyncService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,9 +29,6 @@ class MinorFactionConflictConverterTest {
     @Mock
     private ConflictingMinorFactionDao conflictingMinorFactionDao;
 
-    @Mock
-    private ConflictingMinorFactionSyncService conflictingMinorFactionSyncService;
-
     @InjectMocks
     private MinorFactionConflictConverter underTest;
 
@@ -58,7 +54,6 @@ class MinorFactionConflictConverterTest {
             .returns(WarStatus.ACTIVE, MinorFactionConflictEntity::getStatus)
             .returns(WarType.CIVIL_WAR, MinorFactionConflictEntity::getWarType);
 
-        then(conflictingMinorFactionSyncService).should().sync(ID, List.of(conflictingMinorFaction));
     }
 
     @Test

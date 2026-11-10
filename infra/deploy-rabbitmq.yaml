@@ -31,7 +31,7 @@ spec:
               value: guest
           resources:
             limits:
-              memory: 512Mi
+              memory: 2512Mi
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq

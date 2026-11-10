@@ -53,7 +53,7 @@ public class EdMessageProcessor {
         } catch (DataIntegrityViolationException e) {
             if (e.getMessage().contains("violates foreign key constraint")) {
                 log.debug(e.getMessage());
-                processRetry(edMessage, "DataIntegrityViolation");
+                processRetry(edMessage, e.getMessage());
             } else {
                 handleException(edMessage, e);
             }

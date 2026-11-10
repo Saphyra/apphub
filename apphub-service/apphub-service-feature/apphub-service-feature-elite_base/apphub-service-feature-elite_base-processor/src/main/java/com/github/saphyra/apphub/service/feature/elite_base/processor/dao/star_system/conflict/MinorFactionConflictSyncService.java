@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict;
 
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionDao;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.conflict.minor_faction.ConflictingMinorFactionSyncService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import static java.util.Objects.isNull;
 public class MinorFactionConflictSyncService {
     private final MinorFactionConflictDao minorFactionConflictDao;
     private final ConflictingMinorFactionDao conflictingMinorFactionDao;
+    private final ConflictingMinorFactionSyncService conflictingMinorFactionSyncService;
 
     @Transactional
     public void sync(UUID starSystemId, List<MinorFactionConflict> newConflicts) {
@@ -40,6 +42,8 @@ public class MinorFactionConflictSyncService {
         toDelete.forEach(this::delete);
 
         minorFactionConflictDao.saveAll(newConflicts);
+        //ConflictingMinorFaction sync has to happen after MinorFactionConflicts are saved because of foreign key dependencies
+        newConflicts.forEach(minorFactionConflict -> conflictingMinorFactionSyncService.sync(minorFactionConflict.getId(), minorFactionConflict.getConflictingMinorFactions()));
     }
 
     private void delete(UUID conflictId) {
