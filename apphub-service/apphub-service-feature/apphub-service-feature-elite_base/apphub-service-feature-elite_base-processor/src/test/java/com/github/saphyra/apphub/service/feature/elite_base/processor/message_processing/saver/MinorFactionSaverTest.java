@@ -9,7 +9,9 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_u
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFactionDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFactionFactory;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionState;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateFactory;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.journal.FactionState;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,9 @@ class MinorFactionSaverTest {
     private MinorFactionStateFactory minorFactionStateFactory;
 
     @Mock
+    private MinorFactionStateSyncService minorFactionStateSyncService;
+
+    @Mock
     private LastUpdateDao lastUpdateDao;
 
     @Mock
@@ -70,6 +75,9 @@ class MinorFactionSaverTest {
     @Mock
     private LastUpdate lastUpdate;
 
+    @Mock
+    private MinorFactionState minorFactionState;
+
     @Test
     void save_new() {
         Faction faction = Faction.builder()
@@ -85,6 +93,9 @@ class MinorFactionSaverTest {
         given(minorFactionDao.findByFactionName(FACTION_NAME)).willReturn(Optional.empty());
         given(minorFactionFactory.create(FACTION_NAME, FactionStateEnum.BOOM, INFLUENCE, Allegiance.ALLIANCE, List.of(activeState), List.of(pendingState), List.of(recoveringState))).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(MINOR_FACTION_ID);
+        given(minorFaction.getActiveStates()).willReturn(List.of(minorFactionState));
+        given(minorFaction.getPendingStates()).willReturn(List.of(minorFactionState));
+        given(minorFaction.getRecoveringStates()).willReturn(List.of(minorFactionState));
         given(lastUpdateFactory.create(MINOR_FACTION_ID, ObjectType.MINOR_FACTION, LAST_UPDATE)).willReturn(lastUpdate);
 
         assertThat(underTest.save(LAST_UPDATE, new Faction[]{faction})).containsExactly(minorFaction);
@@ -96,6 +107,7 @@ class MinorFactionSaverTest {
         then(minorFaction).should(times(0)).setPendingStates(any());
         then(minorFaction).should(times(0)).setRecoveringStates(any());
         then(minorFactionDao).should().save(minorFaction);
+        then(minorFactionStateSyncService).should().sync(MINOR_FACTION_ID, List.of(minorFactionState), List.of(minorFactionState), List.of(minorFactionState));
         then(lastUpdateDao).should().save(lastUpdate);
     }
 
@@ -116,6 +128,9 @@ class MinorFactionSaverTest {
         given(lastUpdateDao.findByIdOrDefault(MINOR_FACTION_ID, ObjectType.MINOR_FACTION)).willReturn(lastUpdate);
         given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
         given(lastUpdateFactory.create(MINOR_FACTION_ID, ObjectType.MINOR_FACTION, LAST_UPDATE)).willReturn(lastUpdate);
+        given(minorFaction.getActiveStates()).willReturn(List.of(minorFactionState));
+        given(minorFaction.getPendingStates()).willReturn(List.of(minorFactionState));
+        given(minorFaction.getRecoveringStates()).willReturn(List.of(minorFactionState));
 
         assertThat(underTest.save(LAST_UPDATE, new Faction[]{faction})).containsExactly(minorFaction);
 
@@ -126,6 +141,7 @@ class MinorFactionSaverTest {
         then(minorFaction).should().setPendingStates(any());
         then(minorFaction).should().setRecoveringStates(any());
         then(minorFactionDao).should().save(minorFaction);
+        then(minorFactionStateSyncService).should().sync(MINOR_FACTION_ID, List.of(minorFactionState), List.of(minorFactionState), List.of(minorFactionState));
         then(lastUpdateDao).should().save(lastUpdate);
     }
 
@@ -149,6 +165,7 @@ class MinorFactionSaverTest {
         assertThat(underTest.save(LAST_UPDATE, new Faction[]{faction})).containsExactly(minorFaction);
 
         then(minorFactionDao).should(never()).save(any());
+        then(minorFactionStateSyncService).should(never()).sync(any(), any(), any(), any());
         then(lastUpdateDao).should(never()).save(any());
     }
 }

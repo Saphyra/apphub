@@ -63,7 +63,7 @@ public class StarSystemSaver {
                 return starSystem;
             } else {
                 StarSystem created = starSystemFactory.create(starId, starName, starPosition, starType);
-                log.debug("Saving new {}", created);
+                log.info("New {} is discovered: {}", created.getClass().getSimpleName(), created);
 
                 starSystemDao.save(created);
 

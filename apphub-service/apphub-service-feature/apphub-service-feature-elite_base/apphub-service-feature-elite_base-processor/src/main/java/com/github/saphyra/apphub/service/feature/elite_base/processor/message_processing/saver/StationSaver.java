@@ -103,7 +103,7 @@ public class StationSaver {
                 Optional.ofNullable(economies).map(Arrays::asList).orElse(null),
                 controllingFactionId
             );
-            log.debug("Saving new {}", station);
+            log.info("New {} is discovered: {}", station.getClass().getSimpleName(), station);
             stationDao.save(station);
 
             saveLastUpdate(timestamp, station);

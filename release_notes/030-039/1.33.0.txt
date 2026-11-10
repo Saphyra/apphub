@@ -6,6 +6,8 @@
 
 ===BUGFIXES===
     ApphubCI ignored foreign key dependencies when referring partitioned tables
+    EliteBase
+        Saving MinorFactionState before MinorFaction caused ForeignKeyViolation making up the system unable to register new MinorFactions
 
 ===PLATFORM CHANGES===
 
@@ -21,6 +23,7 @@
     EliteBase
         Copyable system and station names in merit miner search results
         Integration test for pages
+        Log if new entity is discovered
 
 ===Manual Release Steps===
     Pre deployment

@@ -67,7 +67,7 @@ public class FleetCarrierSaver {
                 }
 
                 FleetCarrier created = fleetCarrierFactory.create(carrierId, carrierName, starSystemId, dockingAccess, marketId);
-                log.debug("Saving new {}", created);
+                log.info("New {} is discovered: {}", created.getClass().getSimpleName(), created);
                 fleetCarrierDao.clearMarketId(created.getId(), marketId);
                 fleetCarrierDao.save(created);
                 saveLastUpdate(timestamp, created);
