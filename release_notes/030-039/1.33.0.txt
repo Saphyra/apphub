@@ -24,6 +24,8 @@
         Copyable system and station names in merit miner search results
         Integration test for pages
         Log if new entity is discovered
+        Migrate Settlement to add FK to star_system_id and body_id
+        Migrate StationService and StationEconomy to add FK to station_id
 
 ===Manual Release Steps===
     Pre deployment

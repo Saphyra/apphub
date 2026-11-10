@@ -14,7 +14,9 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.statio
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.StationFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomyFactory;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomySyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.Economy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,8 @@ public class StationSaver {
     private final StationDao stationDao;
     private final StationFactory stationFactory;
     private final StationEconomyFactory stationEconomyFactory;
+    private final StationEconomySyncService stationEconomySyncService;
+    private final StationServiceSyncService stationServiceSyncService;
     private final MinorFactionSaver minorFactionSaver;
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
@@ -105,6 +109,7 @@ public class StationSaver {
             );
             log.info("New {} is discovered: {}", station.getClass().getSimpleName(), station);
             stationDao.save(station);
+            syncStationData(station);
 
             saveLastUpdate(timestamp, station);
 
@@ -147,6 +152,12 @@ public class StationSaver {
             .forEach(UpdateHelper::modify);
 
         stationDao.save(station);
+        syncStationData(station);
+    }
+
+    private void syncStationData(Station station) {
+        stationServiceSyncService.sync(station.getId(), station.getServices());
+        stationEconomySyncService.sync(station.getId(), station.getEconomies());
     }
 
     private void saveLastUpdate(LocalDateTime timestamp, Station station) {

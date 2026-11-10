@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_SERVICE;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_SERVICE_V2;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = SCHEMA, name = TABLE_STATION_SERVICE)
+@Table(schema = SCHEMA, name = TABLE_STATION_SERVICE_V2)
 @IdClass(StationServiceEntity.class)
 class StationServiceEntity implements Serializable {
     @Id

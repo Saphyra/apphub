@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +15,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class SettlementFactoryTest {
     private static final UUID ID = UUID.randomUUID();
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
     private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
     private static final UUID BODY_ID = UUID.randomUUID();
     private static final String SETTLEMENT_NAME = "settlement-name";
@@ -34,9 +32,8 @@ class SettlementFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(ID);
 
-        assertThat(underTest.create(LAST_UPDATE, STAR_SYSTEM_ID, BODY_ID, SETTLEMENT_NAME, MARKET_ID, LONGITUDE, LATITUDE))
+        assertThat(underTest.create(STAR_SYSTEM_ID, BODY_ID, SETTLEMENT_NAME, MARKET_ID, LONGITUDE, LATITUDE))
             .returns(ID, Settlement::getId)
-            .returns(LAST_UPDATE, Settlement::getLastUpdate)
             .returns(STAR_SYSTEM_ID, Settlement::getStarSystemId)
             .returns(BODY_ID, Settlement::getBodyId)
             .returns(SETTLEMENT_NAME, Settlement::getSettlementName)

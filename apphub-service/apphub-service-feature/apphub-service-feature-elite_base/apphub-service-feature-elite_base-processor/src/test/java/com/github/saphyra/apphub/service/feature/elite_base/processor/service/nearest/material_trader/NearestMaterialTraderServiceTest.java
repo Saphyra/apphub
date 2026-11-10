@@ -14,6 +14,8 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.statio
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.StationDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.material_trader_override.MaterialTraderOverride;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.material_trader_override.MaterialTraderOverrideDao;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationService;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceEnum;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.AfterEach;
@@ -55,6 +57,9 @@ class NearestMaterialTraderServiceTest {
 
     @Autowired
     private StationDao stationDao;
+
+    @Autowired
+    private StationServiceDao stationServiceDao;
 
     @Autowired
     private BodyDao bodyDao;
@@ -106,6 +111,7 @@ class NearestMaterialTraderServiceTest {
             .economies(LazyLoadedField.loaded(Collections.emptyList()))
             .build();
         stationDao.save(station);
+        saveStationService(station.getId(), StationServiceEnum.MATERIAL_TRADER);
 
         Body body = Body.builder()
             .id(BODY_ID)
@@ -148,6 +154,7 @@ class NearestMaterialTraderServiceTest {
             .economies(LazyLoadedField.loaded(Collections.emptyList()))
             .build();
         stationDao.save(station);
+        saveStationService(station.getId(), StationServiceEnum.MATERIAL_TRADER);
 
         Body body = Body.builder()
             .id(BODY_ID)
@@ -191,6 +198,7 @@ class NearestMaterialTraderServiceTest {
             .economies(LazyLoadedField.loaded(Collections.emptyList()))
             .build();
         stationDao.save(station);
+        saveStationService(station.getId(), StationServiceEnum.MATERIAL_TRADER);
 
         Body body = Body.builder()
             .id(BODY_ID)
@@ -240,6 +248,7 @@ class NearestMaterialTraderServiceTest {
             .economies(LazyLoadedField.loaded(Collections.emptyList()))
             .build();
         stationDao.save(station);
+        saveStationService(station.getId(), StationServiceEnum.MATERIAL_TRADER);
 
         Body body = Body.builder()
             .id(BODY_ID)
@@ -256,5 +265,12 @@ class NearestMaterialTraderServiceTest {
         bufferSynchronizationService.synchronizeAll();
 
         assertThat(underTest.getNearestMaterialTraders(REFERENCE_STAR_ID, MaterialType.MANUFACTURED, 0)).isEmpty();
+    }
+
+    private void saveStationService(UUID stationId, StationServiceEnum service) {
+        stationServiceDao.save(StationService.builder()
+            .stationId(stationId)
+            .service(service)
+            .build());
     }
 }

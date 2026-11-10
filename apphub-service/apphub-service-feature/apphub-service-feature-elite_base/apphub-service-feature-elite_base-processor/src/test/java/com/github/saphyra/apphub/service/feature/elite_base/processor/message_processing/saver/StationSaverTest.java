@@ -14,11 +14,14 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.statio
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.StationFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomyFactory;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomySyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.Economy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -32,6 +35,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,6 +57,12 @@ class StationSaverTest {
 
     @Mock
     private StationEconomyFactory stationEconomyFactory;
+
+    @Mock
+    private StationEconomySyncService stationEconomySyncService;
+
+    @Mock
+    private StationServiceSyncService stationServiceSyncService;
 
     @Mock
     private MinorFactionSaver minorFactionSaver;
@@ -156,6 +166,9 @@ class StationSaverTest {
             CONTROLLING_FACTION_ID
         ))
             .willReturn(station);
+        given(station.getId()).willReturn(STATION_ID);
+        given(station.getServices()).willReturn(List.of(StationServiceEnum.BARTENDER));
+        given(station.getEconomies()).willReturn(List.of(stationEconomy));
 
         assertThat(underTest.save(
             LAST_UPDATE,
@@ -179,7 +192,10 @@ class StationSaverTest {
         then(station).should(times(0)).setEconomies(any());
         then(station).should(times(0)).setType(any());
         then(station).should(times(0)).setControllingFactionId(any());
-        then(stationDao).should().save(station);
+        InOrder inOrder = inOrder(stationDao, stationServiceSyncService, stationEconomySyncService);
+        inOrder.verify(stationDao).save(station);
+        inOrder.verify(stationServiceSyncService).sync(STATION_ID, List.of(StationServiceEnum.BARTENDER));
+        inOrder.verify(stationEconomySyncService).sync(STATION_ID, List.of(stationEconomy));
     }
 
     @Test
@@ -194,6 +210,8 @@ class StationSaverTest {
         given(lastUpdateDao.findByIdOrDefault(STATION_ID, ObjectType.STATION)).willReturn(lastUpdate);
         given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
         given(station.getId()).willReturn(STATION_ID);
+        given(station.getServices()).willReturn(List.of(StationServiceEnum.BARTENDER));
+        given(station.getEconomies()).willReturn(List.of(stationEconomy));
         given(lastUpdateFactory.create(STATION_ID, ObjectType.STATION, LAST_UPDATE)).willReturn(lastUpdate);
 
         assertThat(underTest.save(
@@ -214,11 +232,14 @@ class StationSaverTest {
         then(station).should().setBodyId(BODY_ID);
         then(station).should().setAllegiance(Allegiance.ALLIANCE);
         then(station).should().setEconomy(EconomyEnum.AGRICULTURE);
-        then(station).should().setServices(any());
-        then(station).should().setEconomies(any());
+        then(station).should(times(0)).setServices(any());
+        then(station).should(times(0)).setEconomies(any());
         then(station).should().setType(StationType.SURFACE_STATION);
         then(station).should().setControllingFactionId(CONTROLLING_FACTION_ID);
-        then(stationDao).should().save(station);
+        InOrder inOrder = inOrder(stationDao, stationServiceSyncService, stationEconomySyncService);
+        inOrder.verify(stationDao).save(station);
+        inOrder.verify(stationServiceSyncService).sync(STATION_ID, List.of(StationServiceEnum.BARTENDER));
+        inOrder.verify(stationEconomySyncService).sync(STATION_ID, List.of(stationEconomy));
         then(lastUpdateDao).should().save(lastUpdate);
     }
 }

@@ -8,8 +8,12 @@ public class DatabaseConstants {
     @Deprecated
     public static final String TABLE_STATION = "station";
     public static final String TABLE_STATION_V2 = "station_v2";
+    @Deprecated
     public static final String TABLE_STATION_SERVICE = "station_service";
+    @Deprecated
     public static final String TABLE_STATION_ECONOMY = "station_economy";
+    public static final String TABLE_STATION_SERVICE_V2 = "station_service_v2";
+    public static final String TABLE_STATION_ECONOMY_V2 = "station_economy_v2";
     @Deprecated
     public static final String TABLE_BODY_V2 = "body_v2";
     public static final String TABLE_BODY_V3 = "body_v3";
@@ -48,7 +52,9 @@ public class DatabaseConstants {
     public static final String TABLE_ITEM_SPACESHIP = "item_spaceship";
     public static final String TABLE_ITEM_SPACESHIP_V2 = "item_spaceship_v2";
     public static final String TABLE_COMMODITY_AVERAGE_PRICE = "commodity_average_price";
+    @Deprecated
     public static final String TABLE_SETTLEMENT = "settlement";
+    public static final String TABLE_SETTLEMENT_V2 = "settlement_v2";
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";
@@ -60,6 +66,8 @@ public class DatabaseConstants {
     public static final String COLUMN_CARRIER_ID = "carrier_id";
     public static final String COLUMN_DOCKING_ACCESS = "docking_access";
     public static final String COLUMN_MARKET_ID = "market_id";
+    public static final String COLUMN_LONGITUDE = "longitude";
+    public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_STAR_NAME = "star_name";
     public static final String COLUMN_X_POS = "x_pos";
     public static final String COLUMN_Y_POS = "y_pos";
@@ -70,10 +78,12 @@ public class DatabaseConstants {
     public static final String COLUMN_DISTANCE_FROM_STAR = "distance_from_star";
     public static final String COLUMN_DISTANCE_FROM_REFERENCE = "distance_from_reference";
     public static final String COLUMN_BODY_ID = "body_id";
+    public static final String COLUMN_SETTLEMENT_NAME = "settlement_name";
     public static final String COLUMN_MATERIAL = "material";
     public static final String COLUMN_PERCENT = "percent";
     public static final String COLUMN_SERVICE = "service";
     public static final String COLUMN_ECONOMY = "economy";
+    public static final String COLUMN_PROPORTION = "proportion";
     public static final String COLUMN_MATERIAL_TYPE = "material_type";
     public static final String COLUMN_VERIFIED = "verified";
     public static final String COLUMN_EXTERNAL_REFERENCE = "external_reference";
