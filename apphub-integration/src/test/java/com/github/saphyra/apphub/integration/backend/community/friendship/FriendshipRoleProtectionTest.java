@@ -13,6 +13,14 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+/**
+ * Tests that friendship endpoints enforce required roles.
+ *
+ * <ul>
+ *   <li>listing friendships requires role.</li>
+ *   <li>deleting a friendship requires role.</li>
+ * </ul>
+ */
 public class FriendshipRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community", "role-protection"})
     public void friendshipRoleProtection(String role) {

@@ -14,6 +14,14 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelectLanguageTest extends SeleniumTest {
+    /**
+     * Verifies that selecting a language on the index page updates the username placeholder accordingly.
+     *
+     * <ul>
+     *   <li>select Hungarian and check placeholder "Felhasználónév"</li>
+     *   <li>select English and check placeholder "Username"</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void selectLanguageOnIndexPage() {
         WebDriver driver = extractDriver();

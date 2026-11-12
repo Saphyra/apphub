@@ -28,6 +28,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeleteSharedOccurrenceTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Deletes a shared occurrence and verifies that it is removed from the owner's event.
+     *
+     * <ul>
+     *   <li>when no label grant but event grant includes VIEW + DELETE</li>
+     *   <li>when event grant includes DELETE_CHILDREN and occurrence grant includes VIEW</li>
+     *   <li>when label grant includes DELETE_CHILDREN and event grant none, occurrence grant includes VIEW</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "deleteSharedOccurrenceData")
     public void deleteSharedOccurrence(Set<Grant> labelGrants, Set<Grant> eventGrants, Set<Grant> occurrenceGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -95,6 +104,9 @@ public class DeleteSharedOccurrenceTest extends BackEndTest {
         assertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), ownerToken, eventId)).isEmpty();
     }
 
+    /**
+     * Verifies that deleting a shared occurrence fails when the user lacks sufficient grants.
+     */
     @Test(groups = {"be", "calendar"})
     public void deleteSharedOccurrence_noGrant() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

@@ -20,6 +20,13 @@ public class ArchiveTest extends SeleniumTest {
     private static final String CATEGORY_TITLE = "category";
     private static final String LIST_ITEM_TITLE = "list-item-title";
 
+    /**
+     * Tests archiving and unarchiving a notebook list item.
+     * <ul>
+     *   <li>Archives the category and verifies it is archived in pinned items and tree.</li>
+     *   <li>Unarchives the same category and verifies removal of archived flag.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void archiveListItem() {
         WebDriver driver = extractDriver();
@@ -57,6 +64,13 @@ public class ArchiveTest extends SeleniumTest {
         assertThat(leaf.isArchived()).isFalse();
     }
 
+    /**
+     * Tests that a child list item inherits the archived state of its parent category.
+     * <ul>
+     *   <li>Creates a category and an only‑title item inside it.</li>
+     *   <li>Archives the category and verifies the child item is also marked as archived.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void contentOfArchivedCategoryShouldBeArchivedToo() {
         WebDriver driver = extractDriver();

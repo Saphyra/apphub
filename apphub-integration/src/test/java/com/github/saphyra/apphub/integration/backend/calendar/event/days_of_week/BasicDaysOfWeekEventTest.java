@@ -29,6 +29,15 @@ public class BasicDaysOfWeekEventTest extends BackEndTest {
     private static final LocalDate NEW_END_DATE = NEW_START_DATE.plusWeeks(1)
         .with(DayOfWeek.SUNDAY);
 
+    /**
+     * Tests creation, editing, and deletion of a days‑of‑week recurring event.
+     *
+     * <ul>
+     *   <li>Validate that creating an event with repetition type DAYS_OF_WEEK returns correct default data.</li>
+     *   <li>Validate that editing the event updates start/end dates and repetition data correctly.</li>
+     *   <li>Validate that deleting the event removes it from events list and occurrences.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void basicDaysOfWeekEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

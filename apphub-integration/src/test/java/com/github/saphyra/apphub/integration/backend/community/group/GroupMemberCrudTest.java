@@ -26,6 +26,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GroupMemberCrudTest extends BackEndTest {
     private static final String GROUP_NAME = "group-name";
 
+    /**
+     * Tests CRUD operations for group members: searching, adding, role modifications, and deletions with permission checks.
+     *
+     * <ul>
+     *   <li>searching only friends returns correct list.</li>
+     *   <li>adding a member fails on null or non‑friend.</li>
+     *   <li>duplicate addition fails.</li>
+     *   <li>role modifications validate null fields and enforce permissions.</li>
+     *   <li>inviting, kicking, modifying roles work for owner.</li>
+     *   <li>deletion respects ownership and role restrictions.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "community"})
     public void groupMemberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

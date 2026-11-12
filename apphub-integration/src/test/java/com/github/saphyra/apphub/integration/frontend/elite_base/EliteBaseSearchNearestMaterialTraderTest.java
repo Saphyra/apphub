@@ -17,6 +17,13 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EliteBaseSearchNearestMaterialTraderTest extends SeleniumTest {
+    /**
+     * Tests searching for the nearest material trader in Elite Base.
+     *
+     * <ul>
+     *   <li>Verifies that a search returns results when reference star system is set.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "elite-base"})
     public void searchNearestMaterialTrader() {
         String starName = EliteBasePreconditions.checkMaterialTraderPreconditions();

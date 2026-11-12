@@ -24,6 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExitFromLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests host and member leaving a lobby, including invitation cancellation.
+     *
+     * <ul>
+     *   <li>host left triggers lobby exit event with isHost true</li>
+     *   <li>member left triggers lobby exit event with isHost false</li>
+     *   <li>invitation cancelled when user leaves lobby</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void hostLeftTheLobby() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

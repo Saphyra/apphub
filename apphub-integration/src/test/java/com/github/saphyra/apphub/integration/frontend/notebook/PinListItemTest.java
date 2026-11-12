@@ -17,6 +17,15 @@ public class PinListItemTest extends SeleniumTest {
     private static final String CATEGORY_1 = "category-1";
     private static final String CATEGORY_2 = "category-2";
 
+    /**
+     * Tests opening the parent of a pinned list item.
+     *
+     * <ul>
+     *   <li>Creates two categories, pins one.</li>
+     *   <li>Moves the pinned category up and verifies it is moved.</li>
+     *   <li>Opens the parent of the pinned item and checks that the correct parent category is displayed.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     void openParentOfPinnedItem() {
         WebDriver driver = extractDriver();

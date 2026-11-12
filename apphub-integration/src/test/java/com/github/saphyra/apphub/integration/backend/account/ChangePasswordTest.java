@@ -19,6 +19,18 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangePasswordTest extends BackEndTest {
+    /** Tests the password change endpoint covering validation and success scenarios.
+     *
+     * <ul>
+     *   <li>Null new password returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Password too short returns 400 with TOO_SHORT</li>
+     *   <li>Password too long returns 400 with TOO_LONG</li>
+     *   <li>Null password returns 400 with MUST_NOT_BE_NULL_OR_BLANK</li>
+     *   <li>Null deactivateAllSessions flag returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Incorrect current password returns 401 with INCORRECT_PASSWORD</li>
+     *   <li>Successful change returns 200 and old credentials invalidated</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     public void changePassword() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -111,6 +123,13 @@ public class ChangePasswordTest extends BackEndTest {
         IndexPageActions.login(getServerPort(), LoginRequest.builder().password(DataConstants.VALID_PASSWORD2).userIdentifier(userData.getEmail()).build());
     }
 
+    /** Tests the password change endpoint when deactivateAllSessions flag is true.
+     *
+     * <ul>
+     *   <li>Endpoint deactivates all sessions and returns 200</li>
+     *   <li>Subsequent module requests fail with 401</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     public void changePassword_deactivateAllSessions() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -14,6 +14,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class UtilsRoleProtectionTest extends SeleniumTest {
+    /**
+     * Verifies that users without the required roles cannot access utility pages.
+     * <ul>
+     *   <li>Removes the "UTILS" role and checks that Base64 page is inaccessible.</li>
+     *   <li>Removes the "ACCESS" role and checks that JSON formatter page is inaccessible.</li>
+     * </ul>
+     */
+
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "utils", "role-protection"})
     public void utilsRoleProtection(String role) {
         WebDriver driver = extractDriver();

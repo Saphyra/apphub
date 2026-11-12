@@ -19,6 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EliteBaseTradeTest extends SeleniumTest {
     private static final String BIOWASTE = "biowaste";
 
+    /**
+     * Tests buying commodities in the Elite Base trade page.
+     *
+     * <ul>
+     *   <li>Verifies that a buy search returns results when commodity and reference system are set.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "elite-base"})
     public void buyCommodities() {
         String starName = EliteBasePreconditions.checkBuyCommodityPreconditions(BIOWASTE);
@@ -40,6 +47,13 @@ public class EliteBaseTradeTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(EliteBaseTradePageActions.getSearchResult(driver)).isNotEmpty());
     }
 
+    /**
+     * Tests selling commodities in the Elite Base trade page.
+     *
+     * <ul>
+     *   <li>Verifies that a sell search returns results when commodity and reference system are set.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "elite-base"})
     public void sellCommodities() {
         String starName = EliteBasePreconditions.checkSellCommodityPreconditions(BIOWASTE);

@@ -28,6 +28,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangePasswordTest extends SeleniumTest {
+    /**
+     * Tests password change flow including validation and session handling.
+     * <ul>
+     *   <li>too short new password</li>
+     *   <li>too long new password</li>
+     *   <li>incorrect confirm password</li>
+     *   <li>empty current password</li>
+     *   <li>incorrect current password</li>
+     *   <li>successful change and session invalidation</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "account"})
     public void changePassword() {
         WebDriver driver = extractDriver();
@@ -131,6 +142,13 @@ public class ChangePasswordTest extends SeleniumTest {
             .build();
     }
 
+    /**
+     * Tests password change with session deactivation.
+     * <ul>
+     *   <li>user changes password while another session is active</li>
+     *   <li>all sessions are logged out and cannot access protected pages</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "account"})
     public void changePassword_deactivateAllSessions() {
         List<WebDriver> drivers = extractDrivers(2);

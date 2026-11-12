@@ -29,6 +29,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GetSharedEventTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Retrieves a shared event with various grant combinations and verifies returned fields.
+     *
+     * <ul>
+     *   <li>Owner grants VIEW, shared user grants VIEW: title/content present.</li>
+     *   <li>Owner grants VIEW, shared user grants SEE: placeholder title/question mark.</li>
+     *   <li>Owner grants VIEW_CHILDREN, no event grant: title/content present.</li>
+     *   <li>Owner grants SEE_CHILDREN, no event grant: placeholder title/question mark.</li>
+     *   <li>Owner grants SEE_CHILDREN with shared user VIEW: title/content present.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "getSharedEventData")
     public void getSharedEvent(
         Set<Grant> labelGrants,

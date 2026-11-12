@@ -25,6 +25,18 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeconstructConstructionAreaWithBuildingModulesTest extends BackEndTest {
+    /**
+     * Tests deconstruction of a construction area that has building modules present.
+     *
+     * <ul>
+     *   <li>create construction area with modules</li>
+     *   <li>deconstruct the area and verify modules are queued for deconstruction</li>
+     *   <li>verify surface still references the area during deconstruction</li>
+     *   <li>resume game to allow deconstruction completion</li>
+     *   <li>confirm all modules are removed after deconstruction finishes</li>
+     *   <li>ensure construction area is fully removed from the surface</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void deconstructConstructionAreaWithBuildingModulesPresent() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

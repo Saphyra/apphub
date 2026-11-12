@@ -47,6 +47,15 @@ public class SearchListItemTest extends BackEndTest {
     private static final String CHECKLIST_TABLE_COLUMN_NAME = "checklist-table-column-name";
     private static final String CHECKLIST_TABLE_COLUMN_VALUE = "checklist-table-column-value";
 
+    /**
+     * Tests search functionality for various notebook items ensuring correct results and handling of short queries.
+     *
+     * <ul>
+     *   <li>validate search returns appropriate list item types for category, link, text, checklist, table, and checklist-table</li>
+     *   <li>validate search with too short query returns error</li>
+     *   <li>validate that identical items are not duplicated in results</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void search() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -133,6 +142,13 @@ public class SearchListItemTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(response, "search", ValidationConstants.TOO_SHORT);
     }
 
+    /**
+     * Validates that a search query returning the same item only once.
+     *
+     * <ul>
+     *   <li>search for an existing link by title should return exactly one result</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void sameItemShouldBeReturnedOnlyOnce() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -22,6 +22,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShareCrudTest extends SeleniumTest {
+    /**
+     * Tests the full lifecycle of sharing a calendar event: creation, sharing, grant modification, and unsharing.
+     *
+     * <ul>
+     *   <li>Creates a one‑time event and verifies success toast.</li>
+     *   <li>Shares the event with another user granting view and view children permissions; verifies shared event appears for that user.</li>
+     *   <li>Edits grants to remove view permission; verifies title changes to question mark suffix.</li>
+     *   <li>Unshares the event; verifies no shared events are visible for either user.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void shareCrud() {
         List<WebDriver> drivers = extractDrivers(2);

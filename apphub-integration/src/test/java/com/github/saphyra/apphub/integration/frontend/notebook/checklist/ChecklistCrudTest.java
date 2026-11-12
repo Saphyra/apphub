@@ -38,6 +38,26 @@ public class ChecklistCrudTest extends SeleniumTest {
     private static final String NEW_CHECKLIST_TITLE = "new-checklist";
     private static final String NEW_VALUE = "new-value";
 
+    /**
+     * Tests full CRUD operations for a checklist.
+     *
+     * <ul>
+     *   <li>Creates an empty title and verifies error toast.</li>
+     *   <li>Removes item from new checklist form and checks list is empty.</li>
+     *   <li>Adds two items, fills values, verifies order.</li>
+     *   <li>Moves items up/down and verifies positions.</li>
+     *   <li>Toggles check/uncheck on items and verifies state.</li>
+     *   <li>Submits checklist, checks creation, opens category list.</li>
+     *   <li>Edits title with empty value and expects error toast.</li>
+     *   <li>Edits checklist: changes title/value, removes item, discards changes, verifies original state.</li>
+     *   <li>Edits checklist: applies changes, saves, verifies updated values.</li>
+     *   <li>Reorders items, saves, verifies new order.</li>
+     *   <li>Deletes checked items and verifies remaining count.</li>
+     *   <li>Toggles check/uncheck on first item and verifies state.</li>
+     *   <li>Edits a checklist item value and verifies update.</li>
+     *   <li>Deletes the checklist and verifies list is empty.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void checklistCrud() {
         WebDriver driver = extractDriver();
@@ -73,6 +93,15 @@ public class ChecklistCrudTest extends SeleniumTest {
         delete(driver);
     }
 
+    /**
+     * Tests search functionality and item count in a checklist.
+     *
+     * <ul>
+     *   <li>Creates a checklist with two items, one checked.</li>
+     *   <li>Performs search by text "2" and verifies only matching item is displayed.</li>
+     *   <li>Clears search and verifies total and checked counts.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void checklistSearchAndCount() {
         WebDriver driver = extractDriver();

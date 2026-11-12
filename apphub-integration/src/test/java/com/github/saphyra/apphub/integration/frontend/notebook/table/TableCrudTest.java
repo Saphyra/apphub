@@ -35,6 +35,22 @@ public class TableCrudTest extends SeleniumTest {
     private static final String COLUMN_2 = "column-2";
     private static final String NEW_TABLE_TITLE = "new-table";
 
+    /**
+     * Tests CRUD operations on a standard table in the notebook module.
+     *
+     * <ul>
+     *   <li>Create table with blank title and verify error.</li>
+     *   <li>Create table with blank column name and verify error.</li>
+     *   <li>Add, remove rows and columns.</li>
+     *   <li>Move columns left/right and rows up/down.</li>
+     *   <li>Create the table and view its contents.</li>
+     *   <li>Edit title and column names, including validation errors.</li>
+     *   <li>Discard changes and verify reset state.</li>
+     *   <li>Add/remove rows and columns during edit.</li>
+     *   <li>Move columns/rows while editing.</li>
+     *   <li>Save final edits and delete the table.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void tableCrud() {
         WebDriver driver = extractDriver();

@@ -24,6 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarViewSharedEventTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Tests visibility of shared events and labels for different grant combinations.
+     *
+     * <ul>
+     *   <li>validate event visibility based on view/grant settings</li>
+     *   <li>validate label visibility with child grants</li>
+     *   <li>validate combined label and event sharing behavior</li>
+     * </ul>
+     */
     @Test(dataProvider = "eventShareCases", groups = {"fe", "calendar"})
     void eventShareVisibility(Grant firstGrant, Grant secondGrant, boolean seeOnly) {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -37,6 +46,14 @@ public class CalendarViewSharedEventTest extends SeleniumTest {
         assertOccurrenceTitle(testContext.sharedWithDriver(), parameters, seeOnly);
     }
 
+    /**
+     * Verifies that a shared label is visible based on child grant settings.
+     *
+     * <ul>
+     *   <li>Label is not visible when only VIEW_CHILDREN grant is selected.</li>
+     *   <li>Label is visible (question mark) when SEE_CHILDREN grant is selected.</li>
+     * </ul>
+     */
     @Test(dataProvider = "labelShareCases", groups = {"fe", "calendar"})
     void sharedLabelVisibility(Grant childGrant, boolean seeOnly) {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -51,6 +68,14 @@ public class CalendarViewSharedEventTest extends SeleniumTest {
         assertSharedLabelEventTitle(testContext.sharedWithDriver(), seeOnly ? Constants.QUESTION_MARK + Constants.SHARED_SUFFIX : parameters.getTitle() + Constants.SHARED_SUFFIX);
     }
 
+    /**
+     * Verifies combined sharing of a label and an event with different grant combinations.
+     *
+     * <ul>
+     *   <li>When the label has SEE_CHILDREN grant and the event has VIEW grant, the event is visible.</li>
+     *   <li>When the label has VIEW_CHILDREN grant and the event has SEE grant, the event is visible.</li>
+     * </ul>
+     */
     @Test(dataProvider = "labelAndEventShareCases", groups = {"fe", "calendar"})
     void sharedLabelAndEventVisibility(Grant labelChildGrant, Grant eventGrant) {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));

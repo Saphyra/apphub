@@ -38,6 +38,16 @@ public class LobbySettingsTest extends SeleniumTest {
     private static final String AI_NAME = "ai-%s";
     private static final String NEW_AI_NAME = "new-ai-name";
 
+    /**
+     * Tests alliance and game settings validation in a lobby.
+     *
+     * <ul>
+     *   <li>Host changes own alliance; member sees updated alliance.</li>
+     *   <li>Member cannot change alliance after host changed.</li>
+     *   <li>Changing another player's alliance updates both hosts and members.</li>
+     *   <li>Lobby settings (max players, additional solar systems, planets per system, planet size) enforce min/max constraints.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void allianceSettings() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -75,6 +85,16 @@ public class LobbySettingsTest extends SeleniumTest {
             .assertTrue();
     }
 
+    /**
+     * Tests validation of lobby game settings for various parameters.
+     *
+     * <ul>
+     *   <li>maxPlayersPerSolarSystems must be between 1 and 5.</li>
+     *   <li>additionalSolarSystems range min >=0, max <=30, min <= max.</li>
+     *   <li>planetsPerSolarSystem range min >=0, max <=10, min <= max.</li>
+     *   <li>planetSize range min >=10, max <=20, min <= max.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void gameSettings() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -224,6 +244,17 @@ public class LobbySettingsTest extends SeleniumTest {
         }
     }
 
+    /**
+     * Tests AI creation, validation, removal, alliance assignment and renaming in a lobby.
+     *
+     * <ul>
+     *   <li>AI name too short or too long triggers validation errors.</li>
+     *   <li>Host can create 10 AIs; all are present for host and member.</li>
+     *   <li>Host can remove 10 AIs; all are removed from both hosts and members.</li>
+     *   <li>AI alliance can be set by host and is reflected on member side.</li>
+     *   <li>AI can be renamed; new name appears for both hosts and members.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void ais() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -319,6 +350,14 @@ public class LobbySettingsTest extends SeleniumTest {
             .assertTrue("Ai is not renamed");
     }
 
+    /**
+     * Tests that a lobby cannot start if only one alliance is present.
+     *
+     * <ul>
+     *   <li>Host creates lobby, adds AI and changes player to new alliance; attempts to start game.</li>
+     *   <li>Error toast "Only one alliance" appears.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     void gameDoesNotStartWithOnlyOneAlliance() {
         WebDriver driver = extractDriver();

@@ -22,6 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AcceptInvitationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests accepting an invitation and forbidden operation when not invited.
+     *
+     * <ul>
+     *   <li>validate that a user without an invitation receives a forbidden error</li>
+     *   <li>verify that after accepting, the lobby contains both players</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void acceptInvitation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

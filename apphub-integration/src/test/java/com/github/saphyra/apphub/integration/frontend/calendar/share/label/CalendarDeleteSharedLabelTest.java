@@ -20,6 +20,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarDeleteSharedLabelTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Deletes a shared label when owner has DELETE grant.
+     *
+     * <ul>
+     *   <li>Owner shares label with DELETE grant.</li>
+     *   <li>Shared user deletes the label.</li>
+     *   <li>Verify label removed from both users and event remains.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void deleteSharedLabel() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -51,6 +60,15 @@ public class CalendarDeleteSharedLabelTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).hasSize(1));
     }
 
+    /**
+     * Attempts to delete a shared label without DELETE grant.
+     *
+     * <ul>
+     *   <li>Owner shares label without DELETE grant.</li>
+     *   <li>Shared user attempts deletion.</li>
+     *   <li>Verify label remains visible for both users.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void deleteSharedLabel_noGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));

@@ -13,6 +13,17 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+/**
+ * Tests that removing a role from a user prevents access to all admin‑panel pages.
+ *
+ * <ul>
+ *   <li>Verify the ban page is inaccessible.</li>
+ *   <li>Verify the disabled‑role‑management page is inaccessible.</li>
+ *   <li>Verify the migration‑tasks page is inaccessible.</li>
+ *   <li>Verify the role‑management page is inaccessible.</li>
+ *   <li>Verify the roles‑for‑all page is inaccessible.</li>
+ * </ul>
+ */
 public class AdminPanelRoleProtectionTest extends SeleniumTest {
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "admin-panel", "role-protection"})
     public void adminPanelRoleProtection(String role) {

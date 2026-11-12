@@ -30,6 +30,15 @@ public class PopulationOverviewTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
     private static final String CITIZEN_NAME_PREFIX = "citizen-";
 
+    /**
+     * Renames citizens, orders them, and verifies skill display toggling in population overview.
+     *
+     * <ul>
+     *   <li>Citizen names are updated to a new sequential prefix.</li>
+     *   <li>Citizens are ordered descending then ascending according to the new names.</li>
+     *   <li>Skill visibility toggles correctly for AIMING skill and global hide/show.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void renameAndOrderCitizens() {
         WebDriver driver = extractDriver();

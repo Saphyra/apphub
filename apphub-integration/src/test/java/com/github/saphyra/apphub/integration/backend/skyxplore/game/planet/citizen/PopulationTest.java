@@ -33,6 +33,17 @@ public class PopulationTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String NEW_NAME = "new-name";
 
+    /**
+     * Tests citizen population retrieval and renaming.
+     *
+     * <ul>
+     *   <li>Retrieves 10 citizens and validates default stats.</li>
+     *   <li>Attempts to rename with blank name – expects validation error.</li>
+     *   <li>Attempts to rename with too long name – expects validation error.</li>
+     *   <li>Attempts to rename non‑existent citizen – expects 404.</li>
+     *   <li>Renames a citizen successfully and verifies the new name.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void getAndRenameCitizens() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -29,6 +29,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class ConstructionAreaCrudTest extends BackEndTest {
+    /**
+     * Tests full CRUD lifecycle of a construction area including validation and state transitions.
+     *
+     * <ul>
+     *   <li>validate null dataId when constructing</li>
+     *   <li>prevent construction on occupied surface</li>
+     *   <li>reject unsupported construction type</li>
+     *   <li>block construction while terraforming in progress</li>
+     *   <li>construct area successfully</li>
+     *   <li>disallow deconstruction during active construction</li>
+     *   <li>cancel an ongoing construction</li>
+     *   <li>finish construction and verify state</li>
+     *   <li>deconstruct the area</li>
+     *   <li>prevent deconstruction when already under deconstruction</li>
+     *   <li>cancel a pending deconstruction</li>
+     *   <li>complete deconstruction and confirm removal</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void constructionAreaCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

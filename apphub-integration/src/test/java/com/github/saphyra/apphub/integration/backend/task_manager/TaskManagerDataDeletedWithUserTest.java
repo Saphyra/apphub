@@ -24,6 +24,15 @@ public class TaskManagerDataDeletedWithUserTest extends BackEndTest {
     private static final String ORGANIZATION_NAME = "organization-name";
     private static final String DESCRIPTION = "description";
 
+    /**
+     * Tests that deleting a user removes all related task manager data.
+     *
+     * <ul>
+     *   <li>Verifies organization and its ALMs are deleted.</li>
+     *   <li>Ensures invitations of other users are removed.</li>
+     *   <li>Confirms notifications for the deleted user are cleared.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "task-manager"})
     public void dataDeletedWithUser() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

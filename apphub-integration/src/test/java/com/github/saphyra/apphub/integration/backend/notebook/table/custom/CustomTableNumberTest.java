@@ -25,6 +25,19 @@ public class CustomTableNumberTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_COLUMN_TITLE = "new-column-title";
 
+    /**
+     * Tests CRUD operations for a custom number table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate creation fails when parsing fails</li>
+     *   <li>validate creation fails when value is null</li>
+     *   <li>validate creation fails when step is null</li>
+     *   <li>validate creation fails when step is too low</li>
+     *   <li>validate successful creation and retrieval of number data</li>
+     *   <li>validate editing updates number value and step correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableNumberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

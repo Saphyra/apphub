@@ -32,6 +32,21 @@ public class EditSharedOccurrenceTest extends BackEndTest {
     private static final String LABEL = "label";
     private static final String NOTE = "note";
 
+    /**
+     * Edits a shared occurrence and verifies updates when the user has sufficient grants.
+     *
+     * <ul>
+     *   <li>when no label grant but event grant includes VIEW + EDIT_CHILDREN</li>
+     *   <li>when event grant includes EDIT_CHILDREN + VIEW_CHILDREN only</li>
+     *   <li>when label grant includes EDIT_CHILDREN + VIEW_CHILDREN and no event grant</li>
+     *   <li>when event grant includes EDIT_CHILDREN and occurrence grant includes VIEW</li>
+     *   <li>when event grant includes VIEW_CHILDREN and occurrence grant includes EDIT</li>
+     *   <li>when label grant includes EDIT_CHILDREN and event grant none, occurrence grant includes VIEW</li>
+     *   <li>when label grant includes VIEW_CHILDREN and event grant none, occurrence grant includes EDIT</li>
+     *   <li>when label grant includes VIEW_CHILDREN and event grant includes EDIT_CHILDREN</li>
+     *   <li>when label grant includes EDIT_CHILDREN and event grant includes VIEW_CHILDREN</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "editSharedOccurrenceData")
     public void editSharedOccurrence(Set<Grant> labelGrants, Set<Grant> eventGrants, Set<Grant> occurrenceGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -124,6 +139,9 @@ public class EditSharedOccurrenceTest extends BackEndTest {
             .returns(OccurrenceStatus.SNOOZED, OccurrenceResponse::getStatus);
     }
 
+    /**
+     * Verifies that editing a shared occurrence fails when the user lacks sufficient grants.
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "editSharedOccurrence_noGrantData")
     public void editSharedOccurrence_noGrant(Set<Grant> labelGrants, Set<Grant> eventGrants, Set<Grant> occurrenceGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

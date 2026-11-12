@@ -20,6 +20,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PinTest extends BackEndTest {
     private static final String TITLE = "title";
 
+    /**
+     * Tests pinning and unpinning of a notebook item.
+     *
+     * <ul>
+     *   <li>validate pin endpoint returns error when pinned flag is null</li>
+     *   <li>validate pin action adds item to pinned list</li>
+     *   <li>validate unpin action removes item from pinned list</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void pinListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

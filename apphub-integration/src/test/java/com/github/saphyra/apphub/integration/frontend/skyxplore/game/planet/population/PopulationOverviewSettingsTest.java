@@ -26,6 +26,17 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PopulationOverviewSettingsTest extends SeleniumTest {
+    /**
+     * Saves hidden skill settings as default per planet and globally, verifies persistence and deletion.
+     *
+     * <ul>
+     *   <li>Hidden AIMING skill is saved as global default.</li>
+     *   <li>Hidden BUILDING skill is saved as planet default.</li>
+     *   <li>After reopening, defaults are applied.</li>
+     *   <li>Deleting planet defaults restores planet-specific visibility.</li>
+     *   <li>Deleting global defaults restores all skills visible.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void saveHiddenPropertiesAsDefault() {
         WebDriver driver = extractDriver();
@@ -93,6 +104,17 @@ public class PopulationOverviewSettingsTest extends SeleniumTest {
         assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_BUILDING)).isTrue();
     }
 
+    /**
+     * Saves citizen order settings as default per planet and globally, verifies persistence and deletion.
+     *
+     * <ul>
+     *   <li>Order ASCENDING with BY_STAT SATIETY is saved as global default.</li>
+     *   <li>Order DESCENDING with BY_SKILL MELEE_FIGHTING is saved as planet default.</li>
+     *   <li>After reopening, planet defaults are applied.</li>
+     *   <li>Deleting planet defaults restores global defaults.</li>
+     *   <li>Deleting global defaults restores default order and type.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void saveOrderPropertiesAsDefault() {
         WebDriver driver = extractDriver();

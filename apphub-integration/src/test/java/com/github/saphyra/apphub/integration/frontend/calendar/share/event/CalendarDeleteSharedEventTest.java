@@ -20,6 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarDeleteSharedEventTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Verifies that a user with only DELETE grant cannot delete a shared event.
+     *
+     * <ul>
+     *   <li>Attempting to delete the event results in no deletion.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void deleteSharedEvent_noGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -49,6 +56,13 @@ public class CalendarDeleteSharedEventTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).hasSize(1));
     }
 
+    /**
+     * Tests that a user with only DELETE_CHILDREN grant cannot delete an event within a shared label.
+     *
+     * <ul>
+     *   <li>Attempting to delete the event results in no deletion.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void deleteEventOfSharedLabel_noGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -81,6 +95,13 @@ public class CalendarDeleteSharedEventTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).hasSize(1));
     }
 
+    /**
+     * Tests that a user can delete an event within a shared label when both the label and event have appropriate delete grants.
+     *
+     * <ul>
+     *   <li>Event is successfully deleted.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void deleteSharedEventOfSharedLabel_onlyLabelHasGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -113,6 +134,13 @@ public class CalendarDeleteSharedEventTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(ownerDriver)).isEmpty());
     }
 
+    /**
+     * Tests that a user can delete an event within a shared label when the label has DELETE_CHILDREN grant and the event has full grants.
+     *
+     * <ul>
+     *   <li>Event is successfully deleted.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void deleteSharedEventOfSharedLabel_onlyEventHasGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -145,6 +173,13 @@ public class CalendarDeleteSharedEventTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(ownerDriver)).isEmpty());
     }
 
+    /**
+     * Tests deletion of a shared label event when the user has full grants.
+     *
+     * <ul>
+     *   <li>Label event is successfully deleted.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void deleteSharedLabelEvent() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -174,6 +209,13 @@ public class CalendarDeleteSharedEventTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).isEmpty());
     }
 
+    /**
+     * Tests deletion of a shared event when the user has full grants.
+     *
+     * <ul>
+     *   <li>Event is successfully deleted.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void deleteSharedEvent() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));

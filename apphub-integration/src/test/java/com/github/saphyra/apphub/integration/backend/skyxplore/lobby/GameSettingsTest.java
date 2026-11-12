@@ -15,10 +15,17 @@ import com.github.saphyra.apphub.integration.ws.model.WebSocketEventName;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests the default and editable game settings for a lobby.
+ *
+ * <ul>
+ *   <li>verify default settings returned by get
+ *   <li>validate various invalid values (null, too low, too high etc.)</n>
+ *   <li>verify editable settings via WebSocket
+ * </ul>
+ */
 public class GameSettingsTest extends BackEndTest {
     private static final SkyXploreGameSettings VALID_SETTINGS = SkyXploreGameSettings.builder()
         .maxPlayersPerSolarSystem(5)

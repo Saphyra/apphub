@@ -42,6 +42,18 @@ import static org.assertj.core.api.Assertions.assertThat;
  * </ul>
  */
 public class AccountDataDeletedWithUserTest extends BackEndTest {
+    /**
+     * Verifies that deleting an account removes all associated data from DynamoDB and PostgreSQL.
+     *
+     * <ul>
+     *   <li>Deletes user settings</li>
+     *   <li>Removes refresh tokens</li>
+     *   <li>Deletes profile</li>
+     *   <li>Deletes credentials</li>
+     *   <li>Clears roles</li>
+     *   <li>Unmarks deletion flag</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     public void accountDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

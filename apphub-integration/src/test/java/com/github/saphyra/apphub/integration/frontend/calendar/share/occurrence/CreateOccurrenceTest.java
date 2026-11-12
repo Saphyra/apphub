@@ -23,6 +23,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateOccurrenceTest extends SeleniumTest {
+    /**
+     * Tests creating an occurrence on a shared calendar event and verifies that the occurrence is correctly displayed for both the owner and the shared user.
+     *
+     * <ul>
+     *   <li>Creates a one‑time event as the owner.</li>
+     *   <li>Shares the event with another user granting view and view children permissions.</li>
+     *   <li>As the shared user, creates an occurrence on the next month.</li>
+     *   <li>Verifies that the occurrence appears for both users with correct titles.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void createOccurrenceToSharedEvent() {
         List<WebDriver> drivers = extractDrivers(2);

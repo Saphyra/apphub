@@ -74,6 +74,14 @@ public class CloneListItemTest extends SeleniumTest {
     );
     private static final String CUSTOM_TABLE_LINK_URL = UserEndpoints.ACCOUNT_PAGE;
 
+    /**
+     * Tests cloning a list item and verifying its content and state.
+     * <ul>
+     *   <li>Creates categories, items, pins and archives them.</li>
+     *   <li>Clones the category, edits it, and verifies all child items are cloned.</li>
+     *   <li>Checks that pinned items count is doubled after cloning.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void cloneListItem() {
         WebDriver driver = extractDriver();

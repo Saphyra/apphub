@@ -28,6 +28,15 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
     private static final String TITLE_4 = "title-4";
     private static final String TITLE_5 = "title-5";
 
+    /**
+     * Tests retrieval of children for a category, including validation of invalid type
+     * and correct listing of child categories and text items.
+     *
+     * <ul>
+     *   <li>validate invalid type error</li>
+     *   <li>retrieve children correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void getChildrenOfCategory() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

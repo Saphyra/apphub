@@ -31,6 +31,17 @@ public class AiSettingsTest extends BackEndTest {
         .build();
     private static final String NEW_AI_NAME = "new-ai-name";
 
+    /**
+     * Tests AI CRUD operations and validation.
+     *
+     * <ul>
+     *   <li>validate null, short, long names are rejected</li>
+     *   <li>verify alliance id must exist when creating AI</li>
+     *   <li>ensure host can create up to 10 AIs and receive events</li>
+     *   <li>check rename operation updates name correctly</li>
+     *   <li>confirm deletion removes AI from list and emits removal event</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     void aiCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -17,6 +17,16 @@ public class CategoryTreeTest extends BackEndTest {
     private static final String TITLE_1 = "title-1";
     private static final String TITLE_2 = "title-2";
 
+    /**
+     * Tests retrieval of the category tree, ensuring that a root and child
+     * categories are correctly returned.
+     *
+     * <ul>
+     *   <li>create root category</li>
+     *   <li>create child category under root</li>
+     *   <li>verify tree structure matches expectations</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void getCategoryTree() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

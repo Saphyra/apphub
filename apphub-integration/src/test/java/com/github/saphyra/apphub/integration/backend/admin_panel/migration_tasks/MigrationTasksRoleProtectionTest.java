@@ -12,6 +12,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class MigrationTasksRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests role protection for migration task endpoints.
+     * <ul>
+     *   <li>Ensures that protected actions are blocked when the user lacks the required role.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void migrationTasksRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -21,7 +27,6 @@ public class MigrationTasksRoleProtectionTest extends BackEndTest {
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
-
 
         CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getGetMigrationTasksResponse(getServerPort(), accessToken));
         CommonUtils.verifyMissingRole(() -> MigrationTasksActions.getTriggerTaskResponse(getServerPort(), accessToken, ""));

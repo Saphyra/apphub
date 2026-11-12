@@ -19,6 +19,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+/**
+ * Tests that deleting a user removes all related community data from tables.
+ *
+ * <ul>
+ *   <li>creates blacklist, group, friend request and friendship for the user.</li>
+ *   <li>verifies records exist before deletion.</li>
+ *   <li>deletes account via AccountActions.</li>
+ *   <li>waits until all community tables are empty for that user.</li>
+ * </ul>
+ */
 public class CommunityDataDeletedWithUserTest extends BackEndTest {
     private static final String GROUP_NAME = "group-name";
     private static final Map<String, String> COMMUNITY_TABLES = CollectionUtils.toMap(

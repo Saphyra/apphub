@@ -16,6 +16,30 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreLobbyRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests that lobby endpoints enforce role protection.
+     *
+     * <ul>
+     *   <li>verify missing platform role blocks isUserInLobby endpoint</li>
+     *   <li>verify missing platform role blocks createLobby endpoint</li>
+     *   <li>verify missing platform role blocks lobby view endpoint</li>
+     *   <li>verify missing platform role blocks exitFromLobby endpoint</li>
+     *   <li>verify missing platform role blocks inviteToLobby endpoint</li>
+     *   <li>verify missing platform role blocks acceptInvitation endpoint</li>
+     *   <li>verify missing platform role blocks lobbyPlayers endpoint</li>
+     *   <li>verify missing platform role blocks startGame endpoint</li>
+     *   <li>verify missing platform role blocks activeFriends endpoint</li>
+     *   <li>verify missing platform role blocks loadGame endpoint</li>
+     *   <li>verify missing settings role blocks editSettings endpoint</li>
+     *   <li>verify missing settings role blocks gameSettings endpoint</li>
+     *   <li>verify missing settings role blocks createOrModifyAi endpoint</li>
+     *   <li>verify missing settings role blocks removeAi endpoint</li>
+     *   <li>verify missing settings role blocks ais endpoint</li>
+     *   <li>verify missing settings role blocks alliances endpoint</li>
+     *   <li>verify missing settings role blocks changeAllianceOfPlayer endpoint</li>
+     *   <li>verify missing settings role blocks changeAllianceOfAi endpoint</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void lobbyRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

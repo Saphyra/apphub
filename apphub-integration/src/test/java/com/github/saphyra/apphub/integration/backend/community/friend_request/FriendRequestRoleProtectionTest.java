@@ -13,6 +13,18 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+/**
+ * Tests that friend request endpoints enforce required roles.
+ *
+ * <ul>
+ *   <li>search endpoint requires role.</li>
+ *   <li>sent requests endpoint requires role.</li>
+ *   <li>received requests endpoint requires role.</li>
+ *   <li>create friend request endpoint requires role.</li>
+ *   <li>delete friend request endpoint requires role.</li>
+ *   <li>accept friend request endpoint requires role.</li>
+ * </ul>
+ */
 public class FriendRequestRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community", "role-protection"})
     public void friendRequestRoleProtection(String role) {
@@ -26,7 +38,7 @@ public class FriendRequestRoleProtectionTest extends BackEndTest {
 
         CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSearchResponse(getServerPort(), accessToken, ""));
         CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSentFriendRequestsResponse(getServerPort(), accessToken));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getReceivedFriendRequeestsResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getReceivedFriendRequestsResponse(getServerPort(), accessToken));
         CommonUtils.verifyMissingRole(() -> FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessToken, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> FriendRequestActions.getDeleteFriendRequestResponse(getServerPort(), accessToken, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> FriendRequestActions.getAcceptFriendRequestResponse(getServerPort(), accessToken, UUID.randomUUID()));

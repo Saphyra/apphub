@@ -22,6 +22,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarCreateAndShareEventTest extends SeleniumTest {
+    /**
+     * Creates an event and shares it with another user, then verifies that the shared user can see the event.
+     *
+     * <ul>
+     *   <li>validate that shared user sees event after sharing</li>
+     * </ul>
+     */
+
     @Test(groups = {"fe", "calendar"})
     public void createAndShareEvent() {
         // Setup two drivers

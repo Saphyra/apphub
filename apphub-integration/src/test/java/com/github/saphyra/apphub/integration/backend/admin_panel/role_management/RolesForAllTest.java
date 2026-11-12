@@ -20,6 +20,15 @@ import static com.github.saphyra.apphub.integration.framework.DataConstants.INCO
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RolesForAllTest extends BackEndTest {
+    /**
+     * Tests adding and removing a role for all users.
+     * <ul>
+     *   <li>Verifies that adding the role to all users succeeds when authenticated.</li>
+     *   <li>Checks that attempting to add with an incorrect password triggers an error.</li>
+     *   <li>Ensures that adding with a restricted role is forbidden.</li>
+     *   <li>Confirms removal of the role from all users works correctly.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     @PermitCount(value = PermitCount.PermitCountType.ALL)

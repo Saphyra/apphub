@@ -79,6 +79,15 @@ public class CloneListItemTest extends BackEndTest {
     private static final String CUSTOM_TABLE_COLUMN_LINK_LABEL = "custom-table-column-link-label";
     private static final String CUSTOM_TABLE_COLUMN_LINK_URL = "custom-table-column-link-url";
 
+    /**
+     * Tests cloning of list items, including handling of non‑existent items
+     * and verifying that the cloned item retains all properties.
+     *
+     * <ul>
+     *   <li>validate list item not found error</li>
+     *   <li>clone item successfully and verify archived & pinned status</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void cloneListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

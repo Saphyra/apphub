@@ -20,6 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeleteLabelTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Tests deleting a shared calendar label.
+     *
+     * <ul>
+     *   <li>validate that a user with DELETE and VIEW grants can delete the label, which is removed from both owner and shared views</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void deleteLabel() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -53,6 +60,13 @@ public class DeleteLabelTest extends BackEndTest {
         assertThat(CalendarLabelActions.getLabels(getServerPort(), ownerToken)).isEmpty();
     }
 
+    /**
+     * Tests deletion of a shared calendar label without DELETE grant.
+     *
+     * <ul>
+     *   <li>validate that a user lacking DELETE grant receives 404 when attempting to delete the label</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void deleteLabel_noGrant() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

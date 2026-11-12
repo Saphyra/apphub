@@ -22,6 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarSearchEventsTest extends BackEndTest {
     private static final String SEARCH_TEXT = "search-text";
 
+    /**
+     * Tests searching calendar events by title, content or occurrence note.
+     *
+     * <ul>
+     *   <li>Validates that searchText shorter than minimum length returns TOO_SHORT error.</li>
+     *   <li>Ensures events with matching title, content or occurrence note are returned.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchEventsTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

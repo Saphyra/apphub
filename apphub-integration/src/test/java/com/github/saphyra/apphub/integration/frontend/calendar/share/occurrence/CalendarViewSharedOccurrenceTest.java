@@ -21,6 +21,13 @@ public class CalendarViewSharedOccurrenceTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
     private static final String NOTE = "note";
 
+    /**
+     * Verifies note visibility on a shared occurrence based on whether the occurrence itself is shared.
+     * <ul>
+     *   <li>When the occurrence is not shared, the note should be hidden.</li>
+     *   <li>When the occurrence is shared, the note should be visible.</li>
+     * </ul>
+     */
     @Test(dataProvider = "visibilityCases", groups = {"fe", "calendar"})
     public void sharedOccurrenceVisibility(boolean shareOccurrence, boolean expectedNoteVisible) {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));

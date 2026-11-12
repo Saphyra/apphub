@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum Feature {
     ROLE_TEST,
+    MIGRATION_TASK,
     ;
 
     @Getter

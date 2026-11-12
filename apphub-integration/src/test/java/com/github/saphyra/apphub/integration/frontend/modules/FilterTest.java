@@ -13,6 +13,15 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FilterTest extends SeleniumTest {
+    /**
+     * Tests the module search functionality.
+     *
+     * <ul>
+     *   <li>Search with no results returns an empty list.</li>
+     *   <li>Searching by category name shows that single category and its modules.</li>
+     *   <li>Searching by partial module name resets, then searching a random term shows the correct module.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "modules"})
     public void searchModule() {
         WebDriver driver = extractDriver();

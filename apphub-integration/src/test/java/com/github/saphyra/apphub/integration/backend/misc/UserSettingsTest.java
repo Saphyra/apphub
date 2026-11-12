@@ -20,6 +20,12 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserSettingsTest extends BackEndTest {
+    /**
+     * Tests user settings access and validation.
+     * <ul>
+     *   <li>verifies that a user without the ACCESS role receives a missing‑role error when querying or updating settings</li>
+     * </ul>
+     */
     @Test(groups = {"be", "misc"})
     public void userSettingsRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -34,6 +40,12 @@ public class UserSettingsTest extends BackEndTest {
     }
 
 
+    /**
+     * Tests user settings functionality and validation.
+     * <ul>
+     *   <li>verifies default settings retrieval, blank key handling, category not found, unsupported key, and successful update of a setting</li>
+     * </ul>
+     */
     @Test(groups = {"be", "misc"})
     public void userSettingsTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

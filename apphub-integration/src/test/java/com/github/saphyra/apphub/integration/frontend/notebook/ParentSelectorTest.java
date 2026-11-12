@@ -22,6 +22,15 @@ public class ParentSelectorTest extends SeleniumTest {
     private static final String CONTENT = "content";
     private static final String PARENT_TITLE = "parent-title";
 
+    /**
+     * Tests that when a new text item is created under a category, the parent selector defaults to that category.
+     *
+     * <ul>
+     *   <li>Creates a category and a text item within it.</li>
+     *   <li>Selects a new list item of type TEXT.</li>
+     *   <li>Verifies that the default parent is the previously created category.</li>
+     * </ul>
+     */
     @Test(groups = {"notebook", "fe"})
     public void selectParentAsDefaultIfListItemNotACategory() {
         WebDriver driver = extractDriver();

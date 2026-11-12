@@ -13,6 +13,15 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class SkyXploreCharacterRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests that a user lacking the required SkyXplore or Access role is denied access to character endpoints.
+     *
+     * <ul>
+     *   <li>validate GET /skyxplore/character/name returns 403 when called without proper role</li>
+     *   <li>validate POST /skyxplore/character/create returns 403 when called without proper role</li>
+     *   <li>validate GET /skyxplore/character/exist returns 403 when called without proper role</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void characterRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

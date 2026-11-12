@@ -26,6 +26,7 @@
         Log if new entity is discovered
         Migrate Settlement to add FK to star_system_id and body_id
         Migrate StationService and StationEconomy to add FK to station_id
+    Add short description for every integration test
 
 ===Manual Release Steps===
     Pre deployment

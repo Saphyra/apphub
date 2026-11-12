@@ -31,6 +31,15 @@ public class RepeatDaysOfMonthEventTest extends BackEndTest {
     private static final Integer REPEAT_FOR_DAYS = 2;
     private static final Integer NEW_REPEAT_FOR_DAYS = 3;
 
+    /**
+     * Tests creating, editing and verifying a days‑of‑month event with repeatForDays.
+     *
+     * <ul>
+     *   <li>Creates an event with repeatForDays=2.</li>
+     *   <li>Edits the event to repeatForDays=3.</li>
+     *   <li>Verifies that occurrences are generated correctly for both settings.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void repeatDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

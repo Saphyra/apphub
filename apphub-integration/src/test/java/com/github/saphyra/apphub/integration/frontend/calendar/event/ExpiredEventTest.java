@@ -23,6 +23,14 @@ public class ExpiredEventTest extends SeleniumTest {
     private static final LocalDate START_DATE = CURRENT_DATE.minusDays(3);
     private static final LocalDate END_DATE = CURRENT_DATE.plusDays(3);
 
+    /**
+     * Tests hiding of an expired calendar event.
+     *
+     * <ul>
+     *   <li>Creates an expired event, opens it, hides it, and verifies it is no longer listed.</li>
+     *   <li>Confirms that the hidden event does not appear in the list after hide action.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void hideExpiredEvent() {
         WebDriver driver = CalendarFlow.init(getServerPort(), extractDriver()).driver();
@@ -46,6 +54,14 @@ public class ExpiredEventTest extends SeleniumTest {
             .assertTrue("Expired event is not hidden.");
     }
 
+    /**
+     * Tests extending an expired calendar event.
+     *
+     * <ul>
+     *   <li>Creates and shares an expired event, verifies notification for owner only.</li>
+     *   <li>Extends the event's end date and confirms it is removed from expired list.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void extendExpiredEvent() {
         List<CalendarFlow.Context> contexts = CalendarFlow.init(getServerPort(), extractDrivers(2));

@@ -20,6 +20,14 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CalendarEventValidationTest extends BackEndTest {
+    /**
+     * Tests validation rules for creating and editing calendar events.
+     *
+     * <ul>
+     *   <li>Creates one‑time, every‑X‑days, days‑of‑week and days‑of‑month events.</li>
+     *   <li>Verifies that all required fields are validated for both creation and edit.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void calendarEventValidation() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

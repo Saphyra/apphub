@@ -25,6 +25,14 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends SeleniumTest {
+    /**
+     * Tests account deletion flow.
+     * <ul>
+     *   <li>empty password validation</li>
+     *   <li>incorrect password leading to lock after 3 attempts</li>
+     *   <li>successful deletion and subsequent login failure</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "account"})
     public void deleteAccount() {
         WebDriver driver = extractDriver();

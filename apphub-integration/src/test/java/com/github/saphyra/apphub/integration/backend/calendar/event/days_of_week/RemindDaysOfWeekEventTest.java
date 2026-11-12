@@ -32,6 +32,15 @@ public class RemindDaysOfWeekEventTest extends BackEndTest {
     private static final Integer REMIND_ME_BEFORE_DAYS = 2;
     private static final int NEW_REMIND_ME_BEFORE_DAYS = 1;
 
+    /**
+     * Tests creation and editing of a days‑of‑week event with reminder settings.
+     *
+     * <ul>
+     *   <li>Validate that creating an event with remindMeBeforeDays=2 returns correct data.</li>
+     *   <li>Validate that editing the event to remindMeBeforeDays=1 updates the field.</li>
+     *   <li>Validate that reminder and pending statuses appear on expected dates.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void remindDaysOfWeekEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

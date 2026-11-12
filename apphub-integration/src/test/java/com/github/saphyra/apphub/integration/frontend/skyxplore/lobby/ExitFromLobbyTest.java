@@ -20,6 +20,14 @@ import java.util.List;
 public class ExitFromLobbyTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests that members and host can leave lobby correctly, ensuring invitations are removed and host exit triggers member redirection.
+     *
+     * <ul>
+     *   <li>Member leaves lobby after being invited; invitation is cancelled.</li>
+     *   <li>Host leaves lobby; remaining members are redirected to main menu.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void exitFromLobby() {
         List<WebDriver> drivers = extractDrivers(4);

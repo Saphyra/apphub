@@ -29,6 +29,20 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TerraformTest extends BackEndTest {
+    /**
+     * Tests the terraforming lifecycle including validation of surface type,
+     * occupancy, incompatibility, successful terraformation, duplicate request
+     * handling and cancellation.
+     *
+     * <ul>
+     *   <li>validate endpoint /terraform with invalid surfaceType returns error</li>
+     *   <li>error when attempting to terraform occupied surface</li>
+     *   <li>forbidden operation for incompatible surface type</li>
+     *   <li>successful terraformation creates queue item and updates surface</li>
+     *   <li>error when terraforming already in progress</li>
+     *   <li>cancel terraformation removes pending queue and clears surface</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void terraformCD() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -108,6 +122,13 @@ public class TerraformTest extends BackEndTest {
         assertThat(modifiedSurfaceResponse.getTerraformation()).isNull();
     }
 
+    /**
+     * Tests completion of a terraformation after the game is unpaused.
+     *
+     * <ul>
+     *   <li>verifies that after waiting, surface type changes to target and terraformation field cleared</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void finishTerraformation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

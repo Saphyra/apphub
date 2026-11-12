@@ -25,6 +25,15 @@ public class RemindEveryXDaysEventTest extends BackEndTest {
     private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS);
     private static final int NEW_REMIND_ME_BEFORE_DAYS = 1;
 
+    /**
+     * Tests reminder logic for a recurring event with {@link RepetitionType#EVERY_X_DAYS}.
+     *
+     * <ul>
+     *   <li>Creates an event with a reminder set before each occurrence.</li>
+     *   <li>Edits the event to change the reminder offset.</li>
+     *   <li>Verifies that reminder and pending statuses are correctly assigned for all occurrences.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void remindEveryXDaysEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

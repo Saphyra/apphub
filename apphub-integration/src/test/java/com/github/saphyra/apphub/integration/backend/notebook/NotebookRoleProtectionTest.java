@@ -36,6 +36,13 @@ import java.util.Collections;
 import java.util.UUID;
 
 public class NotebookRoleProtectionTest extends BackEndTest {
+    /**
+     * Ensures that users lacking required roles cannot access notebook endpoints.
+     *
+     * <ul>
+     *   <li>verify missing role for text, table, pin, only‑title, list item, link, image, file, checklist and category actions</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "notebook", "role-protection"})
     public void notebookRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

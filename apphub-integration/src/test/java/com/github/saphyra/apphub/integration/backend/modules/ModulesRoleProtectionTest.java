@@ -11,6 +11,14 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import org.testng.annotations.Test;
 
 public class ModulesRoleProtectionTest extends BackEndTest {
+    /**
+     * Verifies that users without the required role receive a missing‑role error when accessing module endpoints.
+     *
+     * <ul>
+     *   <li>User is registered and then stripped of ROLE_ACCESS.</li>
+     *   <li>Login succeeds but subsequent calls to /modules and set‑as‑favorite return a missing‑role response.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "modules", "role-protection"})
     public void modulesRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

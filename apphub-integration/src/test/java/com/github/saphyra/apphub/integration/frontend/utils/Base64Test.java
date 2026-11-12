@@ -19,6 +19,13 @@ public class Base64Test extends SeleniumTest {
     public static final String ENCODED_TEXT = Base64.getEncoder()
         .encodeToString(TEXT_TO_ENCODE.getBytes());
 
+    /**
+     * Tests Base64 encoding and decoding functionality.
+     * <ul>
+     *   <li>Encodes a known text and verifies the output matches expected Base64 string.</li>
+     *   <li>Decodes the previously encoded string and verifies it returns the original text.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "utils"})
     public void encodeDecodeBase64() {
         WebDriver driver = extractDriver();

@@ -27,6 +27,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PriorityTest extends BackEndTest {
     private static final String GAME_NAME = "game";
 
+    /**
+     * Tests priority handling for a planet, covering retrieval of default priorities,
+     * validation of unknown type, bounds checks and successful update.
+     *
+     * <ul>
+     *   <li>validate endpoint getPriorities returns all priorities with default value</li>
+     *   <li>validate endpoint updatePriority with unknown priorityType returns error</li>
+     *   <li>validate endpoint updatePriority with too low priority returns error</li>
+     *   <li>validate endpoint updatePriority with too high priority returns error</li>
+     *   <li>validate successful update of priority</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void testPriorities() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

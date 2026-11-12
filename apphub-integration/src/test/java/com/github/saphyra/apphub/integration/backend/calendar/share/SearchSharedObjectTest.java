@@ -28,6 +28,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SearchSharedObjectTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Tests searching events of a shared label with view children permission.
+     * <ul>
+     *   <li>Creates a label and shares it.</li>
+     *   <li>Creates an event under the label.</li>
+     *   <li>Searches for the event as owner and verifies result.</li>
+     *   <li>Searches as shared user and verifies result.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchEventOfSharedLabel_viewChildren() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -70,6 +79,15 @@ public class SearchSharedObjectTest extends BackEndTest {
             .returns(eventId, EventResponse::getEventId);
     }
 
+    /**
+     * Tests searching events of a shared label with see children permission.
+     * <ul>
+     *   <li>Creates a label and shares it with SEE_CHILDREN.</li>
+     *   <li>Creates an event under the label.</li>
+     *   <li>Searches for the event as owner and verifies result.</li>
+     *   <li>Searches as shared user expecting no results.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchEventOfSharedLabel_seeChildren() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -110,6 +128,14 @@ public class SearchSharedObjectTest extends BackEndTest {
         assertThat(CalendarEventActions.search(getServerPort(), sharedWithToken, createEventRequest.getTitle())).isEmpty();
     }
 
+    /**
+     * Tests searching a shared event with view permission.
+     * <ul>
+     *   <li>Creates an event and shares it.</li>
+     *   <li>Searches for the event as owner and verifies result.</li>
+     *   <li>Searches as shared user and verifies result.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchSharedEvent_view() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -145,6 +171,14 @@ public class SearchSharedObjectTest extends BackEndTest {
             .returns(eventId, EventResponse::getEventId);
     }
 
+    /**
+     * Tests searching a shared event with see permission.
+     * <ul>
+     *   <li>Creates an event and shares it with SEE.</li>
+     *   <li>Searches for the event as owner and verifies result.</li>
+     *   <li>Searches as shared user expecting no results.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchSharedEvent_see() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -178,6 +212,15 @@ public class SearchSharedObjectTest extends BackEndTest {
         assertThat(CalendarEventActions.search(getServerPort(), sharedWithToken, createEventRequest.getTitle())).isEmpty();
     }
 
+    /**
+     * Tests searching occurrences of a shared label with view children permission.
+     * <ul>
+     *   <li>Creates a label, shares it, creates an event and occurrence.</li>
+     *   <li>Edits the occurrence.</li>
+     *   <li>Searches for the occurrence as owner and verifies result.</li>
+     *   <li>Searches as shared user and verifies result.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchOccurrenceOfSharedLabel_viewChildren() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -228,6 +271,15 @@ public class SearchSharedObjectTest extends BackEndTest {
             .returns(eventId, EventResponse::getEventId);
     }
 
+    /**
+     * Tests searching occurrences of a shared label with see children permission.
+     * <ul>
+     *   <li>Creates a label, shares it with SEE_CHILDREN, creates an event and occurrence.</li>
+     *   <li>Edits the occurrence.</li>
+     *   <li>Searches for the occurrence as owner and verifies result.</li>
+     *   <li>Searches as shared user expecting no results.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchOccurrenceOfSharedLabel_seeChildren() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -276,6 +328,14 @@ public class SearchSharedObjectTest extends BackEndTest {
         assertThat(CalendarEventActions.search(getServerPort(), sharedWithToken, editOccurrenceRequest.getNote())).isEmpty();
     }
 
+    /**
+     * Tests searching occurrences of a shared event with view children permission.
+     * <ul>
+     *   <li>Creates an event, shares it, creates and edits an occurrence.</li>
+     *   <li>Searches for the occurrence as owner and verifies result.</li>
+     *   <li>Searches as shared user and verifies result.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchOccurrenceOfSharedEvent_viewChildren() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -319,6 +379,14 @@ public class SearchSharedObjectTest extends BackEndTest {
             .returns(eventId, EventResponse::getEventId);
     }
 
+    /**
+     * Tests searching occurrences of a shared event with see children permission.
+     * <ul>
+     *   <li>Creates an event, shares it with SEE_CHILDREN, creates and edits an occurrence.</li>
+     *   <li>Searches for the occurrence as owner and verifies result.</li>
+     *   <li>Searches as shared user expecting no results.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchOccurrenceOfSharedEvent_seeChildren() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -360,6 +428,15 @@ public class SearchSharedObjectTest extends BackEndTest {
         assertThat(CalendarEventActions.search(getServerPort(), sharedWithToken, editOccurrenceRequest.getNote())).isEmpty();
     }
 
+    /**
+     * Tests searching a shared occurrence with view permission.
+     * <ul>
+     *   <li>Creates an event, creates and edits an occurrence.</li>
+     *   <li>Shares the occurrence with VIEW.</li>
+     *   <li>Searches for the occurrence as owner and verifies result.</li>
+     *   <li>Searches as shared user and verifies result.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchSharedOccurrence_view() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -403,6 +480,15 @@ public class SearchSharedObjectTest extends BackEndTest {
             .returns(eventId, EventResponse::getEventId);
     }
 
+    /**
+     * Tests searching a shared occurrence with see permission.
+     * <ul>
+     *   <li>Creates an event, creates and edits an occurrence.</li>
+     *   <li>Shares the occurrence with SEE.</li>
+     *   <li>Searches for the occurrence as owner and verifies result.</li>
+     *   <li>Searches as shared user expecting no results.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void searchSharedOccurrence_see() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

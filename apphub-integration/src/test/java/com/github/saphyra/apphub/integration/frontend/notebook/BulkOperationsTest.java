@@ -21,6 +21,13 @@ public class BulkOperationsTest extends SeleniumTest {
     private static final String LIST_ITEM_2 = "list-item-2";
     private static final String LIST_ITEM_3 = "list-item-3";
 
+    /**
+     * Tests bulk operations on notebook list items.
+     * <ul>
+     *   <li>Verifies select all/unselect all and individual selection.</li>
+     *   <li>Tests archive, unarchive, pin, unpin, and delete actions for selected items.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void bulkOperations() {
         WebDriver driver = extractDriver();

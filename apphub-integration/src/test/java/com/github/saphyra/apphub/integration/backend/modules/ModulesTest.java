@@ -19,6 +19,19 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesTest extends BackEndTest {
+    /**
+     * Tests retrieval of modules for a newly registered user.
+     *
+     * <ul>
+     *   <li>GET /modules returns accounts, office, development-utils groups.</li>
+     *   <li>Module 'account' has correct URL and favorite=false.</li>
+     *   <li>Office group contains notebook and calendar with correct URLs.</li>
+     *   <li>Training modules include html, css, basics-of-programming, javascript with correct URLs.</li>
+     *   <li>Development utils modules contain json-formatter and base64 encoder.</li>
+     *   <li>If skyxplore feature enabled, game group contains skyxplore module.</li>
+     *   <li>If community feature enabled, community group contains community module.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "modules"})
     public void getModules() {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
@@ -114,6 +127,15 @@ public class ModulesTest extends BackEndTest {
         }
     }
 
+    /**
+     * Tests setting a module as favorite and error handling for invalid inputs.
+     *
+     * <ul>
+     *   <li>Unknown module returns validation error.</li>
+     *   <li>Null favorite value triggers validation error.</li>
+     *   <li>Valid request sets favorite flag correctly.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "modules"})
     public void setAsFavorite() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

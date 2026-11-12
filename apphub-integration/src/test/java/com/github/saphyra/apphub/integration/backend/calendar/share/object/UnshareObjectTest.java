@@ -19,6 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UnshareObjectTest extends BackEndTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Tests unsharing a shared object and access control.
+     * <ul>
+     *   <li>unshare label by owner</li>
+     *   <li>verify no access after unshare</li>
+     *   <li>prevent non‑owner from unsharing</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void unshareObject() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

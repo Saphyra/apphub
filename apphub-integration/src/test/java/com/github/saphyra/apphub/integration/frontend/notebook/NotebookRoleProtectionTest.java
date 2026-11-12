@@ -14,6 +14,15 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class NotebookRoleProtectionTest extends SeleniumTest {
+    /**
+     * Tests role protection for notebook module endpoints.
+     *
+     * <ul>
+     *   <li>Removes NOTEBOOK role and verifies access to notebook page is denied.</li>
+     *   <li>Verifies all new item creation routes are blocked when role missing.</li>
+     *   <li>Checks edit route is inaccessible without the required role.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "notebook", "role-protection"})
     public void notebookRoleProtection(String role) {
         WebDriver driver = extractDriver();

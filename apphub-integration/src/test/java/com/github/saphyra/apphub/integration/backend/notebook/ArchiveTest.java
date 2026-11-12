@@ -21,6 +21,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ArchiveTest extends BackEndTest {
     private static final String TITLE = "title";
 
+    /**
+     * Tests archiving and unarchiving a text item.
+     *
+     * <ul>
+     *   <li>validate null archived param error</li>
+     *   <li>archive item</li>
+     *   <li>unarchive item</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void archiveListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

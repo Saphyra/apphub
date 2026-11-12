@@ -26,6 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarIndexOccurrenceStatusTest extends SeleniumTest {
     private static final LocalDate CURRENT_DATE = LocalDate.now();
 
+    /**
+     * Tests the lifecycle of an occurrence's status on the calendar index page.
+     *
+     * <ul>
+     *   <li>Create a one‑time event; mark it DONE and verify status is DONE for both date views.</li>
+     *   <li>Mark the same event SNOOZED and verify status updates to SNOOZED.</li>
+     *   <li>Reset the status back to PENDING and confirm the change.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void occurrenceStatus() {
         WebDriver driver = extractDriver();

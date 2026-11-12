@@ -26,6 +26,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeleteSharedEventTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Deletes a shared event with various grant combinations and verifies that the owner no longer sees it.
+     *
+     * <ul>
+     *   <li>Owner grants DELETE, event grants DELETE: shared user deletes successfully.</li>
+     *   <li>Owner grants DELETE_CHILDREN, event grants DELETE: shared user deletes successfully.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "deleteSharedEventData")
     public void deleteSharedEvent(Set<Grant> labelGrants, Set<Grant> eventGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -76,6 +84,9 @@ public class DeleteSharedEventTest extends BackEndTest {
         assertThat(CalendarEventActions.getEvents(getServerPort(), ownerToken)).isEmpty();
     }
 
+    /**
+     * Attempts to delete a shared event without sufficient grants and verifies that the operation fails.
+     */
     @Test(groups = {"be", "calendar"})
     public void deleteSharedEvent_noGrant() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

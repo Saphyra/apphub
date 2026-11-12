@@ -19,8 +19,13 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class CalendarEventPageValidationTest extends SeleniumTest {
-    private static final String LABEL_1 = "label-1";
-
+    /**
+     * Tests validation of event creation fields.
+     *
+     * <ul>
+     *   <li>Verifies that empty start date, end before start, blank title, and missing repetition days trigger errors.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void eventPageValidation() {
         WebDriver driver = extractDriver();
@@ -39,6 +44,14 @@ public class CalendarEventPageValidationTest extends SeleniumTest {
         daysOfMonth_noDaySelected(driver);
     }
 
+    /**
+     * Tests validation of label creation on the event page.
+     *
+     * <ul>
+     *   <li>Attempts to add a too‑short label and expects an error toast.</li>
+     *   <li>Attempts to add a too‑long label and expects an error toast.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void createEventLabelValidation() {
         WebDriver driver = extractDriver();

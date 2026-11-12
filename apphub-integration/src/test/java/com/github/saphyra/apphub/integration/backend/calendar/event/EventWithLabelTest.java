@@ -25,6 +25,15 @@ public class EventWithLabelTest extends BackEndTest {
     private static final String LABEL_2 = "label-2";
     private static final String EVENT_WITH_LABEL_TITLE = "event-with-label";
 
+    /**
+     * Tests adding, editing and removing labels on an event.
+     *
+     * <ul>
+     *   <li>Creates a label and verifies that events can be retrieved by that label.</li>
+     *   <li>Edits the event to change its label and checks that it is no longer returned for the old label but appears for the new one.</li>
+     *   <li>Removes all labels from the event and confirms it is not listed under any label.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void eventWithLabel() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -58,6 +67,13 @@ public class EventWithLabelTest extends BackEndTest {
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).hasSize(2);
     }
 
+    /**
+     * Tests retrieving events that have no labels.
+     *
+     * <ul>
+     *   <li>Creates an event with a label and another without; verifies only the unlabeled event is returned.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void getEventsWithoutLabel(){
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -23,6 +23,18 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BuildingModuleCrudTest extends SeleniumTest {
+    /**
+     * Tests CRUD operations on building modules within a construction area.
+     *
+     * <ul>
+     *   <li>Creates a HAMSTER_WHEEL module in BASIC_POWER_SUPPLY category and verifies it is under construction.</li>
+     *   <li>Cancels the construction and ensures the module is removed from the area.</li>
+     *   <li>Completes the construction after game resume and confirms it is no longer in progress.</li>
+     *   <li>Initiates deconstruction, waits for deconstruction to start, then verifies deconstruction status.</li>
+     *   <li>Cancels the deconstruction and checks that construction is not in progress.</li>
+     *   <li>Finishes deconstruction and ensures the module is removed from the area.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void buildingModuleCrud() {
         WebDriver driver = extractDriver();

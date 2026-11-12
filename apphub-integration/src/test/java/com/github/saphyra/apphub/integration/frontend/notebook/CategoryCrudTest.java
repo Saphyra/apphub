@@ -31,6 +31,13 @@ public class CategoryCrudTest extends SeleniumTest {
     private static final String CATEGORY_2_TITLE = "category-2";
     private static final String NEW_CATEGORY_TITLE = "new-category-title";
 
+    /**
+     * Tests CRUD operations for notebook categories.
+     * <ul>
+     *   <li>Creates, edits (empty and valid titles), and deletes a category.</li>
+     *   <li>Verifies the category tree updates after each operation.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void categoryCrud() {
         WebDriver driver = extractDriver();
@@ -120,6 +127,13 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(NotebookActions.getCategoryTree(driver).hasChildren()).isFalse();
     }
 
+    /**
+     * Tests the expansion and collapse behavior of the notebook category tree.
+     * <ul>
+     *   <li>Verifies initial state, opening child categories, and loading content.</li>
+     *   <li>Checks that closing a node updates its opened flag.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void categoryTreeTest() {
         WebDriver driver = extractDriver();

@@ -16,6 +16,13 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EliteBaseMeritMinerTest extends SeleniumTest {
+    /**
+     * Tests that the Merit Miner page displays offers after user login and navigation.
+     *
+     * <ul>
+     *   <li>Verifies that offers list is not empty when accessing Merit Miner subpage.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "elite-base"})
     public void meritMiner() {
         WebDriver driver = extractDriver();

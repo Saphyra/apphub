@@ -25,8 +25,25 @@ public class CustomTableRangeTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_COLUMN_TITLE = "new-column-title";
 
+    /**
+     * Tests CRUD operations for a custom range table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate creation fails when parsing fails</li>
+     *   <li>validate creation fails when value is null</li>
+     *   <li>validate creation fails when step is null</li>
+     *   <li>validate creation fails when step is too low</li>
+     *   <li>validate creation fails when min is null</li>
+     *   <li>validate creation fails when max is null</li>
+     *   <li>validate creation fails when max less than min</li>
+     *   <li>validate creation fails when value not in range</li>
+     *   <li>validate successful creation and retrieval of range data</li>
+     *   <li>validate editing updates range correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
-    public void customTableNumberCrud() {
+    public void customTableRangeCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
@@ -78,7 +95,7 @@ public class CustomTableRangeTest extends BackEndTest {
 
     private void create(String accessToken) {
         Range range = new Range(1d, 3d, 3d, 2d);
-        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, range);
+        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
         TableActions.createTable(getServerPort(), accessToken, request);
     }

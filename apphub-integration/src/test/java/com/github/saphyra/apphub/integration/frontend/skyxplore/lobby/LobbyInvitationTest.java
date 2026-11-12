@@ -27,6 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LobbyInvitationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests inviting a friend to a lobby and handling invitation cancellation.
+     *
+     * <ul>
+     *   <li>Invite friend; member receives invitation and joins lobby.</li>
+     *   <li>Inviter leaves lobby; invitation is cancelled for the invited member.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void inviteFriendToLobby() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -71,6 +79,14 @@ public class LobbyInvitationTest extends SeleniumTest {
             .assertTrue("Lobby member status is not 'NOT_READY'");
     }
 
+    /**
+     * Tests that an invitation is cancelled when the inviter leaves the lobby.
+     *
+     * <ul>
+     *   <li>Inviter invites friend; friend accepts and joins.</li>
+     *   <li>Inviter exits lobby; pending invitation for the second member disappears.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void invitationCancelledWhenInviterLeftLobby() {
         List<WebDriver> drivers = extractDrivers(3);
