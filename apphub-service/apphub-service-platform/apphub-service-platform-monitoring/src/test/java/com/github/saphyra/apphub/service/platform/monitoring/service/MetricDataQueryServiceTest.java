@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ class MetricDataQueryServiceTest {
 
     @Mock
     private MetricDao metricDao;
+
+    @Mock
+    private MetricDataDaoSelector metricDataDaoSelector;
 
     @Mock
     private MetricDataDao metricDataDao;
@@ -76,6 +80,7 @@ class MetricDataQueryServiceTest {
 
     @Test
     void getMetrics() {
+        given(metricDataDaoSelector.selectDao(MetricDataType.SECOND)).willReturn(metricDataDao);
         given(metricDao.getByFeatureAndOptionalFunctionality(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY)).willReturn(List.of(metric));
         given(metric.getMetricId()).willReturn(METRIC_ID);
         given(monitoringProperties.getAggregation()).willReturn(Map.of(MetricDataType.SECOND, aggregationProperties));

@@ -18,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class MetricDataDaoTest {
+class MetricDataDaoImplTest {
     private static final LocalDateTime TIMESTAMP_1 = LocalDateTime.now();
     private static final LocalDateTime TIMESTAMP_2 = TIMESTAMP_1.plusSeconds(2);
     private static final String METRIC_ID_STRING = "metric-id";
@@ -35,7 +35,7 @@ class MetricDataDaoTest {
     private UuidConverter uuidConverter;
 
     @InjectMocks
-    private MetricDataDao underTest;
+    private MetricDataDaoImpl underTest;
 
     @Mock
     private MetricData domain;

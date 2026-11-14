@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.data_provider.MetricAggregationDataProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,9 @@ class MetricAggregationServiceTest {
     private MetricAggregationDataProvider dataProvider;
 
     @Mock
+    private MetricDataDaoSelector metricDataDaoSelector;
+
+    @Mock
     private MetricDataDao metricDataDao;
 
     @Spy
@@ -67,7 +71,7 @@ class MetricAggregationServiceTest {
 
         underTest = new MetricAggregationService(
             List.of(dataProvider),
-            metricDataDao,
+            metricDataDaoSelector,
             executorServiceBean,
             metricPropertyAggregator,
             metricDataFactory
@@ -88,6 +92,7 @@ class MetricAggregationServiceTest {
         given(metricPropertyAggregator.aggregateProperties(METRIC_ID, List.of(toAggregate))).willReturn(properties);
         given(dataProvider.getResultType()).willReturn(MetricDataType.MINUTE);
         given(metricDataFactory.create(METRIC_ID, SERVICE, CURRENT_TIME, MetricDataType.MINUTE, properties)).willReturn(aggregated);
+        given(metricDataDaoSelector.selectDao(MetricDataType.SECOND)).willReturn(metricDataDao);
 
         underTest.aggregate(MetricDataType.SECOND);
 

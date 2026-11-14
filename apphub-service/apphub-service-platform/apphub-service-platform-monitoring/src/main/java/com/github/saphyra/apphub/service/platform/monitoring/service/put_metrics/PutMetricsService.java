@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
@@ -34,7 +34,7 @@ public class PutMetricsService {
 
     private final MetricDao metricDao;
     private final MetricServiceDao metricServiceDao;
-    private final MetricDataDao metricDataDao;
+    private final MetricDataDaoSelector metricDataDaoSelector;
     private final PutMetricsPropertyValidator putMetricsPropertyValidator;
     private final MetricServiceFactory metricServiceFactory;
     private final MetricDataFactory metricDataFactory;
@@ -82,7 +82,8 @@ public class PutMetricsService {
 
     private void saveMetricData(UUID metricId, String service, LocalDateTime timestamp, Map<String, Double> properties) {
         MetricData metricData = metricDataFactory.createSecond(metricId, service, timestamp, properties);
-        metricDataDao.save(metricData);
+        metricDataDaoSelector.selectDao(metricData.getType())
+            .save(metricData);
     }
 
     private record LockKey(Feature feature, String functionality) {

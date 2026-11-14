@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.data_provider.MetricAggregationDataProvider;
 import jakarta.transaction.Transactional;
@@ -21,21 +22,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MetricAggregationService {
     private final Map<MetricDataType, MetricAggregationDataProvider> aggregationDataProviders;
-    private final MetricDataDao metricDataDao;
+    private final MetricDataDaoSelector metricDataDaoSelector;
     private final ExecutorServiceBean executorServiceBean;
     private final MetricDataFactory metricDataFactory;
     private final MetricPropertyAggregator metricPropertyAggregator;
 
     MetricAggregationService(
         List<MetricAggregationDataProvider> aggregationDataProviders,
-        MetricDataDao metricDataDao,
+        MetricDataDaoSelector metricDataDaoSelector,
         ExecutorServiceBean executorServiceBean,
         MetricPropertyAggregator metricPropertyAggregator,
         MetricDataFactory metricDataFactory
     ) {
         this.aggregationDataProviders = aggregationDataProviders.stream()
             .collect(Collectors.toMap(MetricAggregationDataProvider::getType, data -> data));
-        this.metricDataDao = metricDataDao;
+        this.metricDataDaoSelector = metricDataDaoSelector;
         this.executorServiceBean = executorServiceBean;
         this.metricDataFactory = metricDataFactory;
         this.metricPropertyAggregator = metricPropertyAggregator;
@@ -44,6 +45,8 @@ public class MetricAggregationService {
     @Transactional
     public void aggregate(MetricDataType metricDataType) {
         MetricAggregationDataProvider dataProvider = aggregationDataProviders.get(metricDataType);
+
+        MetricDataDao metricDataDao = metricDataDaoSelector.selectDao(metricDataType);
 
         LocalDateTime oldestRecordTimestamp = metricDataDao.findOldest(metricDataType)
             .map(metricData -> {
@@ -65,7 +68,7 @@ public class MetricAggregationService {
             LocalDateTime timestamp = expirationEnd;
             executorServiceBean.processCollectionWithWait(
                 metrics.entrySet(),
-                entry -> aggregate(dataProvider, timestamp, entry.getKey().getEntity1(), entry.getKey().getEntity2(), entry.getValue())
+                entry -> aggregate(metricDataDao, dataProvider, timestamp, entry.getKey().getEntity1(), entry.getKey().getEntity2(), entry.getValue())
             );
 
             expirationEnd = expirationStart;
@@ -75,7 +78,7 @@ public class MetricAggregationService {
         log.info("{} aggregation finished. Oldest record timestamp: {}, expirationStart: {}, expirationEnd: {}", metricDataType, oldestRecordTimestamp, expirationStart, expirationEnd);
     }
 
-    private Void aggregate(MetricAggregationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
+    private Void aggregate(MetricDataDao metricDataDao, MetricAggregationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
         log.info("Aggregating {} metric of type {} for metricId {} and service {} to timestamp: {}", metrics.size(), dataProvider.getType(), metricId, service, timestamp);
         Map<String, Double> aggregatedProperties = metricPropertyAggregator.aggregateProperties(metricId, metrics);
         MetricData aggregated = metricDataFactory.create(metricId, service, timestamp, dataProvider.getResultType(), aggregatedProperties);

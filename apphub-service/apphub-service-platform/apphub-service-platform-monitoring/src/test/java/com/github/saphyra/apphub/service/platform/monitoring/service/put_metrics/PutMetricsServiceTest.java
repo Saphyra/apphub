@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.platform.monitoring.service.put_metrics;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricPropertyModel;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
@@ -39,6 +41,9 @@ class PutMetricsServiceTest {
 
     @Mock
     private MetricServiceDao metricServiceDao;
+
+    @Mock
+    private MetricDataDaoSelector metricDataDaoSelector;
 
     @Mock
     private MetricDataDao metricDataDao;
@@ -89,6 +94,8 @@ class PutMetricsServiceTest {
 
         Map<String, Double> properties = Map.of(PROPERTY_KEY, PROPERTY_VALUE);
         given(metricDataFactory.createSecond(METRIC_ID, SERVICE, TIMESTAMP.withNano(0), properties)).willReturn(metricData);
+        given(metricData.getType()).willReturn(MetricDataType.SECOND);
+        given(metricDataDaoSelector.selectDao(MetricDataType.SECOND)).willReturn(metricDataDao);
 
         underTest.putMetrics(SERVICE, request);
 
