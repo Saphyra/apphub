@@ -21,6 +21,14 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarEditEventTest extends SeleniumTest {
+    /**
+     * Tests editing an existing calendar event.
+     *
+     * <ul>
+     *   <li>Creates a one‑time event, opens it, and edits to a recurring pattern.</li>
+     *   <li>Saves changes and verifies the updated title appears in the calendar view.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editEvent() {
         WebDriver driver = extractDriver();

@@ -9,7 +9,7 @@ import { ELITE_BASE_COMMODITY_TRADING_COMMODITIES } from "../../../EliteBaseEndp
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./commodity_selector.css";
 
-const CommoditySelector = ({ commodity, setCommodity }) => {
+const CommoditySelector = ({ id, commodity, setCommodity }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [selectedCommodity, setSelectedCommodity] = useState(new DataListInputEntry(commodity, hasValue(sessionStorage.eliteBaseCommoditySelectorCommodity) ? sessionStorage.eliteBaseCommoditySelectorCommodity : ""));
@@ -24,6 +24,7 @@ const CommoditySelector = ({ commodity, setCommodity }) => {
             <PreLabeledInputField
                 label={localizationHandler.get("commodity") + ":"}
                 input={<DataListInputField
+                    id={id}
                     className={"elite-base-commodity-selector" + (hasValue(commodity) ? " locked" : "")}
                     value={selectedCommodity}
                     setValue={setSelectedCommodity}
@@ -46,7 +47,7 @@ const CommoditySelector = ({ commodity, setCommodity }) => {
         if (hasValue(selectedCommodity.key)) {
             setCommodity(selectedCommodity.key);
             sessionStorage.eliteBaseCommoditySelectorCommodity = selectedCommodity.value;
-        } else if(hasValue(commodities)) {
+        } else if (hasValue(commodities)) {
             new Stream(commodities)
                 .filter(commodity => commodity.toLowerCase() === selectedCommodity.value.toLowerCase())
                 .findFirst()

@@ -28,6 +28,15 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConnectionLostTest extends SeleniumTest {
+    /**
+     * Tests player disconnection during an active game.
+     *
+     * <ul>
+     *   <li>Player disconnects while host is in lobby; dialog appears.</li>
+     *   <li>Game remains paused after disconnection.</li>
+     *   <li>Reconnecting restores game state.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void playerDisconnected() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -64,6 +73,14 @@ public class ConnectionLostTest extends SeleniumTest {
             .assertTrue("Game is still paused.");
     }
 
+    /**
+     * Tests host disconnection during an active game.
+     *
+     * <ul>
+     *   <li>Host leaves lobby; other player sees paused state.</li>
+     *   <li>Game remains paused for non-host.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void hostDisconnected() {
         List<WebDriver> drivers = extractDrivers(2);

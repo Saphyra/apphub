@@ -22,6 +22,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class LoginTest extends BackEndTest {
+    /**
+     * Tests the full login and logout flow.
+     *
+     * <p>Sub‑cases:
+     * <ul>
+     *   <li>Attempt to log in with an unknown email – expects 401 BAD_CREDENTIALS.</li>
+     *   <li>Register a user and attempt login with incorrect password – expects 401 BAD_CREDENTIALS.</li>
+     *   <li>Login with correct credentials and rememberMe flag set – verifies refresh token expiry > 29 days.</li>
+     *   <li>Login with correct credentials without rememberMe – verifies refresh token expiry < 1 hour.</li>
+     *   <li>Logout using the obtained tokens – expects subsequent module request to return 401 NO_SESSION_AVAILABLE.</li>
+     *   <li>Lock user after repeated failed logins and verify account locked responses, then unlock and login again.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "index"})
     public void loginAndOut() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

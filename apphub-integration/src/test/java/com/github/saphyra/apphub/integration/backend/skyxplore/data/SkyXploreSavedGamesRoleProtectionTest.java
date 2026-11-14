@@ -14,6 +14,14 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreSavedGamesRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests role-based access control for retrieving and deleting SkyXplore saved games.
+     *
+     * <ul>
+     *   <li>validate endpoint {@code GET /api/skyxplore/saved-games} returns 403 when user lacks SKYXPLORE role</li>
+     *   <li>validate endpoint {@code DELETE /api/skyxplore/saved-game/{id}} returns 403 when user lacks SKYXPLORE role</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void savedGamesRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

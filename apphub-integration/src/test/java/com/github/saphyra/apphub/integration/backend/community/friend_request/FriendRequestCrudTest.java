@@ -19,6 +19,26 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests full CRUD lifecycle of friend requests including creation, duplicate handling,
+ * querying sent/received lists, deletion by sender or receiver, acceptance flow
+ * and role‑based restrictions.
+ *
+ * <ul>
+ *   <li>creating a request succeeds.</li>
+ *   <li>duplicate request returns conflict.</li>
+ *   <li>sent list contains created request.</li>
+ *   <li>received list contains incoming request.</li>
+ *   <li>deleting non‑existent request returns not found.</li>
+ *   <li>forbidden delete by blocked user.</li>
+ *   <li>sender deletion removes from both lists.</li>
+ *   <li>receiver deletion removes from both lists.</li>
+ *   <li>accepting nonexistent request returns not found.</li>
+ *   <li>accepting forbidden request fails.</li>
+ *   <li>successful acceptance creates friendship and clears requests.</li>
+ *   <li>creating a request to an existing friend returns conflict.</li>
+ * </ul>
+ */
 public class FriendRequestCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void friendRequestCrud() {

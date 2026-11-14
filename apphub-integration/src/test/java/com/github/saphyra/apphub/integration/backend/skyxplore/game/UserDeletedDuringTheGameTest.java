@@ -23,6 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserDeletedDuringTheGameTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Ensures that deleting the host account during an active game redirects other participants.
+     *
+     * <ul>
+     *   <li>receives REDIRECT event after host deletion.</li>
+     *   <li>event payload is SKYXPLORE_MAIN_MENU_PAGE.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void hostDeleted() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

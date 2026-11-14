@@ -24,6 +24,19 @@ public class GroupCrudTest extends BackEndTest {
     private static final String GROUP_NAME = "group-name";
     private static final String NEW_GROUP_NAME = "new-group-name";
 
+    /**
+     * Tests full CRUD flow for groups: creation, renaming, invitation type changes,
+     * ownership transfer, and deletion with permission checks.
+     *
+     * <ul>
+     *   <li>creating a group succeeds.</li>
+     *   <li>renaming fails on null/short/long names.</li>
+     *   <li>renaming by non‑owner is forbidden.</li>
+     *   <li>changing invitation type fails on null or by non‑owner.</li>
+     *   <li>changing owner fails on null, by non‑owner, or to current owner.</li>
+     *   <li>deleting a group fails for non‑owner and succeeds for owner.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "community"})
     public void groupCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

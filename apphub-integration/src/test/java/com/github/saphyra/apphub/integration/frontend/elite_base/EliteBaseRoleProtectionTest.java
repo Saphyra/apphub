@@ -14,6 +14,13 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class EliteBaseRoleProtectionTest extends SeleniumTest {
+    /**
+     * Tests role protection for Elite Base page.
+     *
+     * <ul>
+     *   <li>Verifies that access is denied when the user lacks ELITE_BASE or ACCESS roles.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "elite-base", "role-protection"})
     public void eliteBaseRoleProtection(String role) {
         WebDriver driver = extractDriver();

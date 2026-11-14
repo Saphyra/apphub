@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class MetricDataQueryService {
     private static final String INVALID_COMBINATION = "invalid_combination";
 
     private final MetricDao metricDao;
-    private final MetricDataDao metricDataDao;
+    private final MetricDataDaoSelector  metricDataDaoSelector;
     private final MonitoringProperties monitoringProperties;
     private final DateTimeUtil dateTimeUtil;
 
@@ -59,7 +59,8 @@ public class MetricDataQueryService {
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
             .minus(expirationDuration);
 
-        return metricDataDao.getByTypeAndMetricIdInAndServiceAfter(type, metrics.keySet(), service, timestamp)
+        return metricDataDaoSelector.selectDao(type)
+            .getByTypeAndMetricIdInAndServiceAfter(type, metrics.keySet(), service, timestamp)
             .stream()
             .map(metricData -> {
                 Metric metric = metrics.get(metricData.getMetricId());

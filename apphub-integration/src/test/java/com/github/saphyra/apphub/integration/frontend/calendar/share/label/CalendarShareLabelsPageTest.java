@@ -20,6 +20,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarShareLabelsPageTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Verifies that a label and its associated event are correctly shared.
+     *
+     * <ul>
+     *   <li>Owner creates an event with a label.</li>
+     *   <li>Owner shares the label with all grants.</li>
+     *   <li>Shared user sees the label and can open the event.</li>
+     *   <li>The opened event title matches the shared label suffix.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void sharedLabel() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -57,6 +67,15 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
         });
     }
 
+    /**
+     * Verifies that an event without labels is correctly shared.
+     *
+     * <ul>
+     *   <li>Owner creates a labelless event.</li>
+     *   <li>Owner shares the event with all grants.</li>
+     *   <li>Shared user sees the event title with shared suffix.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void sharedLabellessEvent() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));

@@ -18,6 +18,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArchiveEventTest extends BackEndTest {
+    /**
+     * Tests archiving and unarchiving a calendar event.
+     *
+     * <ul>
+     *   <li>Creates a one-time event and archives it; verifies the archived flag on the event and its occurrences.</li>
+     *   <li>Unarchives the event via editEvent; verifies the unarchived flag on the event and its occurrences.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void archiveEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

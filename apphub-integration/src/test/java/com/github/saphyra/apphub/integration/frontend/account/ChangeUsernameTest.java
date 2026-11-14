@@ -20,6 +20,17 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeUsernameTest extends SeleniumTest {
+    /**
+     * Tests the username change flow including validation and success.
+     * <ul>
+     *   <li>too short username</li>
+     *   <li>too long username</li>
+     *   <li>empty password</li>
+     *   <li>username already exists</li>
+     *   <li>incorrect password</li>
+     *   <li>successful change</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "account"})
     public void changeUsername() {
         WebDriver driver = extractDriver();

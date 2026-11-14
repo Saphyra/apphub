@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,9 @@ class ExpiredMetricCleanupServiceTest {
     private static final Duration METRIC_EXPIRATION_DURATION = Duration.ofDays(2);
     private static final UUID METRIC_ID = UUID.randomUUID();
     private static final String SERVICE = "service";
+
+    @Mock
+    private MetricDataDaoSelector metricDataDaoSelector;
 
     @Mock
     private MetricDataDao metricDataDao;
@@ -60,6 +64,7 @@ class ExpiredMetricCleanupServiceTest {
         given(aggregation.getExpirationDuration()).willReturn(METRIC_EXPIRATION_DURATION);
         given(metricDataDao.getMetricIds()).willReturn(List.of(METRIC_ID));
         given(metricDataDao.getServices()).willReturn(List.of(SERVICE));
+        given(metricDataDaoSelector.selectDao(MetricDataType.HOUR)).willReturn(metricDataDao);
 
         underTest.cleanup();
 

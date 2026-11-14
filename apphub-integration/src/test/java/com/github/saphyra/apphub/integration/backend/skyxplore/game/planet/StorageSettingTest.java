@@ -32,6 +32,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests CRUD operations for storage settings, including validation of required fields,
+     * duplicate creation handling, update with validation, and deletion.
+     *
+     * <ul>
+     *   <li>validate create endpoint with missing or invalid fields returns error</li>
+     *   <li>validate duplicate create returns already exists error</li>
+     *   <li>validate update endpoint with missing or invalid fields returns error</li>
+     *   <li>verify successful creation, retrieval, update and deletion of a storage setting</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void storageSettingCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -151,6 +162,15 @@ public class StorageSettingTest extends BackEndTest {
         ApphubWsClient.cleanUpConnections();
     }
 
+    /**
+     * Tests that a storage setting produces resources correctly: reserves storage on start
+     * and verifies resource amount after production completes.
+     *
+     * <ul>
+     *   <li>verify storage is reserved when game starts</li>
+     *   <li>verify resource amount equals target + 100 after production period</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void produceResourcesForStorageSetting() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

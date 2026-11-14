@@ -44,6 +44,17 @@ public class ChecklistTableCrudTest extends BackEndTest {
     private static final String NEW_COLUMN_VALUE = "new-column-value";
     private static final String NEW_TITLE = "new-title";
 
+    /**
+     * Tests the full CRUD lifecycle of a checklist table.
+     *
+     * <ul>
+     *   <li>Creates a valid checklist table and verifies its properties.</li>
+     *   <li>Validates error responses for invalid creation parameters (blank title, too long title, null type, etc.).</li>
+     *   <li>Tests editing operations: blank/too‑long titles, column names, values, mismatched columns, missing data.</li>
+     *   <li>Verifies row status updates and handling of null status.</li>
+     *   <li>Deletes the table and ensures it is removed from the category tree.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void checklistTableCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

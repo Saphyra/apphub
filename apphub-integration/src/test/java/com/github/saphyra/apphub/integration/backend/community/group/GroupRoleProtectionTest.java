@@ -16,6 +16,23 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class GroupRoleProtectionTest extends BackEndTest {
+    /** 
+     * Tests that group endpoints enforce required roles.
+     *
+     * <ul>
+     *   <li>listing groups requires role.</li>
+     *   <li>creating a group requires role.</li>
+     *   <li>deleting a group requires role.</li>
+     *   <li>changing owner requires role.</li>
+     *   <li>renaming group requires role.</li>
+     *   <li>changing invitation type requires role.</li>
+     *   <li>listing members requires role.</li>
+     *   <li>searching groups requires role.</li>
+     *   <li>creating a member requires role.</li>
+     *   <li>deleting a member requires role.</li>
+     *   <li>modifying roles requires role.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "community", "role-protection"})
     public void groupRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

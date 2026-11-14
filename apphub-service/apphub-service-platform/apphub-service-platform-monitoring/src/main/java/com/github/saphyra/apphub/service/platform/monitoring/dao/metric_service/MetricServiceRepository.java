@@ -5,12 +5,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 interface MetricServiceRepository extends CrudRepository<MetricServiceEntity, MetricServiceEntity> {
     @Modifying
     @Query("DELETE FROM MetricServiceEntity e WHERE e.service NOT IN :services")
-    void deleteByServiceNotIn(@Param("services") List<String> services);
+    void deleteByServiceNotIn(@Param("services") Collection<String> services);
 
     @Modifying
     @Query("DELETE FROM MetricServiceEntity e WHERE e.metricId NOT IN :metricIds")

@@ -27,6 +27,15 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptFriendRequestTest extends BackEndTest {
+    /**
+     * Tests accepting a friend request between two users.
+     *
+     * <ul>
+     *   <li>Verifies 404 when no pending request exists.</li>
+     *   <li>Ensures forbidden error when another user attempts to accept.</li>
+     *   <li>Confirms successful acceptance updates friendships and emits WebSocket event.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void acceptFriendRequest() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -27,6 +27,16 @@ public class AddTableColumnTest extends SeleniumTest {
     private static final String COLUMN_VALUE = "column-value";
     private static final String NEW_COLUMN_NAME = "new-column-name";
 
+    /**
+     * Adds columns to a checklist table and verifies column addition at start and end.
+     *
+     * <ul>
+     *   <li>Creates a new checklist table with one column and row.</li>
+     *   <li>Enables editing mode.</li>
+     *   <li>Adds a column at the start and verifies it is empty.</li>
+     *   <li>Adds a column at the end and verifies it is empty.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void addColumnsToTable() {
         WebDriver driver = extractDriver();

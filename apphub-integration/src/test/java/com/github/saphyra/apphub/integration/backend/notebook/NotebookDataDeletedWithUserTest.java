@@ -32,6 +32,18 @@ public class NotebookDataDeletedWithUserTest extends BackEndTest {
     private static final String CONTENT = "content";
     private static final String PIN_GROUP = "pin-group";
 
+    /**
+     * Verifies that deleting a user account removes all associated notebook data.
+     *
+     * <ul>
+     *   <li>create table and checklist items for the user</li>
+     *   <li>create a pin group linked to the user</li>
+     *   <li>delete the user account</li>
+     *   <li>assert that list items no longer exist in DynamoDB</li>
+     *   <li>assert that children of table and checklist are removed</li>
+     *   <li>assert that pin groups for the user are empty</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void notebookDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

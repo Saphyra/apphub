@@ -24,4 +24,12 @@
             <column name="body_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-body_ring" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="body_ring"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="body_ring"/>
+    </changeSet>
 </databaseChangeLog>

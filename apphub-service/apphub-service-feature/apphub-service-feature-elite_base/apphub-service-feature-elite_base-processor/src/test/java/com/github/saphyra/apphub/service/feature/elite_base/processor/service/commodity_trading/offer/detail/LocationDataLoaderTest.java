@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.service.commodity_trading.offer.detail;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.fleet_carrier.FleetCarrierDao;
@@ -29,7 +29,7 @@ class LocationDataLoaderTest {
     private static final UUID FLEET_CARRIER_ID = UUID.randomUUID();
 
     @Spy
-    private ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @Mock
     private StationDao stationDao;

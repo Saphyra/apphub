@@ -20,6 +20,19 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistCrudTest extends BackEndTest {
+    /**
+     * Tests CRUD operations for user blacklisting including creation, duplicate handling,
+     * retrieval, deletion, and permission checks.
+     *
+     * <ul>
+     *   <li>validate creating a blacklist entry succeeds.</li>
+     *   <li>validate duplicate blacklist creation returns conflict.</li>
+     *   <li>validate retrieving blacklist list contains created entry.</li>
+     *   <li>validate deleting non-existent blacklist returns not found.</li>
+     *   <li>validate forbidden delete by another user.</li>
+     *   <li>validate successful deletion removes entry.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "community"})
     public void blacklistCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -88,6 +101,9 @@ public class BlacklistCrudTest extends BackEndTest {
         assertThat(BlacklistActions.getBlacklists(getServerPort(), accessToken)).isEmpty();
     }
 
+    /**
+     * Tests that creating a blacklist entry removes pending friend requests.
+     */
     @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendship() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -104,6 +120,9 @@ public class BlacklistCrudTest extends BackEndTest {
         assertThat(FriendRequestActions.getSentFriendRequests(getServerPort(), accessToken)).isEmpty();
     }
 
+    /**
+     * Tests that creating a blacklist entry removes established friendships.
+     */
     @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendRequest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

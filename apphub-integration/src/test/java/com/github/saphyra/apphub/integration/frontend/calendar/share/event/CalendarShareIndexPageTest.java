@@ -24,6 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarShareIndexPageTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Verifies that a shared label is displayed to the user when appropriate grants are set.
+     *
+     * <ul>
+     *   <li>Label appears in the calendar view for the shared user.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void sharedLabel() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -53,13 +60,20 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify shared label displayed
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())).extracting(CalendarOccurrence::isShared).containsExactly(true));
     }
 
+    /**
+     * Verifies that a shared event is displayed to the user when appropriate grants are set.
+     *
+     * <ul>
+     *   <li>Event appears in the calendar view for the shared user.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void sharedEvent() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -94,7 +108,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify shared event displayed
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
@@ -102,6 +116,13 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())).extracting(CalendarOccurrence::isShared).containsExactly(true));
     }
 
+    /**
+     * Verifies that a shared occurrence is displayed to the user when appropriate grants are set.
+     *
+     * <ul>
+     *   <li>Occurrence appears in the calendar view for the shared user.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     void sharedOccurrence() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -133,7 +154,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify shared event displayed
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());

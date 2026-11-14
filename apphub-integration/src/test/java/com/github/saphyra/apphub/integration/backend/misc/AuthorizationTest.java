@@ -18,6 +18,12 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthorizationTest extends BackEndTest {
+    /**
+     * Tests access control for protected endpoints.
+     * <ul>
+     *   <li>validate /user/check-session returns 401 when called without access token</li>
+     * </ul>
+     */
     @Test(groups = {"be", "misc"})
     public void callProtectedEndpointWithoutAccessToken() {
         Response response = RequestFactory.createRequest()
@@ -28,6 +34,13 @@ public class AuthorizationTest extends BackEndTest {
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.NO_SESSION_AVAILABLE.name());
     }
 
+    /**
+     * Tests token refresh flow and session validation.
+     * <ul>
+     *   <li>refreshes an access token using a valid refresh token and verifies that the new token can be used to fetch modules</li>
+     *   <li>ensures that calling getSessionCheck with an invalid token returns 401 and INVALID_TOKEN error code</li>
+     * </ul>
+     */
     @Test(groups = {"be", "misc"})
     public void refreshToken() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -41,6 +54,13 @@ public class AuthorizationTest extends BackEndTest {
         ModulesActions.getModules(getServerPort(), newTokenResponse.getAccessToken().getJwt());
     }
 
+    /**
+     * Tests session validation for protected endpoints.
+     * <ul>
+     *   <li>validate getSessionCheck returns 401 and INVALID_TOKEN when called with an invalid token</li>
+     *   <li>validate getSessionCheck returns 200 when called with a valid access token</li>
+     * </ul>
+     */
     @Test(groups = {"be", "misc"})
     public void checkSession() {
         ResponseValidator.verifyErrorResponse(AccessTokenActions.getSessionCheckResponse(getServerPort(), "asd"), 401, ErrorCode.INVALID_TOKEN);

@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,10 +15,9 @@ import java.util.UUID;
 public class SettlementFactory {
     private final IdGenerator idGenerator;
 
-    public Settlement create(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String settlementName, Long marketId, Double longitude, Double latitude) {
+    public Settlement create(UUID starSystemId, UUID bodyId, String settlementName, Long marketId, Double longitude, Double latitude) {
         return Settlement.builder()
             .id(idGenerator.randomUuid())
-            .lastUpdate(timestamp)
             .starSystemId(starSystemId)
             .bodyId(bodyId)
             .settlementName(settlementName)

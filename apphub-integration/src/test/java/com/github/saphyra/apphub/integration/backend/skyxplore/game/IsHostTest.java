@@ -16,6 +16,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IsHostTest extends BackEndTest {
+    /**
+     * Verifies host identification logic.
+     *
+     * <ul>
+     *   <li>isHost() returns true for the player who started the game.</li>
+     *   <li>isHost() returns false for a non-host participant.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void isHost() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

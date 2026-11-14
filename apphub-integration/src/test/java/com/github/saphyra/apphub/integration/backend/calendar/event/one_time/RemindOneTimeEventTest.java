@@ -22,6 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RemindOneTimeEventTest extends BackEndTest {
     private static final Integer REMIND_ME_BEFORE_DAYS = 2;
 
+    /**
+     * Tests reminder logic for a one‑time event.
+     *
+     * <ul>
+     *   <li>Creates an event with a reminder set before the occurrence.</li>
+     *   <li>Edits the event to change the reminder offset.</li>
+     *   <li>Verifies that REMINDER and PENDING statuses are correctly assigned.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void remindOneTimeEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -24,6 +24,17 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeEmailTest extends SeleniumTest {
+    /**
+     * Tests email change flow including validation and success.
+     * <ul>
+     *   <li>blank email input</li>
+     *   <li>invalid email format</li>
+     *   <li>empty password</li>
+     *   <li>email already exists</li>
+     *   <li>incorrect password</li>
+     *   <li>successful change and login with new email</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "account"})
     public void changeEmail() {
         WebDriver driver = extractDriver();

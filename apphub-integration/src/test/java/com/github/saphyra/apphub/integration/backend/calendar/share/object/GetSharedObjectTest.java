@@ -29,6 +29,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GetSharedObjectTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Tests retrieval of shared label information and access control.
+     * <ul>
+     *   <li>retrieve own unshared label details</li>
+     *   <li>verify not found for non‑owner on unshared label</li>
+     *   <li>share label and verify owner and sharedWith data</li>
+     *   <li>revoke view grant and confirm access removal</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void getSharedLabel() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -99,6 +108,16 @@ public class GetSharedObjectTest extends BackEndTest {
         ResponseValidator.verifyNotFound(CalendarShareActions.getGetSharedObjectResponse(getServerPort(), sharedWithToken, SharedObjectType.LABEL, labelId, null));
     }
 
+    /**
+     * Tests retrieval of shared event information with different grant levels.
+     * <ul>
+     *   <li>retrieve own unshared event details</li>
+     *   <li>verify not found for non‑owner on unshared event</li>
+     *   <li>share event and verify owner and sharedWith data</li>
+     *   <li>revoke view grant and confirm access removal</li>
+     *   <li>grant SEE permission and verify masked name</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void getSharedEvent(){
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

@@ -27,6 +27,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EditSharedEventTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Edits an event with various grant combinations and verifies that the owner sees updated title.
+     *
+     * <ul>
+     *   <li>Owner grants VIEW, event grants EDIT: shared user edits successfully.</li>
+     *   <li>Owner grants VIEW_CHILDREN, event grants EDIT: shared user edits successfully.</li>
+     *   <li>Owner grants EDIT_CHILDREN, event grants VIEW: shared user edits successfully.</li>
+     *   <li>Owner grants EDIT_CHILDREN+VIEW_CHILDREN, no event grant: shared user cannot edit (not tested here).</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "editSharedEventData")
     public void editSharedEvent(Set<Grant> labelGrants, Set<Grant> eventGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -79,6 +89,9 @@ public class EditSharedEventTest extends BackEndTest {
             .returns(editRequest.getTitle(), EventResponse::getTitle);
     }
 
+    /**
+     * Attempts to edit a shared event without sufficient grants and verifies that the operation fails.
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "editSharedEventData_noGrant")
     public void editSharedEvent_noGrant(Set<Grant> labelGrants, Set<Grant> eventGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

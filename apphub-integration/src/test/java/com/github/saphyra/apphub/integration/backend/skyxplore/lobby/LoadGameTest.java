@@ -29,6 +29,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LoadGameTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests loading a saved game into a lobby, covering error cases and successful flow.
+     *
+     * <ul>
+     *   <li>validate load game endpoint returns 404 when game not found</li>
+     *   <li>validate load game forbidden when user is not the host</li>
+     *   <li>validate start game fails with 412 when players not ready</li>
+     *   <li>verify host left triggers lobby exit and deletion handling</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void loadGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

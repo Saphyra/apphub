@@ -31,6 +31,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateOccurrenceTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Creates an occurrence on a shared event when the shared user has appropriate grants.
+     *
+     * <ul>
+     *   <li>when label is shared with VIEW_CHILDREN grant</li>
+     *   <li>when event is shared with VIEW + VIEW_CHILDREN grants</li>
+     *   <li>when event is shared with VIEW + SEE_CHILDREN grants</li>
+     *   <li>when event is shared with SEE + VIEW_CHILDREN grants</li>
+     *   <li>when event is shared with SEE + SEE_CHILDREN grants</li>
+     *   <li>when event is shared with VIEW_CHILDREN grant only (label not shared)</li>
+     *   <li>when label is shared with SEE_CHILDREN grant only (event not shared)</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "createOccurrenceData")
     public void createOccurrenceToSharedEvent(Set<Grant> labelGrants, Set<Grant> eventGrants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -86,6 +99,13 @@ public class CreateOccurrenceTest extends BackEndTest {
             .returns(DEFAULT_NOTE, OccurrenceResponse::getNote);
     }
 
+    /**
+     * Verifies that creating an occurrence fails when the shared user lacks sufficient grants.
+     *
+     * <ul>
+     *   <li>when label is shared with VIEW grant and event is shared with DELETE grant</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void createOccurrenceToSharedEvent_noGrant() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

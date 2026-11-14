@@ -1,0 +1,38 @@
+{
+    "search-placeholder": {
+        "en": "Who do you want to share this {type} with?",
+        "hu": "Kivel szeretnéd megosztani ezt a {type}-t?"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "search-text-too-short": {
+        "en": "Search text must be at least 3 characters long.",
+        "hu": "A keresési szövegnek legalább 3 karakter hosszúnak kell lennie."
+    },
+    "search-result-empty": {
+        "en": "No users found.",
+        "hu": "Nincs találat."
+    },
+    "share-with-user-title": {
+        "en": "What do you want to allow to user {username} ('{email}')?",
+        "hu": "Mit szeretnél engedélyezni a {username} ('{email}') felhasználónak?"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
+    },
+    "EVENT": {
+        "en": "Event",
+        "hu": "Esemény"
+    },
+    "OCCURRENCE": {
+        "en": "Occurrence",
+        "hu": "Előfordulás"
+    },
+    "LABEL": {
+        "en": "Label",
+        "hu": "Címke"
+    }
+}

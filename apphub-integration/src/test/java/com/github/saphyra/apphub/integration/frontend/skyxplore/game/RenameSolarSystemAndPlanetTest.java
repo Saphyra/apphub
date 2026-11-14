@@ -29,6 +29,16 @@ public class RenameSolarSystemAndPlanetTest extends SeleniumTest {
     private static final String NEW_SOLAR_SYSTEM_NAME = "new-solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";
 
+    /**
+     * Tests renaming of solar system and planet with validation.
+     *
+     * <ul>
+     *   <li>Blank name shows error.</li>
+     *   <li>Name longer than 30 chars shows error.</li>
+     *   <li>Discarding reverts to original names.</li>
+     *   <li>Successful rename persists after reopening.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void renameSolarSystemAndPlanet() {
         WebDriver driver = extractDriver();

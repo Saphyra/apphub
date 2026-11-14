@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creatio
 import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
@@ -65,7 +65,7 @@ public class GameCreationServiceTest {
             .gameDao(gameDao)
             .requests(requests)
             .gameSaverService(gameSaverService)
-            .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class)))
+            .executorServiceBeanFactory(ExecutorServiceBeeaTestUtils.createFactory(Mockito.mock(ErrorReporterService.class)))
             .errorReporterService(errorReporterService)
             .tickSchedulerLauncher(tickSchedulerLauncher)
             .build();

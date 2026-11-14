@@ -25,6 +25,15 @@ public class AddItemToChecklistTest extends BackEndTest {
     private static final String CONTENT = "content";
     private static final String NEW_CONTENT = "new-content";
 
+    /**
+     * Tests adding items to a checklist.
+     *
+     * <ul>
+     *   <li>validate endpoint /checklist/{id}/items returns error when content is null</li>
+     *   <li>validate endpoint /checklist/{id}/items returns error when index is null</li>
+     *   <li>adding an item at index -1 inserts it at the start and updates ordering correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void addItemToChecklist() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

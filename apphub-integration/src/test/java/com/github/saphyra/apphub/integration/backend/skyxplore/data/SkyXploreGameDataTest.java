@@ -9,12 +9,18 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
-
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameDataTest extends BackEndTest {
+    /**
+     * Tests retrieval of SkyXplore game data for a valid ID and handling of missing data.
+     *
+     * <ul>
+     *   <li>validate endpoint {@code GET /api/skyxplore/game-data/{id}} returns 200 with correct data when called with existing ID</li>
+     *   <li>Error message appears when user calls the same endpoint with non-existing ID (404)</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void getGameData() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

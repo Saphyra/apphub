@@ -33,6 +33,16 @@ import java.util.List;
 public class CalendarAutoRefreshIndexPageTest extends HeadedSeleniumTest {
     private static final String LABEL = "label";
 
+    /**
+     * Tests that creating an event automatically refreshes the calendar index page
+     * and displays the new event, its label, and selected day occurrences correctly.
+     *
+     * <ul>
+     *   <li>Create a one-time event with a label; verify it appears in the day's occurrences list after creation.</li>
+     *   <li>Verify the newly created event is listed among selected day occurrences.</li>
+     *   <li>Verify the label is displayed on the calendar.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar", "headed-only"})
     public void autoRefreshIndexPage() {
         WebDriver driver = extractDriver(WebDriverMode.HEADED);

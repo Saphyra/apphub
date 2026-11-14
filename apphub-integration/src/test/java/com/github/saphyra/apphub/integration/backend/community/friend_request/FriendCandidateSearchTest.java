@@ -15,6 +15,16 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests searching for friend candidates and subsequent actions.
+ *
+ * <ul>
+ *   <li>search returns matching user.</li>
+ *   <li>creating a friend request removes user from search results.</li>
+ *   <li>accepting the request also clears search results.</li>
+ *   <li>blacklisting the user clears search results.</li>
+ * </ul>
+ */
 public class FriendCandidateSearchTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void searchFriendCandidates() {

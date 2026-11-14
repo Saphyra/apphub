@@ -28,6 +28,13 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreGameRoleProtectionTest extends BackEndTest {
+    /**
+     * Validates that users without a specific role are prevented from performing game actions.
+     *
+     * <ul>
+     *   <li>any game-related request results in a missing-role response.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void gameRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -97,6 +104,13 @@ public class SkyXploreGameRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
     }
 
+    /**
+     * Checks that only users with the ADMIN role can trigger game ticks.
+     *
+     * <ul>
+     *   <li>getProcessTickResponse fails with missing-role error if not an admin.</li>
+     * </ul>
+     */
     @Test(dataProvider = "adminRoleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void gameAdminRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

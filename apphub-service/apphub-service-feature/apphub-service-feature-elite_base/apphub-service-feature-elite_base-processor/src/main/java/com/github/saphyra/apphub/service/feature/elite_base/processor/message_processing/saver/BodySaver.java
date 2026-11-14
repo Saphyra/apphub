@@ -69,7 +69,7 @@ public class BodySaver {
                 return body;
             } else {
                 Body created = bodyFactory.create(starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
-                log.debug("Saving new {}", created);
+                log.info("New {} is discovered: {}", created.getClass().getSimpleName(), created);
 
                 bodyDao.save(created);
 

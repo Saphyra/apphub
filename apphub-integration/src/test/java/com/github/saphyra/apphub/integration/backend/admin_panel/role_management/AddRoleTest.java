@@ -24,6 +24,14 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddRoleTest extends BackEndTest {
+    /**
+     * Tests adding a role to a user.
+     * <ul>
+     *   <li>Registers an admin and a test user.</li>
+     *   <li>Adds the ROLE_TEST to the test user.</li>
+     *   <li>Verifies that the role appears in the user's roles list.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void addRole() {

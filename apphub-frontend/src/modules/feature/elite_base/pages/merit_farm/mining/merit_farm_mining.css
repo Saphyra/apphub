@@ -15,3 +15,16 @@
     flex-direction: row;
     justify-content: space-evenly
 }
+
+.elite-base-merit-miner-copy-button {
+    float: right;
+    background-image: url("../../../../../../common/style/img/clone.png");
+    width: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 85%;
+    margin: 0;
+    margin-left: 5px;
+    color: transparent;
+    border-width: 2px;
+}

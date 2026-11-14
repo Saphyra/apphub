@@ -24,6 +24,14 @@ import java.util.UUID;
 public class BanExpirationTest extends BackEndTest {
     private static final String REASON = "reason";
 
+    /**
+     * Tests that a user can access the application after a temporary ban expires.
+     * <ul>
+     *   <li>Creates an admin and a test user, then bans the test user temporarily.</li>
+     *   <li>Attempts to access modules while banned and expects a missing role error.</li>
+     *   <li>Waits until the ban duration elapses and verifies that module access succeeds.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

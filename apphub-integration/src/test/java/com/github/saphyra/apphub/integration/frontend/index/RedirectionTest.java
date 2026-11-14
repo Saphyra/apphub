@@ -26,6 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class RedirectionTest extends SeleniumTest {
+    /**
+     * Verifies that accessing the modules page without an access token redirects to the index page.
+     */
     @Test(groups = {"fe", "index"})
     public void redirectToIndexWhenNoAccessToken() {
         //GIVEN
@@ -38,6 +41,14 @@ public class RedirectionTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE, new HashMap<>(), CollectionUtils.singleValueMap("redirect", ModulesEndpoints.MODULES_PAGE)));
     }
 
+    /**
+     * Tests that after logging out, navigating to a protected page redirects to the index page with a redirect query.
+     *
+     * <ul>
+     *   <li>user logs out and navigates to notebook page without token</li>
+     *   <li>after login, user is redirected back to notebook page</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterLogin() {
         WebDriver driver = extractDriver();
@@ -58,6 +69,14 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue("User is not redirected to notebook page.");
     }
 
+    /**
+     * Ensures that after registration the user is automatically redirected to the requested protected page.
+     *
+     * <ul>
+     *   <li>user registers and navigates to index with redirect param</li>
+     *   <li>after login, user is redirected back to notebook page</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void redirectToUrlAfterRegistration() {
         WebDriver driver = extractDriver();
@@ -74,6 +93,9 @@ public class RedirectionTest extends SeleniumTest {
             .assertTrue("User is not redirected to notebook page.");
     }
 
+    /**
+     * Verifies that accessing the root URL redirects to the index page.
+     */
     @Test(groups = {"fe", "index"})
     public void redirectToWebWhenCalledRoot() {
         //GIVEN
@@ -85,6 +107,15 @@ public class RedirectionTest extends SeleniumTest {
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE));
     }
 
+    /**
+     * Tests the auto-login feature.
+     *
+     * <ul>
+     *   <li>user registers and is redirected to modules page</li>
+     *   <li>user logs out</li>
+     *   <li>user is redirected to index page after accessing a protected page</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void autoLogin() {
         WebDriver driver = extractDriver();
@@ -98,6 +129,14 @@ public class RedirectionTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(driver::getCurrentUrl, currentUrl -> assertThat(currentUrl).isEqualTo(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE)));
     }
 
+    /**
+     * Verifies that accessing a protected page without the required role shows an error page with the correct message.
+     *
+     * <ul>
+     *   <li>user registers and navigates to index</li>
+     *   <li>accesses admin panel disabled role management page, expecting error code MISSING_ROLE</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void redirectToErrorPage() {
         WebDriver driver = extractDriver();

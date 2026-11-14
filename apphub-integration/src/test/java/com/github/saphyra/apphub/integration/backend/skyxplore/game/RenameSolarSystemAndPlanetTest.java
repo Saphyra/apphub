@@ -30,6 +30,15 @@ public class RenameSolarSystemAndPlanetTest extends BackEndTest {
     private static final String NEW_SOLAR_SYSTEM_NAME = "new_solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";
 
+    /**
+     * Validates renaming logic for solar systems and planets.
+     *
+     * <ul>
+     *   <li>blank newName is rejected.</li>
+     *   <li>newName exceeding 30 chars is rejected.</li>
+     *   <li>valid names are applied successfully.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void renameSolarSystemAndPlanet() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

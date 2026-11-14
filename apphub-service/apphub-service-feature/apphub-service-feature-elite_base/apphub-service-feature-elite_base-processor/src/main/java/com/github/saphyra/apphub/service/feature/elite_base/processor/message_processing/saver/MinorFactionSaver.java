@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFactionDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.MinorFactionFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateFactory;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.StateStatus;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.structure.journal.FactionState;
@@ -42,6 +43,7 @@ public class MinorFactionSaver {
     private final MinorFactionDao minorFactionDao;
     private final MinorFactionFactory minorFactionFactory;
     private final MinorFactionStateFactory minorFactionStateFactory;
+    private final MinorFactionStateSyncService minorFactionStateSyncService;
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
 
@@ -105,8 +107,9 @@ public class MinorFactionSaver {
                     pendingStates,
                     recoveringStates
                 );
-                log.debug("Saving new {}", created);
+                log.info("New {} is discovered: {}", created.getClass().getSimpleName(), created);
                 minorFactionDao.save(created);
+                minorFactionStateSyncService.sync(created.getId(), created.getActiveStates(), created.getPendingStates(), created.getRecoveringStates());
 
                 saveLastUpdate(timestamp, created);
 
@@ -154,6 +157,7 @@ public class MinorFactionSaver {
             .forEach(UpdateHelper::modify);
 
         minorFactionDao.save(minorFaction);
+        minorFactionStateSyncService.sync(minorFaction.getId(), minorFaction.getActiveStates(), minorFaction.getPendingStates(), minorFaction.getRecoveringStates());
     }
 
     private void saveLastUpdate(LocalDateTime timestamp, MinorFaction minorFaction) {

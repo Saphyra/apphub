@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.integration.backend.admin_panel.migration_task
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.MigrationTasksActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
+import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.db.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
@@ -11,33 +13,31 @@ import com.github.saphyra.apphub.integration.structure.api.authorization.TokenRe
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.util.concurrent.Semaphore;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MigrationTasksTest extends BackEndTest {
     private static final String EVENT = "backend-migration-tasks-event";
     private static final String NAME = "Event for BE test";
-    private static final Semaphore SEMAPHORE = new Semaphore(1);
 
-    @BeforeMethod(alwaysRun = true)
-    public void beforeMethod() throws InterruptedException {
-        SEMAPHORE.acquire();
-    }
 
     @AfterMethod(alwaysRun = true)
     public void deleteEvent() {
-        try {
-            DatabaseUtil.deleteMigrationTaskByEvent(EVENT);
-        } finally {
-            SEMAPHORE.release();
-        }
+        DatabaseUtil.deleteMigrationTaskByEvent(EVENT);
     }
 
+    /**
+     * Tests migration task lifecycle.
+     * <ul>
+     *   <li>Creates a migration task, verifies it is incomplete.</li>
+     *   <li>Triggers the task and checks completion status.</li>
+     *   <li>Ensures subsequent trigger returns 410 (already triggered).</li>
+     *   <li>Deletes the task and confirms removal.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
+    @FeatureLocked(Feature.MIGRATION_TASK)
     public void migrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
@@ -63,7 +63,16 @@ public class MigrationTasksTest extends BackEndTest {
         assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessToken, EVENT)).isEmpty();
     }
 
+    /**
+     * Tests repeatable migration task execution.
+     * <ul>
+     *   <li>Creates a repeatable migration task and verifies it is incomplete.</li>
+     *   <li>Triggers the task, checks completion status, then triggers again to confirm idempotency.</li>
+     *   <li>Deletes the task and confirms removal.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
+    @FeatureLocked(Feature.MIGRATION_TASK)
     public void repeatableMigrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());

@@ -25,6 +25,15 @@ public class CustomTableTimeTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_COLUMN_TITLE = "new-column-title";
 
+    /**
+     * Tests CRUD operations for a custom time table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate successful creation and retrieval of time data</li>
+     *   <li>validate editing sets data to empty string</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableTimeCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

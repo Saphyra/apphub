@@ -27,8 +27,21 @@ public class EditListItemTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String ORIGINAL_URL = "original-url";
 
+    /**
+     * Tests editing list items, covering validation of title length,
+     * blank title, parent not found, parent not a category,
+     * and handling of non‑existent list items.
+     *
+     * <ul>
+     *   <li>validate too long title error</li>
+     *   <li>validate blank title error</li>
+     *   <li>validate parent not found error</li>
+     *   <li>validate parent not a category error</li>
+     *   <li>validate list item not found error</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
-    public void editListITem() {
+    public void editListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 

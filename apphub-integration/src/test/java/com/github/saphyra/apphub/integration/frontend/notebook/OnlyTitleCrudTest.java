@@ -22,6 +22,16 @@ public class OnlyTitleCrudTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title";
     private static final String NEW_ONLY_TITLE_TITLE = "new-only-title";
 
+    /**
+     * Tests CRUD operations for only‑title list items in the notebook module.
+     *
+     * <ul>
+     *   <li>Creates a new only‑title item with valid data and verifies it is displayed.</li>
+     *   <li>Attempts to create an only‑title item with an empty title and expects an error toast.</li>
+     *   <li>Edits the existing item's title, then verifies changes are saved.</li>
+     *   <li>Deletes the item and confirms it is removed from the list.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void onlyTitleCrud() {
         WebDriver driver = extractDriver();

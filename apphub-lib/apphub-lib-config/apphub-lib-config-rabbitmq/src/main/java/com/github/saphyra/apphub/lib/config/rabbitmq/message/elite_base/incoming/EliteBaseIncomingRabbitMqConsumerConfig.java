@@ -5,7 +5,6 @@ import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +23,7 @@ public class EliteBaseIncomingRabbitMqConsumerConfig {
     @Bean
     public SimpleMessageListenerContainer eliteBaseIncomingListenerContainer(
         ConnectionFactory connectionFactory,
-        @Qualifier(MESSAGE_LISTENER_ELITE_BASE_INCOMING) MessageListener messageListener,
-        @Value("${spring.application.name}") String serviceName
+        @Qualifier(MESSAGE_LISTENER_ELITE_BASE_INCOMING) MessageListener messageListener
     ) {
 
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory);

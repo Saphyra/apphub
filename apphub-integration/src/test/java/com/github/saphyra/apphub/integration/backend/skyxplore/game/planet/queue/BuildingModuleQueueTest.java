@@ -29,6 +29,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BuildingModuleQueueTest extends BackEndTest {
     private static final Integer NEW_PRIORITY = 7;
 
+    /**
+     * Tests construction and deconstruction of a building module queue item.
+     *
+     * <ul>
+     *   <li>Creates a building module in a construction area and verifies the queue entry.</li>
+     *   <li>Sets priority for construction, including invalid type, too low, too high cases.</li>
+     *   <li>Cancels construction and ensures queue is empty.</li>
+     *   <li>Starts construction, waits until queue starts, then pauses game to allow completion.</li>
+     *   <li>Verifies building module is constructed after waiting.</li>
+     *   <li>Creates deconstruction queue item and verifies the queue entry.</li>
+     *   <li>Sets priority for deconstruction with invalid type, too low, too high cases.</li>
+     *   <li>Cancels deconstruction and ensures queue is empty.</li>
+     *   <li>Starts deconstruction, waits until queue starts, then pauses game to allow completion.</li>
+     *   <li>Verifies building module is deconstructed after waiting.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void constructAndDeconstructBuildingModuleQueue() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedObjectResponse;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedWithResponse;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -50,7 +50,7 @@ class SharedObjectQueryServiceTest {
     private AccountClient accountClient;
 
     @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @InjectMocks
     private SharedObjectQueryService underTest;

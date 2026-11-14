@@ -12,6 +12,15 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+/**
+ * Verifies that a user without the required role is redirected when accessing modules.
+ *
+ * <ul>
+ *   <li>Remove ROLE_ACCESS from the user.</li>
+ *   <li>Invalidate the access token.</li>
+ *   <li>Assert that the missing‑role page is shown.</li>
+ * </ul>
+ */
 public class ModulesRoleProtectionTest extends SeleniumTest {
     @Test(groups = {"fe", "modules", "role-protection"})
     public void modulesRoleProtection() {

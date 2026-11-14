@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
@@ -63,7 +63,7 @@ class BufferSynchronizationServiceTest {
     void setUp() {
         underTest = BufferSynchronizationService.builder()
             .scheduledExecutorServiceBean(scheduledExecutorServiceBean)
-            .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(mock(ErrorReporterService.class)))
+            .executorServiceBeanFactory(ExecutorServiceBeeaTestUtils.createFactory(mock(ErrorReporterService.class)))
             .properties(properties)
             .buffers(List.of(buffer))
             .dateTimeUtil(dateTimeUtil)

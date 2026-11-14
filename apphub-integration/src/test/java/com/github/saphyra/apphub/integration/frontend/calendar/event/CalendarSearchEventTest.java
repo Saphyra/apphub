@@ -18,6 +18,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarSearchEventTest extends SeleniumTest {
     private static final String SEARCH_TEXT = "search text";
 
+    /**
+     * Tests that searching for events returns correct results.
+     *
+     * <ul>
+     *   <li>Searches by title containing "search text" and expects 3 matches.</li>
+     *   <li>Searches by content containing "search text".</li>
+     *   <li>Searches by occurrence note containing "search text".</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void testSearchEvent() {
         WebDriver driver = extractDriver();

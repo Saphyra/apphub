@@ -18,6 +18,20 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests full CRUD lifecycle of friendships including creation, querying by sender/receiver,
+ * deletion scenarios and permission checks.
+ *
+ * <ul>
+ *   <li>creating a friendship succeeds.</li>
+ *   <li>querying by sender returns the friendship.</li>
+ *   <li>querying by receiver returns the friendship.</li>
+ *   <li>deleting non‑existent friendship returns not found.</li>
+ *   <li>forbidden delete by unrelated user fails.</li>
+ *   <li>sender deletion removes from both lists.</li>
+ *   <li>receiver deletion removes from both lists.</li>
+ * </ul>
+ */
 public class FriendshipCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void friendshipCrud() {

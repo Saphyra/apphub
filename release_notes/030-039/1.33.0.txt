@@ -1,0 +1,40 @@
+===FEATURES===
+    ApphubCI
+        Visual indicator of table backup and restoration progress
+    Calendar
+        Instantly share newly created events
+
+===BUGFIXES===
+    ApphubCI ignored foreign key dependencies when referring partitioned tables
+    EliteBase
+        Saving MinorFactionState before MinorFaction caused ForeignKeyViolation making up the system unable to register new MinorFactions
+
+===PLATFORM CHANGES===
+    Monitoring
+        Reporting metrics goes through RabbitMQ
+
+===TECHNICAL DEBTS===
+    ApphubCI
+        Truncate all first, then restore to avoid waiting for locks when importing partitions parallel
+        Restore to local file does not create database / timestamp directories
+
+===ETC===
+    ApphubCI
+        Do not display disabled services inputs for production and preprod environments
+        Multi-select list for start/stop selected services
+    EliteBase
+        Copyable system and station names in merit miner search results
+        Integration test for pages
+        Log if new entity is discovered
+        Migrate Settlement to add FK to star_system_id and body_id
+        Migrate StationService and StationEconomy to add FK to station_id
+    Add short description for every integration test
+    Monitoring
+        Store second precision metrics in memory
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database

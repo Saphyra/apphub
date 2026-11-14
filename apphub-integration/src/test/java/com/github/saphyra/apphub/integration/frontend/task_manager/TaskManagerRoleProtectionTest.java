@@ -14,6 +14,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class TaskManagerRoleProtectionTest extends SeleniumTest {
+    /**
+     * Verifies that users lacking specific roles are prevented from accessing Task Manager pages.
+     *
+     * <ul>
+     *   <li>Removes the given role from the user and invalidates the token.</li>
+     *   <li>Attempts to access TASK_MANAGER_PAGE, CREATE_ORGANIZATION_PAGE, ORGANIZATION_INDEX_PAGE and expects missing‑role handling.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "notebook", "role-protection"})
     public void taskManagerRoleProtection(String role) {
         WebDriver driver = extractDriver();

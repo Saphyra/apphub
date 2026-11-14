@@ -14,7 +14,7 @@ import NumberInput from "common/component/input/NumberInput";
 import "./merit_farm_mining.css";
 import LastUpdateSelector from "modules/feature/elite_base/common/component/last_update_selector/LastUpdateSelector";
 import { PowerplayActivity } from "./PowerplayActivity";
-import { cacheAndUpdate, cachedOrDefault } from "common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, copyToClipboard, getBrowserLanguage } from "common/js/Utils";
 
 const DISPLAY_SIZE = 20;
 
@@ -27,7 +27,7 @@ const CACHE_KEY_POWERPLAY_ACTIVITY = "elite_base_merit_farm_mining_powerplay_act
 const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-    const [offers, setOffers] = useState([]);
+    // State declarations
     const [refreshCounter, refresh] = useRefresh(0);
     const [displaySize, setDisplaySize] = useState(DISPLAY_SIZE);
 
@@ -36,6 +36,9 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
     const [minimumDemand, setMinimumDemand] = useState(cachedOrDefault(CACHE_KEY_MINIMUM_DEMAND, 1));
     const [maxTimeSinceLastUpdated, setMaxTimeSinceLastUpdated] = useState(cachedOrDefault(CACHE_KEY_MAX_TIME_SINCE_LAST_UPDATED, "P365D"));
     const [powerplayActivity, setPowerplayActivity] = useState(cachedOrDefault(CACHE_KEY_POWERPLAY_ACTIVITY, PowerplayActivity.ANY));
+
+    // Offers state
+    const [offers, setOffers] = useState([]);
 
     useEffect(() => setDisplaySize(DISPLAY_SIZE), [offers]);
 
@@ -104,10 +107,11 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
                     />
                 </div>
 
-                    <Button
-                        onclick={() => refresh()}
-                        label={localizationHandler.get("load")}
-                    />
+                <Button
+                    id="elite-base-merit-miner-display-more-button"
+                    onclick={() => refresh()}
+                    label={localizationHandler.get("load")}
+                />
             </fieldset>
 
             {offers.length > 0 &&
@@ -116,7 +120,11 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
                 </div>
             }
 
-            <table className="formatted-table" style={{ margin: "auto" }}>
+            <table
+                id="elite-base-merit-miner-search-result"
+                className="formatted-table"
+                style={{ margin: "auto" }}
+            >
                 <thead>
                     <tr>
                         <th>{localizationHandler.get("mine-in")}</th>
@@ -137,6 +145,7 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
 
             {offers.length > displaySize &&
                 <Button
+                    id="elite-base-merit-miner-display-more-button-bottom"
                     label={localizationHandler.get("display-more")}
                     onclick={() => setDisplaySize(displaySize + DISPLAY_SIZE)}
                 />
@@ -148,11 +157,23 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
         return new Stream(offers)
             .sorted((a, b) => b.price - a.price)
             .map(offer => (
-                <tr key={offer.sourceStarSystemId + offer.targetStarSystemId + offer.stationId + offer.commodityName}>
-                    <td>{offer.sourceStarSystemName}</td>
+                <tr
+                    key={offer.sourceStarSystemId + offer.targetStarSystemId + offer.stationId + offer.commodityName}
+                    className="elite-base-merit-miner-search-result-item"
+                >
+                    <td className="selectable">
+                        {offer.sourceStarSystemName}
+                        <CopyButton text={offer.sourceStarSystemName} />
+                    </td>
                     <td>{offer.reserveLevel}</td>
-                    <td>{offer.targetStarSystemName}</td>
-                    <td>{offer.stationName}</td>
+                    <td className="selectable">
+                        {offer.targetStarSystemName}
+                        <CopyButton text={offer.targetStarSystemName} />
+                    </td>
+                    <td className="selectable">
+                        {offer.stationName}
+                        <CopyButton text={offer.stationName} />
+                    </td>
                     <td>{offer.commodityName}</td>
                     <td>{offer.price}</td>
                     <td>{offer.demand}</td>
@@ -161,6 +182,17 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
                 </tr>
             ))
             .toList();
+
+        function CopyButton({ text }) {
+            return (
+                <Button
+                    onclick={() => copyToClipboard(text)}
+                    title={localizationHandler.get('copy-to-clipboard')}
+                    className="elite-base-merit-miner-copy-button"
+                    label="."
+                />
+            );
+        }
     }
 
     function getReserveLevelOptions() {

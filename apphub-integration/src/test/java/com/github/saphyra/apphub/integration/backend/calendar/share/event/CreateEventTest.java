@@ -27,6 +27,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateEventTest extends BackEndTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Creates an event under a shared label and verifies visibility and occurrence retrieval.
+     *
+     * <ul>
+     *   <li>Event created with label is visible to both owner and shared user via getEventsOfLabel.</li>
+     *   <li>Occurrence of event returned correctly for both users.</li>
+     *   <li>Occurrences within date range returned correctly for both users.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void createEventToSharedLabel() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

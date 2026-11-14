@@ -3,17 +3,13 @@ package com.github.saphyra.apphub.service.platform.monitoring.controller;
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsResponse;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
-import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.api.platform.monitoring.server.MonitoringController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
 import com.github.saphyra.apphub.service.platform.monitoring.service.MetricDataQueryService;
-import com.github.saphyra.apphub.service.platform.monitoring.service.put_metrics.PutMetricsRequestValidator;
-import com.github.saphyra.apphub.service.platform.monitoring.service.put_metrics.PutMetricsService;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,26 +22,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class MonitoringControllerImpl implements MonitoringController {
-    private final PutMetricsService putMetricsService;
-    private final ErrorReporterService errorReporterService;
     private final MetricDao metricDao;
     private final MetricServiceDao metricServiceDao;
     private final MetricDataQueryService metricDataQueryService;
-    private final PutMetricsRequestValidator putMetricsRequestValidator;
-
-    @Override
-    public void internalReportMetrics(String service, List<PutMetricsRequest> metrics) {
-        putMetricsRequestValidator.validate(metrics);
-
-        metrics.forEach((metric) -> {
-            try {
-                log.debug("Arrived: {}", metric);
-                putMetricsService.putMetrics(service, metric);
-            } catch (Exception e) {
-                errorReporterService.report("Failed to put metric" + metric, e);
-            }
-        });
-    }
 
     @Override
     public List<Feature> getFeatures(AccessToken accessToken) {

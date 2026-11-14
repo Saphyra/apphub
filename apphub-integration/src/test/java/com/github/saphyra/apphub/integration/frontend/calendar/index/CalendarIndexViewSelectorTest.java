@@ -15,6 +15,17 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarIndexViewSelectorTest extends SeleniumTest {
+    /**
+     * Tests that the calendar view selector correctly updates the number of days displayed
+     * for each view type (week, surrounding weeks, following weeks, month).
+     * <p>
+     * <ul>
+     *   <li>Switch to WEEK view and verify 7 days are shown.</li>
+     *   <li>Switch to SURROUNDING_WEEKS view and verify 21 days are shown.</li>
+     *   <li>Switch to FOLLOWING_WEEKS view and verify 35 days are shown.</li>
+     *   <li>Switch to MONTH view and verify at least 28 days are shown.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void viewSelector() {
         WebDriver driver = extractDriver();

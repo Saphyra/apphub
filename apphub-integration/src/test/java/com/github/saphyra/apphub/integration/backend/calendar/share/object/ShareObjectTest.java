@@ -32,6 +32,23 @@ public class ShareObjectTest extends BackEndTest {
     private static final String LABEL_1 = "label-1";
     private static final String LABEL_2 = "label-2";
 
+    /**
+     * Tests sharing calendar objects and validation of share requests.
+     * <ul>
+     *   <li>share label, event, and occurrence to another user</li>
+     *   <li>validate error when sharedWith is null</li>
+     *   <li>validate error when owner is null</li>
+     *   <li>validate error when objectId is null</li>
+     *   <li>validate error when type is null</li>
+     *   <li>validate error when grants are null or empty</li>
+     *   <li>validate error when parent is null</li>
+     *   <li>validate error when sharing an object not owned by the user</li>
+     *   <li>validate error when sharing with self</li>
+     *   <li>validate error when sharedWith does not exist</li>
+     *   <li>validate error when object does not exist</li>
+     *   <li>validate error when already shared</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void shareObject() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
@@ -52,7 +52,7 @@ class NotebookViewFactoryTest {
     private IsParentArchivedService isParentArchivedService;
 
     @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @Mock
     private AccessTokenProvider accessTokenProvider;

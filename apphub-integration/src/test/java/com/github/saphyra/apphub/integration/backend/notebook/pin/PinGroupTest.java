@@ -25,6 +25,20 @@ public class PinGroupTest extends BackEndTest {
     private static final String PIN_GROUP_NAME = "pin-group-name";
     private static final String NEW_PIN_GROUP_NAME = "new-pin-group-name";
 
+    /**
+     * Tests pin group lifecycle and item association.
+     *
+     * <ul>
+     *   <li>validate createPinGroup returns error when name blank</li>
+     *   <li>validate createPinGroup returns error when name too long</li>
+     *   <li>validate renamePinGroup returns error when new name blank</li>
+     *   <li>validate renamePinGroup returns error when new name too long</li>
+     *   <li>validate addItemToPinGroup adds item correctly</li>
+     *   <li>validate removeItemFromPinGroup removes item correctly</li>
+     *   <li>validate deletePinGroup deletes group</li>
+     * </ul>
+     */
+
     @Test(groups = {"be", "notebook"})
     public void pinListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

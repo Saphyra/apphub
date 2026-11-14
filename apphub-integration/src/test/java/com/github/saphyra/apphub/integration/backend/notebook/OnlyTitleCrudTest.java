@@ -27,6 +27,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OnlyTitleCrudTest extends BackEndTest {
     private static final String TITLE = "title";
 
+    /**
+     * Tests CRUD operations for only-title items including validation of input constraints and deletion.
+     *
+     * <ul>
+     *   <li>validate creation with blank title returns error</li>
+     *   <li>validate creation with too long title returns error</li>
+     *   <li>validate creation with non-existent parent category returns 404</li>
+     *   <li>validate successful creation and retrieval of only-title item</li>
+     *   <li>validate creation with parent that is not a category returns invalid type</li>
+     *   <li>validate deletion removes item from parent</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void onlyTitleCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

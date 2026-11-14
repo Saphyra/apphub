@@ -23,6 +23,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests lobby creation and validation.
+     *
+     * <ul>
+     *   <li>validate create lobby endpoint with null name returns error</li>
+     *   <li>validate create lobby endpoint with too short name returns error</li>
+     *   <li>validate create lobby endpoint with too long name returns error</li>
+     *   <li>verify user is not in lobby before creation</li>
+     *   <li>after creating lobby, verify lobby has one member with correct id and status NOT_READY</li>
+     *   <li>verify user is now in lobby</li>
+     * </ul>
+     */
+
     @Test(groups = {"be", "skyxplore"})
     public void createLobby() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

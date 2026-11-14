@@ -14,6 +14,15 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class SkyXploreSettingRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests that setting endpoints enforce role protection.
+     *
+     * <ul>
+     *   <li>validate endpoint getCreateOrUpdateSettingResponse returns 403 when called without required role</li>
+     *   <li>validate endpoint getSettingResponse returns 403 when called without required role</li>
+     *   <li>validate endpoint getDeleteResponse returns 403 when called without required role</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void settingRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

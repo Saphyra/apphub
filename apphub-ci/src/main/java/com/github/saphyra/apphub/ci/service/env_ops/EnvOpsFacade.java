@@ -59,7 +59,7 @@ public class EnvOpsFacade {
                 .toList();
             action = Action.BUILD_AND_DEPLOY;
         } else {
-            servicesToStart = getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames);
+            servicesToStart = getServicesToStart(environment, enabledServiceNames, startUserDefinedServices, userDefinedServiceNames);
         }
 
         switch (environment) {
@@ -130,7 +130,7 @@ public class EnvOpsFacade {
         }
     }
 
-    private List<Service> getServicesToStart(List<String> enabledServiceNames, boolean startUserDefinedServices, List<String> userDefinedServiceNames) {
+    private List<Service> getServicesToStart(Environment environment, List<String> enabledServiceNames, boolean startUserDefinedServices, List<String> userDefinedServiceNames) {
         if (startUserDefinedServices) {
             return services.getServices()
                 .stream()
@@ -140,7 +140,7 @@ public class EnvOpsFacade {
         } else {
             return services.getServices()
                 .stream()
-                .filter(service -> !service.isOptional() || enabledServiceNames.contains(service.getName()))
+                .filter(service -> environment.isProdLike() || !service.isOptional() || enabledServiceNames.contains(service.getName()))
                 .toList();
         }
     }

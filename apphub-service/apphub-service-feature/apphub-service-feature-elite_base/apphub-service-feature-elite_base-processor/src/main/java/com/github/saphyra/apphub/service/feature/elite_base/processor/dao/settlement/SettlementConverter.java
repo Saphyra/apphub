@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.dao.settlement;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +11,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class SettlementConverter extends ConverterBase<SettlementEntity, Settlement> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
 
     @Override
     protected SettlementEntity processDomainConversion(Settlement domain) {
         return SettlementEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
-            .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .bodyId(uuidConverter.convertDomain(domain.getBodyId()))
             .settlementName(domain.getSettlementName())
@@ -32,7 +29,6 @@ class SettlementConverter extends ConverterBase<SettlementEntity, Settlement> {
     protected Settlement processEntityConversion(SettlementEntity entity) {
         return Settlement.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
-            .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .bodyId(uuidConverter.convertEntity(entity.getBodyId()))
             .settlementName(entity.getSettlementName())

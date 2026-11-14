@@ -23,6 +23,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
     private static final String EVENT_TITLE_2 = "event-title-2";
 
+    /**
+     * Verifies that editing a shared event without view grant behaves correctly.
+     *
+     * <ul>
+     *   <li>Owner can edit the event but shared user cannot see changes.</li>
+     *   <li>Shared user sees original title with suffix.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedEvent_noViewGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -35,7 +43,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
 
@@ -63,6 +71,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
             .containsExactly(parameters.getTitle()));
     }
 
+    /**
+     * Tests editing of a shared event when label has VIEW_CHILDREN grant and event has EDIT grant.
+     *
+     * <ul>
+     *   <li>Owner edits the event; shared user sees updated title with suffix.</li>
+     *   <li>Original owner still sees original title after edit.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedEvent_labelHasViewChildrenGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -74,12 +90,12 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), false);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         shareEventFromOpenedLabel(ownerDriver, parameters.getTitle(), testContext.sharedWithUserData().getEmail(), false);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
 
@@ -100,6 +116,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(ownerDriver)).isEqualTo(EVENT_TITLE_2));
     }
 
+    /**
+     * Validates that an owner can edit a shared event with full grants.
+     *
+     * <ul>
+     *   <li>Edited title is visible to both owners and shared users.</li>
+     *   <li>Occurrence shows updated title with suffix for shared user.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedEvent() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -110,7 +134,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
 
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
 
@@ -132,6 +156,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
             .containsExactly(EVENT_TITLE_2));
     }
 
+    /**
+     * Checks editing of a shared event when only EDIT grant is given, no view.
+     *
+     * <ul>
+     *   <li>Owner sees original title; shared user sees updated title with suffix.</li>
+     *   <li>Changes are not reflected back to owner after edit.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedEvent_noGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -143,7 +175,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         editEventFromIndex(sharedWithDriver, parameters);
@@ -168,6 +200,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
             .containsExactly(parameters.getTitle()));
     }
 
+    /**
+     * Ensures that editing an event within a shared label without grants does not affect owner visibility.
+     *
+     * <ul>
+     *   <li>Shared user edits but owner still sees original title.</li>
+     *   <li>No changes propagate to owner after edit.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editEventOfSharedLabel_noGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -179,7 +219,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), true);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarFlow.openSharedLabelEvent(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX, parameters.getTitle() + Constants.SHARED_SUFFIX);
         AwaitilityWrapper.retry(() -> CalendarLabelsPageActions.editOpenedEvent(sharedWithDriver));
@@ -214,6 +254,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
             .containsExactly(parameters.getTitle()));
     }
 
+    /**
+     * Tests editing when only the label has EDIT grant, event has full grants.
+     *
+     * <ul>
+     *   <li>Owner sees updated title; shared user sees suffix.</li>
+     *   <li>Owner retains visibility of original events.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedEventOfSharedLabel_onlyLabelHasGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -224,7 +272,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
 
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), true);
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarSharePageActions.back(ownerDriver);
         CalendarLabelsPageActions.back(ownerDriver);
@@ -232,7 +280,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         CalendarFlow.openSharedLabelEvent(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX, parameters.getTitle() + Constants.SHARED_SUFFIX);
@@ -256,6 +304,14 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
             .containsExactly(EVENT_TITLE_2));
     }
 
+    /**
+     * Tests editing when only event has EDIT grant, label has full grants.
+     *
+     * <ul>
+     *   <li>Both owners see updated title with suffix.</li>
+     *   <li>Original owner retains visibility of events.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedEventOfSharedLabel_onlyEventHasGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -266,7 +322,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
 
         shareLabel(ownerDriver, testContext.sharedWithUserData().getEmail(), true);
         CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarSharePageActions.back(ownerDriver);
         CalendarLabelsPageActions.back(ownerDriver);
@@ -274,7 +330,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         shareEventFromIndexPage(ownerDriver, parameters, testContext.sharedWithUserData().getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
         CalendarSharePageActions.back(ownerDriver);
 
         CalendarFlow.openSharedLabelEvent(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX, parameters.getTitle() + Constants.SHARED_SUFFIX);

@@ -22,6 +22,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShareCrudTest extends SeleniumTest {
+    /**
+     * Tests the full lifecycle of sharing a calendar event: creation, sharing, grant modification, and unsharing.
+     *
+     * <ul>
+     *   <li>Creates a one‑time event and verifies success toast.</li>
+     *   <li>Shares the event with another user granting view and view children permissions; verifies shared event appears for that user.</li>
+     *   <li>Edits grants to remove view permission; verifies title changes to question mark suffix.</li>
+     *   <li>Unshares the event; verifies no shared events are visible for either user.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void shareCrud() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -49,7 +59,7 @@ public class ShareCrudTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate()))
@@ -72,7 +82,7 @@ public class ShareCrudTest extends SeleniumTest {
             .orElseThrow()
             .unshare(ownerDriver);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarSharePageActions.getSharedWith(ownerDriver)).isEmpty());
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarSharePageActions.getSharedWithExistingObject(ownerDriver)).isEmpty());
 
         sharedWithDriver.navigate().refresh();
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())).isEmpty());

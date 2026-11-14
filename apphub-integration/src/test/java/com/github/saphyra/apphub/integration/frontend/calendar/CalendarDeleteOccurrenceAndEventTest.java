@@ -20,6 +20,15 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarDeleteOccurrenceAndEventTest extends SeleniumTest {
+    /**
+     * Tests deletion of a single occurrence and the entire event for a recurring calendar entry.
+     *
+     * <ul>
+     *   <li>Creates a recurring event and verifies that all expected occurrences are present.</li>
+     *   <li>Deletes one occurrence and checks that only that occurrence is removed while others remain.</li>
+     *   <li>Deletes the whole event and confirms that no occurrences of the event exist.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void deleteOccurrenceAndEvent() {
         WebDriver driver = extractDriver();

@@ -1,11 +1,7 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import jakarta.annotation.Nullable;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -13,37 +9,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
-@Slf4j
-public class MetricDataDao extends AbstractDao<MetricDataEntity, MetricData, String, MetricDataRepository> {
-    private final UuidConverter uuidConverter;
+public interface MetricDataDao {
+    void deleteByTimestampBefore(LocalDateTime expiration);
 
-    MetricDataDao(MetricDataConverter converter, MetricDataRepository repository, UuidConverter uuidConverter) {
-        super(converter, repository);
-        this.uuidConverter = uuidConverter;
-    }
+    Collection<String> getServices();
 
-    public void deleteByTimestampBefore(LocalDateTime expiration) {
-        repository.deleteByExpirationBefore(expiration);
-    }
+    Collection<UUID> getMetricIds();
 
-    public List<MetricData> getByTypeBetween(MetricDataType type, LocalDateTime expirationStart, LocalDateTime expirationEnd) {
-        return converter.convertEntity(repository.getByTypeBetween(type, expirationStart, expirationEnd));
-    }
+    Optional<MetricData> findOldest(MetricDataType metricDataType);
 
-    public List<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, Collection<UUID> metricIds, @Nullable String service, LocalDateTime timestamp) {
-        return converter.convertEntity(repository.getByTypeAndMetricIdInAndServiceAfter(type, uuidConverter.convertDomain(metricIds), service, timestamp));
-    }
+    Collection<MetricData> getByTypeBetween(MetricDataType metricDataType, LocalDateTime expirationStart, LocalDateTime expirationEnd);
 
-    public Optional<MetricData> findOldest(MetricDataType metricDataType) {
-        return converter.convertEntity(repository.findFirstByTypeOrderByTimestampAsc(metricDataType));
-    }
+    void save(MetricData aggregated);
 
-    public List<String> getServices() {
-        return repository.getServices();
-    }
+    void deleteAll(List<MetricData> metrics);
 
-    public List<UUID> getMetricIds() {
-        return uuidConverter.convertEntity(repository.getMetricIds());
-    }
+    Collection<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, Collection<UUID> uuids, @Nullable String service, LocalDateTime timestamp);
 }

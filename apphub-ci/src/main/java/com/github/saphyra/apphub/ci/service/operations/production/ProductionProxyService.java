@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
 import com.github.saphyra.apphub.ci.tool.service.ServiceStarter;
-import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ProductionProxyService {
     private final PlatformProperties platformProperties;
     private final KubernetesPortForwarder kubernetesPortForwarder;
     private final ServiceStarter serviceStarter;
-    private  final StartupIndicatorFactory startupIndicatorFactory;
+    private  final ProgressIndicatorFactory progressIndicatorFactory;
 
     @SneakyThrows
     public void start() {
@@ -35,6 +35,6 @@ public class ProductionProxyService {
         kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeProductionMainGatewayPort(), Constants.SERVICE_PORT);
 
 
-        serviceStarter.startService(platformProperties.getProductionProxy(), startupIndicatorFactory.noOpIndicator());
+        serviceStarter.startService(platformProperties.getProductionProxy(), progressIndicatorFactory.noOpIndicator());
     }
 }

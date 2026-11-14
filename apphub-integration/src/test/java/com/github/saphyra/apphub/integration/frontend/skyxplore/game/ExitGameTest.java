@@ -26,6 +26,14 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExitGameTest extends SeleniumTest {
+    /**
+     * Tests exiting a game with and without saving progress.
+     *
+     * <ul>
+     *   <li>Exiting without saving discards terraformation.</li>
+     *   <li>Exiting after saving preserves terraformation state.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void exitWithAndWithoutSaving() {
         WebDriver driver = extractDriver();

@@ -28,6 +28,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TerraformationQueueTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests CRUD operations for a terraformation queue item.
+     *
+     * <ul>
+     *   <li>Creates a terraformation request and verifies the queue entry.</li>
+     *   <li>Attempts to set priority with invalid type, too low, and too high values.</li>
+     *   <li>Sets a valid priority and checks it is applied.</li>
+     *   <li>Cancels the terraformation request using an invalid type and then a valid one.</li>
+     *   <li>Verifies that the surface is no longer terraformed after cancellation.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void terraformationQueueCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

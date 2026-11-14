@@ -13,6 +13,16 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class MonitoringRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests that a user without the required monitoring role cannot access any monitoring endpoints.
+     *
+     * <ul>
+     *   <li>validate GET /monitoring/features returns 403 when called with missing role</li>
+     *   <li>validate GET /monitoring/functionality/{feature} returns 403 when called with missing role</li>
+     *   <li>validate GET /monitoring/services/{feature}/{service} returns 403 when called with missing role</li>
+     *   <li>validate GET /monitoring/metrics/{metricType}/... returns 403 when called with missing role</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "monitoring", "role-protection"})
     public void monitoringRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

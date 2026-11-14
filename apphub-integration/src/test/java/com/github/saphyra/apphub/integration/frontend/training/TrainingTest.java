@@ -30,6 +30,14 @@ public class TrainingTest extends SeleniumTest {
             .toArray();
     }
 
+    /**
+     * Tests navigation through training chapters for a given module.
+     * <ul>
+     *   <li>Validate that user can navigate forward through all chapters using the next button.</li>
+     *   <li>Validate that user can navigate backward through all chapters using the previous button.</li>
+     *   <li>Validate that user can open any chapter directly from the menu and the displayed content matches expectations.</li>
+     * </ul>
+     */
     @Test(dataProvider = "bookDataProvider", groups = {"fe", "training"})
     public void bookStepThroughTest(ModuleLocation moduleLocation) {
         WebDriver driver = extractDriver();
