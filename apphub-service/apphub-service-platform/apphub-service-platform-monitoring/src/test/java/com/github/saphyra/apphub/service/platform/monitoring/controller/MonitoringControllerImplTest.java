@@ -5,14 +5,11 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsRespons
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
 import com.github.saphyra.apphub.service.platform.monitoring.service.MetricDataQueryService;
-import com.github.saphyra.apphub.service.platform.monitoring.service.put_metrics.PutMetricsRequestValidator;
-import com.github.saphyra.apphub.service.platform.monitoring.service.put_metrics.PutMetricsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,19 +21,12 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class MonitoringControllerImplTest {
     private static final String SERVICE = "service";
     private static final String FUNCTIONALITY = "functionality";
     private static final UUID METRIC_ID = UUID.randomUUID();
-
-    @Mock
-    private PutMetricsService putMetricsService;
-
-    @Mock
-    private ErrorReporterService errorReporterService;
 
     @Mock
     private MetricDao metricDao;
@@ -46,9 +36,6 @@ class MonitoringControllerImplTest {
 
     @Mock
     private MetricDataQueryService metricDataQueryService;
-
-    @Mock
-    private PutMetricsRequestValidator putMetricsRequestValidator;
 
     @InjectMocks
     private MonitoringControllerImpl underTest;
@@ -67,14 +54,6 @@ class MonitoringControllerImplTest {
 
     @Mock
     private GetMetricsResponse getMetricsResponse;
-
-    @Test
-    void internalReportMetrics() {
-        underTest.internalReportMetrics(SERVICE, List.of(request));
-
-        then(putMetricsRequestValidator).should().validate(List.of(request));
-        then(putMetricsService).should().putMetrics(SERVICE, request);
-    }
 
     @Test
     void getFeatures() {

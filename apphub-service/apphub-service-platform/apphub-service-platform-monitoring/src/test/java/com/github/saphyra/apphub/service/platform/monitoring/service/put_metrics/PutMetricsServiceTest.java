@@ -52,6 +52,9 @@ class PutMetricsServiceTest {
     @Mock
     private MetricDataFactory metricDataFactory;
 
+    @Mock
+    private PutMetricsRequestValidator putMetricsRequestValidator;
+
     @InjectMocks
     private PutMetricsService underTest;
 
@@ -87,9 +90,9 @@ class PutMetricsServiceTest {
         Map<String, Double> properties = Map.of(PROPERTY_KEY, PROPERTY_VALUE);
         given(metricDataFactory.createSecond(METRIC_ID, SERVICE, TIMESTAMP.withNano(0), properties)).willReturn(metricData);
 
-
         underTest.putMetrics(SERVICE, request);
 
+        then(putMetricsRequestValidator).should().validate(request);
         then(metricServiceDao).should().save(metricService);
         then(putMetricsPropertyValidator).should().saveOrVerifyProperties(METRIC_ID, List.of(propertyModel));
         then(metricDataDao).should().save(metricData);

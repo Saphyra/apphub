@@ -38,10 +38,13 @@ public class PutMetricsService {
     private final PutMetricsPropertyValidator putMetricsPropertyValidator;
     private final MetricServiceFactory metricServiceFactory;
     private final MetricDataFactory metricDataFactory;
+    private final PutMetricsRequestValidator putMetricsRequestValidator;
 
     @Transactional
     @SneakyThrows
     public void putMetrics(String service, PutMetricsRequest metric) {
+        putMetricsRequestValidator.validate(metric);
+
         //Processing of metrics for the same feature and functionality must be synchronized to avoid concurrent creation of the same metric and metric properties.
         LockKey lockKey = new LockKey(metric.getFeature(), metric.getFunctionality());
         Lock lock = LOCKS.get(lockKey);

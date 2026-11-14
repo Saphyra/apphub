@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.config.properties.GameProperties;
@@ -79,7 +79,7 @@ class PopulationMessageSenderTest {
     void setUp() {
         underTest = PopulationMessageSender.builder()
             .populationWebSocketHandler(populationWebSocketHandler)
-            .executorServiceBean(ExecutorServiceBeenTestUtils.create(errorReporterService))
+            .executorServiceBean(ExecutorServiceBeeaTestUtils.create(errorReporterService))
             .dateTimeUtil(dateTimeUtil)
             .populationQueryService(populationQueryService)
             .gameProperties(gameProperties)

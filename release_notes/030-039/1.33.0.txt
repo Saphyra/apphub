@@ -10,6 +10,8 @@
         Saving MinorFactionState before MinorFaction caused ForeignKeyViolation making up the system unable to register new MinorFactions
 
 ===PLATFORM CHANGES===
+    Monitoring
+        Reporting metrics goes through RabbitMQ
 
 ===TECHNICAL DEBTS===
     ApphubCI

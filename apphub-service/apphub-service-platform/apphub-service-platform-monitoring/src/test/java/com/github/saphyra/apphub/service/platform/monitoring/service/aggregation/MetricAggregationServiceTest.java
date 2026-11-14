@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.monitoring.service.aggregatio
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
@@ -42,7 +42,7 @@ class MetricAggregationServiceTest {
     private MetricDataDao metricDataDao;
 
     @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @Mock
     private MetricDataFactory metricDataFactory;
