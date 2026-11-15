@@ -28,6 +28,16 @@ public class EditOccurrenceTest extends SeleniumTest {
     private static final LocalTime NEW_OCCURRENCE_TIME = LocalTime.of(15, 30);
     private static final String NEW_NOTE = "new-note";
 
+    /**
+     * Edits an occurrence of a recurring event and verifies validation, status changes, and note updates.
+     *
+     * <ul>
+     *   <li>Error message appears when user saves with empty date.</li>
+     *   <li>Occurrence saved successfully when valid data is provided.</li>
+     *   <li>Status updated to REMINDER for original day and SNOOZED for edited day.</li>
+     *   <li>No occurrences remain on the original start date after editing.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void editOccurrence() {
         WebDriver driver = extractDriver();

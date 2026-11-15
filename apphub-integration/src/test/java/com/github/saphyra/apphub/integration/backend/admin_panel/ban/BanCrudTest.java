@@ -26,6 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BanCrudTest extends BackEndTest {
     private static final String REASON = "reason";
 
+    /**
+     * Tests CRUD operations for banning users.
+     * <ul>
+     *   <li>Creates a user and an admin, then performs ban scenarios with various invalid inputs.</li>
+     *   <li>Verifies that the ban endpoint returns appropriate error responses for null or blank parameters.</li>
+     *   <li>Checks password validation logic by attempting bans with incorrect passwords and ensuring account lock after retries.</li>
+     *   <li>Creates a valid ban, retrieves it, and then revokes it while testing invalid password handling during revoke.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     public void banCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

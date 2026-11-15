@@ -22,6 +22,16 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateFriendRequestTest extends BackEndTest {
+    /**
+     * Tests creating a friend request between two users.
+     *
+     * <ul>
+     *   <li>Creates a friend request successfully when both users exist.</li>
+     *   <li>Returns 404 if the target user does not exist.</li>
+     *   <li>Returns 409 if a friend request already exists.</li>
+     *   <li>Returns 409 if a friendship already exists.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void createFriendRequest() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -16,6 +16,15 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetFriendCandidatesTest extends BackEndTest {
+    /**
+     * Tests retrieving friend candidates after establishing a friendship.
+     *
+     * <ul>
+     *   <li>Creates four users with the same character identifier.</li>
+     *   <li>Establishes a friendship between user1 and user3.</li>
+     *   <li>Verifies that searching for candidates returns only the remaining user (user4).</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void getFriendCandidates() {
         String characterIdentifier = UUID.randomUUID().toString().substring(0, 6);

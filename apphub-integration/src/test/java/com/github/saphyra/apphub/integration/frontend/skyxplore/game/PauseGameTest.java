@@ -26,6 +26,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PauseGameTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests pausing and resuming a game.
+     *
+     * <ul>
+     *   <li>Pauses terraformation queue, verifies status pause.</li>
+     *   <li>Resumes and checks queue continues after pause.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void pauseAndResumeGame() {
         WebDriver driver = extractDriver();

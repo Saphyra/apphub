@@ -19,6 +19,18 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MonitoringTest extends SeleniumTest {
+    /**
+     * Tests the monitoring page functionality for an admin user.
+     *
+     * <ul>
+     *   <li>register a new user and grant ADMIN role</li>
+     *   <li>invalidate access token to force re-authentication</li>
+     *   <li>open monitoring module and select memory monitoring feature</li>
+     *   <li>verify that all services for the environment are displayed</li>
+     *   <li>load metrics and verify metric services list matches expected services</li>
+     *   <li>filter by USER service and confirm only that service remains in the metric list</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "monitoring"})
     public void monitoringTest() {
         WebDriver driver = extractDriver();

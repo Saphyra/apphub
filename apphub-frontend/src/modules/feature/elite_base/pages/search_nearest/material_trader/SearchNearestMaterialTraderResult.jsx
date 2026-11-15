@@ -8,7 +8,7 @@ const SearchNearestMaterialTraderResult = ({ localizationHandler, searchResult, 
         <div id="elite-base-sn-material-trader-search-result">
             <table className="formatted-table selectable">
                 <thead>
-                    <tr>
+                    <tr >
                         <th>{localizationHandler.get("material-type")}</th>
                         <th>{localizationHandler.get("distance-from-reference")}</th>
                         <th>{localizationHandler.get("star-system-name")}</th>
@@ -39,7 +39,7 @@ const SearchNearestMaterialTraderResult = ({ localizationHandler, searchResult, 
 
 const SearchResultRow = ({ localizationHandler, record, reload }) => {
     return (
-        <tr>
+        <tr className="elite-base-sn-material-trader-result-row">
             <td>
                 <span>{record.materialType}</span>
                 {record.materialType !== record.originalMaterialType && <span> ({record.originalMaterialType})</span>}

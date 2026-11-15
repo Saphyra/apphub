@@ -25,6 +25,21 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BuildingModuleQueueTest extends SeleniumTest {
+    /**
+     * Tests CRUD operations for building module queue on a planet surface,
+     * including creation, progress, cancellation, and completion.
+     *
+     * <ul>
+     *   <li>Creates a building module construction item and verifies title.</li>
+     *   <li>Resumes game to start construction and checks status &gt;20.</li>
+     *   <li>Cancels the queue item and ensures queue is empty.</li>
+     *   <li>Recreates construction item and verifies completion after resume.</li>
+     *   <li>Starts deconstruction of built module, verifies title.</li>
+     *   <li>Resumes game to start deconstruction and checks status &gt;20.</li>
+     *   <li>Cancels deconstruction and ensures queue is empty.</li>
+     *   <li>Recreates deconstruction item and verifies completion after resume.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void buildingModuleQueueCrud() {
         WebDriver driver = extractDriver();

@@ -31,6 +31,15 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleManagementCrudTest extends SeleniumTest {
+    /**
+     * Tests that a disabled role blocks access and can be toggled.
+     *
+     * <ul>
+     *   <li>Verify the page is forbidden when the role is disabled.</li>
+     *   <li>Disable the role with correct credentials and confirm success.</li>
+     *   <li>Enable the role again with correct credentials and confirm success.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void pageForbiddenWhenRoleDisabled() {
@@ -53,6 +62,14 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         enableRole(driver, userData);
     }
 
+    /**
+     * Tests disabling and enabling a role with correct credentials.
+     *
+     * <ul>
+     *   <li>Disable the role and confirm success.</li>
+     *   <li>Enable the role again and confirm success.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void disableAndEnableRole() {

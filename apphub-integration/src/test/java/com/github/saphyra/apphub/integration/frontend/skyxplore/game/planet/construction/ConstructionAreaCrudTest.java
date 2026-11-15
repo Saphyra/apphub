@@ -22,6 +22,16 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests CRUD operations for construction areas on a planet surface.
+ *
+ * <ul>
+ *   <li>Creates an extractor construction area and verifies it is in progress.</li>
+ *   <li>Cancels the construction, ensuring the area is removed.</li>
+ *   <li>Finishes construction after game resume and confirms completion.</li>
+ *   <li>Deconstructs the area, verifying deconstruction starts and ends correctly.</li>
+ * </ul>
+ */
 public class ConstructionAreaCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "skyxplore"})
     public void constructionAreaCrud() {

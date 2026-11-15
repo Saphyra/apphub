@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarSha
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory;
 import com.github.saphyra.apphub.integration.action.backend.calendar.OccurrenceRequestFactory;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
@@ -36,6 +37,28 @@ public class GetSharedOccurrenceTest extends BackEndTest {
     private static final String NOTE = "note";
     private static final String LABEL = "label";
 
+    /**
+     * Retrieves a shared occurrence and verifies its properties based on grant combinations.
+     *
+     * <ul>
+     *   <li>when only the occurrence is shared with VIEW grant</li>
+     *   <li>when only the occurrence is shared with SEE grant</li>
+     *   <li>when event is shared with VIEW + VIEW_CHILDREN grants and no occurrence grant</li>
+     *   <li>when event is shared with VIEW + SEE_CHILDREN grants and no occurrence grant</li>
+     *   <li>when event is shared with SEE + VIEW_CHILDREN grants and no occurrence grant</li>
+     *   <li>when event is shared with SEE + SEE_CHILDREN grants and no occurrence grant</li>
+     *   <li>when event is shared with VIEW grant and occurrence is shared with VIEW grant</li>
+     *   <li>when event is shared with VIEW grant and occurrence is shared with SEE grant</li>
+     *   <li>when event is shared with VIEW + VIEW_CHILDREN grants and occurrence is shared with SEE grant</li>
+     *   <li>when event is shared with VIEW + SEE_CHILDREN grants and occurrence is shared with VIEW grant</li>
+     *   <li>when event is shared with SEE grant and occurrence is shared with VIEW grant</li>
+     *   <li>when event is shared with SEE grant and occurrence is shared with SEE grant</li>
+     *   <li>when label is shared with VIEW_CHILDREN grant only</li>
+     *   <li>when label is shared with SEE_CHILDREN grant only</li>
+     *   <li>when label is shared with SEE_CHILDREN grant and occurrence is shared with VIEW grant</li>
+     *   <li>when label is shared with SEE_CHILDREN grant and event is shared with VIEW grant</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "getSharedOccurrenceData")
     void getSharedOccurrence(
         Set<Grant> labelGrants,
@@ -131,6 +154,62 @@ public class GetSharedOccurrenceTest extends BackEndTest {
             .returns(expectedEventArchived, OccurrenceResponse::getEventArchived)
             .returns(expectedAutoDone, OccurrenceResponse::getAutoDone)
             .returns(true, OccurrenceResponse::getShared);
+    }
+
+    /**
+     * Verifies that retrieving a shared occurrence fails when the user lacks sufficient grants.
+     */
+    @Test(groups = {"be", "calendar"})
+    void getSharedOccurrence_noGrant() {
+        RegistrationParameters ownerData = RegistrationParameters.validParameters();
+        String ownerToken = IndexPageActions.registerAndLogin(getServerPort(), ownerData);
+        UUID ownerId = UserDynamoDbRepository.getUserIdByEmail(ownerData.getEmail());
+
+        RegistrationParameters sharedWithData = RegistrationParameters.validParameters();
+        String sharedWithToken = IndexPageActions.registerAndLogin(getServerPort(), sharedWithData);
+        UUID sharedWithUserId = UserDynamoDbRepository.getUserIdByEmail(sharedWithData.getEmail());
+
+        //Create event
+        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), ownerToken, LABEL)
+            .getLabelId();
+        EventRequest eventRequest = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
+            .toBuilder()
+            .labels(Map.of(labelId, ownerId))
+            .build();
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), ownerToken, eventRequest);
+        OccurrenceResponse occurrenceResponse = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), ownerToken, eventId)
+            .getFirst();
+        UUID occurrenceId = occurrenceResponse
+            .getOccurrenceId();
+        OccurrenceRequest occurrenceRequest = OccurrenceRequestFactory.fromResponse(occurrenceResponse)
+            .note(NOTE)
+            .build();
+        CalendarOccurrenceActions.editOccurrence(getServerPort(), ownerToken, eventId, occurrenceId, occurrenceRequest);
+
+        //Share label
+        ShareObjectRequest shareLabelRequest = ShareObjectRequest.builder()
+            .sharedWith(sharedWithUserId)
+            .owner(ownerId)
+            .objectId(labelId)
+            .parent(ownerId)
+            .type(SharedObjectType.LABEL)
+            .grants(Set.of(Grant.VIEW))
+            .build();
+        CalendarShareActions.shareObject(getServerPort(), ownerToken, shareLabelRequest);
+
+        //Share event
+        ShareObjectRequest shareEventRequest = ShareObjectRequest.builder()
+            .sharedWith(sharedWithUserId)
+            .owner(ownerId)
+            .objectId(eventId)
+            .parent(ownerId)
+            .type(SharedObjectType.EVENT)
+            .grants(Set.of(Grant.VIEW))
+            .build();
+        CalendarShareActions.shareObject(getServerPort(), ownerToken, shareEventRequest);
+
+        //Query
+        ResponseValidator.verifyNotFound(CalendarOccurrenceActions.getGetOccurrenceResponse(getServerPort(), sharedWithToken, eventId, occurrenceId));
     }
 
     @DataProvider(parallel = true)

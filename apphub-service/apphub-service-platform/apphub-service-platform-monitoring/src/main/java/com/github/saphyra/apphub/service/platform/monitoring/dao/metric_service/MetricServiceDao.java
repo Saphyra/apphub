@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.dao.InMemoryDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class MetricServiceDao extends InMemoryDao<MetricServiceEntity, MetricSer
             .toList();
     }
 
-    public void deleteByServiceNotIn(List<String> services) {
+    public void deleteByServiceNotIn(Collection<String> services) {
         List<MetricService> toRemove = cache.values()
             .stream()
             .filter(metricService -> !services.contains(metricService.getService()))
@@ -46,7 +47,7 @@ public class MetricServiceDao extends InMemoryDao<MetricServiceEntity, MetricSer
         repository.deleteByServiceNotIn(services);
     }
 
-    public void deleteByMetricIdsNotIn(List<UUID> metricIds) {
+    public void deleteByMetricIdsNotIn(Collection<UUID> metricIds) {
         List<MetricService> toRemove = cache.values()
             .stream()
             .filter(metricService -> !metricIds.contains(metricService.getMetricId()))

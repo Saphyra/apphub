@@ -28,6 +28,16 @@ public class ScheduleUserDeletionTest extends BackEndTest {
     private static final Integer MINUTES = 54;
     private static final String MARKED_FOR_DELETION_AT = String.format("%sT%s:%s", DATE, HOURS, MINUTES);
 
+    /**
+     * Tests scheduling and unscheduling of user deletion.
+     * <ul>
+     *   <li>Validates that null password triggers a validation error.</li>
+     *   <li>Checks incorrect password results in bad request.</li>
+     *   <li>Ensures missing or malformed markForDeletionAt causes errors.</li>
+     *   <li>Confirms successful marking for deletion with correct timestamp.</li>
+     *   <li>Verifies unmarking removes the scheduled deletion flag.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     public void scheduleUserDeletionCd() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

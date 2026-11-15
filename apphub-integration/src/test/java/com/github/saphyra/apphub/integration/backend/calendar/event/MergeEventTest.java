@@ -18,6 +18,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MergeEventTest extends BackEndTest {
+    /**
+     * Tests merging calendar events.
+     *
+     * <ul>
+     *   <li>Merges a parent event with a child; verifies child removed, other event remains and parent has two occurrences.</li>
+     *   <li>Attempts to merge a non‑repeating event; expects invalid parameter error for eventId type.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void mergeEventTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

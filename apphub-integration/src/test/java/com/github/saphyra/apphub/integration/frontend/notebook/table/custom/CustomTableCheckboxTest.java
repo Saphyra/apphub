@@ -27,6 +27,16 @@ public class CustomTableCheckboxTest extends SeleniumTest {
     private static final String TITLE = "title";
     private static final String TABLE_HEAD_CONTENT = "table-head-content";
 
+    /**
+     * Tests CRUD operations for a custom table containing a checkbox column.
+     *
+     * <ul>
+     *   <li>Creates a new custom table with a checkbox cell and verifies the initial checked state.</li>
+     *   <li>Opens the created table, confirms the checkbox is initially checked.</li>
+     *   <li>Toggles the checkbox off, saves changes, and ensures the state persists.</li>
+     *   <li>Re-enables editing, checks the box again, and verifies persistence after saving.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void customTableCheckboxCrud() {
         WebDriver driver = extractDriver();

@@ -22,6 +22,15 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests deconstruction of a construction area that contains building modules.
+ *
+ * <ul>
+ *   <li>Creates an extractor construction area and two building modules.</li>
+ *   <li>Initiates deconstruction of the area, verifying queue items are created for module deconstruction.</li>
+ *   <li>Resumes game and confirms modules are deconstructed and the area is removed from the queue.</li>
+ * </ul>
+ */
 public class DeconstructConstructionAreaWithBuildingModulesTest extends SeleniumTest {
     @Test(groups = {"fe", "skyxplore"})
     public void deconstructConstructionAreaWithBuildingModules() {

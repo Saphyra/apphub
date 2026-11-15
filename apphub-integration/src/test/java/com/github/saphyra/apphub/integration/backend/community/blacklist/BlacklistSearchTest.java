@@ -12,6 +12,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistSearchTest extends BackEndTest {
+    /**
+     * Tests searching for users to blacklist and subsequent creation.
+     *
+     * <ul>
+     *   <li>search returns matching user.</li>
+     *   <li>creating blacklist removes user from search results.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "community"})
     public void searchUsersToBlacklist() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

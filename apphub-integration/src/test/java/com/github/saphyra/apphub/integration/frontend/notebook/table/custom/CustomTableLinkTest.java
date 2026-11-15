@@ -38,6 +38,16 @@ public class CustomTableLinkTest extends SeleniumTest {
     private static final String LABEL = "label";
     private static final String NEW_LABEL = "new-label";
 
+    /**
+     * Tests CRUD operations for a custom table containing a link column.
+     *
+     * <ul>
+     *   <li>Creates a new custom table with a link cell and verifies the initial label and URL.</li>
+     *   <li>Opens the created table, clicks the link, and checks that it opens the expected page.</li>
+     *   <li>Edits the link’s URL and label, saves changes, and confirms updated values persist.</li>
+     *   <li>Attempts to set a blank label during editing and verifies an error toast is shown.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void customTableLinkCrud() {
         WebDriver driver = extractDriver();

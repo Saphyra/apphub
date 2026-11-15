@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateDao;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.StateStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +17,9 @@ import java.util.UUID;
 class MinorFactionConverter extends ConverterBase<MinorFactionEntity, MinorFaction> {
     private final UuidConverter uuidConverter;
     private final MinorFactionStateDao minorFactionStateDao;
-    private final MinorFactionStateSyncService minorFactionStateSyncService;
 
     @Override
     protected MinorFactionEntity processDomainConversion(MinorFaction domain) {
-        minorFactionStateSyncService.sync(domain.getId(), domain.getActiveStates(), domain.getPendingStates(), domain.getRecoveringStates());
 
         return MinorFactionEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))

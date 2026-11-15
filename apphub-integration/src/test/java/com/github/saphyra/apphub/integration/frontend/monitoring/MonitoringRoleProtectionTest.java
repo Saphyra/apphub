@@ -14,6 +14,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class MonitoringRoleProtectionTest extends SeleniumTest {
+    /**
+     * Tests that a user without the required role cannot access the monitoring page.
+     *
+     * <ul>
+     *   <li>validate missing ADMIN role when user has only ADMIN role removed</li>
+     *   <li>validate missing ACCESS role when user has only ACCESS role removed</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "monitoring", "role-protection"})
     public void monitoringRoleProtection(String role) {
         WebDriver driver = extractDriver();

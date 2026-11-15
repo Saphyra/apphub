@@ -39,6 +39,16 @@ public class GameChatTest extends SeleniumTest {
     private static final String CUSTOM_ROOM_NAME = "custom-room";
     private static final String MESSAGE_3 = "message-3";
 
+    /**
+     * Tests in-game chat functionality across different rooms.
+     *
+     * <ul>
+     *   <li>Message too long triggers error toast.</li>
+     *   <li>General room messages are visible to all players.</li>
+     *   <li>Alliance room messages only to alliance members.</li>
+     *   <li>Custom rooms are private between creator and invited player.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void chatInGame() {
         Integer serverPort = getServerPort();

@@ -28,6 +28,16 @@ public class MigrationTasksTest extends SeleniumTest {
         DatabaseUtil.deleteMigrationTaskByEvent(EVENT);
     }
 
+    /**
+     * Tests creating, triggering, and deleting a migration task.
+     *
+     * <ul>
+     *   <li>Create a migration task with a unique event name.</li>
+     *   <li>Verify the task is initially incomplete.</li>
+     *   <li>Trigger the task and wait for completion.</li>
+     *   <li>Delete the task and confirm it no longer exists.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     public void migrationTasksTest() {
         WebDriver driver = extractDriver();

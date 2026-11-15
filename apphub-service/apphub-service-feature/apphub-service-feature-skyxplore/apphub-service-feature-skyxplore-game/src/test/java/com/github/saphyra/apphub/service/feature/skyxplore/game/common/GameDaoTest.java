@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.player.Player;
@@ -34,7 +34,7 @@ public class GameDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(Mockito.mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(Mockito.mock(ErrorReporterService.class));
 
     @Spy
     private final SleepService sleepService = new SleepService();

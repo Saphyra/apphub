@@ -22,6 +22,16 @@ public class TaskManagerOrganizationTest extends BackEndTest {
     private static final String ORGANIZATION_NAME = "organization-name";
     private static final String DESCRIPTION = "description";
 
+    /**
+     * Tests CRUD operations for task manager organizations.
+     *
+     * <ul>
+     *   <li>Creates organization with valid data.</li>
+     *   <li>Validates organization retrieval by ID and list.</li>
+     *   <li>Checks validation errors for blank name, too long name, null description, etc.</li>
+     *   <li>Ensures self‑invitation is rejected.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "task-manager"})
     public void organizationCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

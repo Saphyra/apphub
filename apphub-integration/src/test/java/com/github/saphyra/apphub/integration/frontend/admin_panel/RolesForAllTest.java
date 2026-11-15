@@ -29,6 +29,15 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RolesForAllTest extends SeleniumTest {
+    /**
+     * Tests adding and removing a role for all users.
+     *
+     * <ul>
+     *   <li>Verify restricted roles are not present.</li>
+     *   <li>Add role to all with empty password, incorrect password, and correct password.</li>
+     *   <li>Revoke role from all with empty password, incorrect password, and correct password.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     @PermitCount(value = PermitCount.PermitCountType.ALL)

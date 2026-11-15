@@ -28,6 +28,19 @@ public class SkyXploreSettingTest extends BackEndTest {
     private static final Object DATA_2 = "data-2";
     private static final UUID LOCATION = UUID.randomUUID();
 
+    /**
+     * Tests CRUD operations for SkyXplore settings.
+     *
+     * <ul>
+     *   <li>validate createOrUpdate endpoint creates setting when data is valid</li>
+     *   <li>validate update endpoint updates existing setting data</li>
+     *   <li>validate delete endpoint removes setting and returns deleted data</li>
+     *   <li>validate get endpoint retrieves created setting by type and location</li>
+     *   <li>validate create with too large data returns validation error</li>
+     *   <li>validate create with null type returns validation error</li>
+     *   <li>validate delete non-existent setting returns 404 error</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void settingCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

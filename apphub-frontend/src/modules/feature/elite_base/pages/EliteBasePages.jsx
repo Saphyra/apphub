@@ -12,11 +12,19 @@ const EliteBasePages = ({ openedPage, setDisplaySpinner }) => {
         case EliteBasePage.INDEX:
             return <EliteBaseOverviewPage />
         case EliteBasePage.SEARCH_NEAREST_MATERIAL_TRADER:
-            return <SearchNearestMaterialTraderPage />
+            return <SearchNearestMaterialTraderPage
+                setDisplaySpinner={setDisplaySpinner}
+            />
         case EliteBasePage.COMMODITY_TRADING_BUY_COMMODITIES:
-            return <TradeCommoditiesPage tradeMode={TradeMode.BUY} />
+            return <TradeCommoditiesPage
+                tradeMode={TradeMode.BUY}
+                setDisplaySpinner={setDisplaySpinner}
+            />
         case EliteBasePage.COMMODITY_TRADING_SELL_COMMODITIES:
-            return <TradeCommoditiesPage tradeMode={TradeMode.SELL} />
+            return <TradeCommoditiesPage
+                tradeMode={TradeMode.SELL}
+                setDisplaySpinner={setDisplaySpinner}
+            />
         case EliteBasePage.MERIT_FARMING_NAKATO_KAINE_MINING:
             return <MeritFarmMiningPage setDisplaySpinner={setDisplaySpinner} />
         default:

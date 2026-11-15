@@ -34,5 +34,21 @@
     "filter": {
         "en": "Filter",
         "hu": "Szűrés"
+    },
+    "start_time": {
+        "en": "Start time",
+        "hu": "Kezdő idő"
+    },
+    "end_time": {
+        "en": "End time",
+        "hu": "Befejező idő"
+    },
+    "start-time-after-end-time": {
+        "en": "Start time must be after end time",
+        "hu": "A kezdő időnek a befejező idő után kell lennie"
+    },
+    "end-time-after-start-time": {
+        "en": "End time must be after start time",
+        "hu": "A befejező időnek a kezdő idő után kell lennie"
     }
 }

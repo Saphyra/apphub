@@ -75,4 +75,5 @@ class StationDaoTest {
 
         assertThat(underTest.getByStarSystemIds(List.of(STAR_SYSTEM_ID))).containsExactly(domain);
     }
+
 }

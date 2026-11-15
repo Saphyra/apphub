@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningM
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.PowerplayActivityType;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.star_system_data.Power;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.star_system.star_system_data.PowerplayState;
@@ -40,7 +40,7 @@ class NakatoKaineMeritMinerServiceTest {
     private StarSystemDataDao starSystemDataDao;
 
     @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @Mock
     private DateTimeUtil dateTimeUtil;

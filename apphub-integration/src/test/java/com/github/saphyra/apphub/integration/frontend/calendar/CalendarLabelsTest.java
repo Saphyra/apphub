@@ -33,6 +33,18 @@ public class CalendarLabelsTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
     private static final String LABEL_2 = "label-2";
 
+    /**
+     * Tests creation, editing and deletion of calendar labels.
+     *
+     * <ul>
+     *   <li>Creates an event with two labels.</li>
+     *   <li>Verifies that both labels appear in the label list.</li>
+     *   <li>Deletes one label and checks it is removed.</li>
+     *   <li>Edits the remaining label to a new name and verifies the change.</li>
+     *   <li>Opens an event via its label and confirms the correct title.</li>
+     *   <li>Opens an occurrence from the label view and checks the date matches.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void labels() {
         WebDriver driver = extractDriver();
@@ -90,6 +102,15 @@ public class CalendarLabelsTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(driver)).isEqualTo(occurrenceDate));
     }
 
+    /**
+     * Verifies that events without a label are correctly shown when the "No Label" filter is applied.
+     *
+     * <ul>
+     *   <li>Creates an event with a label.</li>
+     *   <li>Creates another event without any labels.</li>
+     *   <li>Applies the "No Label" filter and checks only the unlabeled event appears.
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void getLabelsWithoutLabel() {
         WebDriver driver = extractDriver();

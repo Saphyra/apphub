@@ -28,6 +28,22 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BuildingModuleCrudTest extends BackEndTest {
+    /**
+     * Tests full lifecycle of building module CRUD operations including validation and state transitions.
+     *
+     * <ul>
+     *   <li>validate null dataId when constructing a building module</li>
+     *   <li>validate no slot available during construction</li>
+     *   <li>construct a building module successfully</li>
+     *   <li>prevent deconstruction while under construction</li>
+     *   <li>cancel an ongoing construction</li>
+     *   <li>finish construction and verify state</li>
+     *   <li>deconstruct a constructed module</li>
+     *   <li>prevent deconstruction after already deconstructed</li>
+     *   <li>cancel a pending deconstruction</li>
+     *   <li>finish deconstruction and confirm removal</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void buildingModuleCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

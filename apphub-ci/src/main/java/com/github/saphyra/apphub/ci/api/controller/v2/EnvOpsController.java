@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ALL_SERVICES;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_BUILD_THREAD_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_DISABLED_SERVICES;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_DYNAMODB_PORT;
@@ -92,6 +93,13 @@ class EnvOpsController {
             .sorted(Comparator.naturalOrder())
             .toList();
         mav.addObject(PARAM_SERVICES, serviceNames);
+
+        List<String> allServiceNames = services.getServices()
+            .stream()
+            .map(Service::getName)
+            .sorted(Comparator.naturalOrder())
+            .toList();
+        mav.addObject(PARAM_ALL_SERVICES, allServiceNames);
 
         int buildThreadCount = propertyDao.getProperty(PropertyName.BUILD_THREAD_COUNT)
             .map(Integer::parseInt)

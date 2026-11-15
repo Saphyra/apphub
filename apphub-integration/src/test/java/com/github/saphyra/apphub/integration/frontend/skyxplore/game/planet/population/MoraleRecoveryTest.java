@@ -23,6 +23,14 @@ import org.testng.annotations.Test;
 public class MoraleRecoveryTest extends SeleniumTest {
     private static final int REFERENCE_MORALE = 90;
 
+    /**
+     * Verifies that citizen morale recovers after terraformation and game progression.
+     *
+     * <ul>
+     *   <li>Citizen morale decreases when terraforming from desert to concrete.</li>
+     *   <li>Citizen morale restores to reference value within 180 seconds after game resumes.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void checkMoraleRecovery() {
         WebDriver driver = extractDriver();

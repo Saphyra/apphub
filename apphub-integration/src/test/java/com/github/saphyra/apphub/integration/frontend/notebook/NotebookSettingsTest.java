@@ -22,6 +22,15 @@ public class NotebookSettingsTest extends SeleniumTest {
     private static final String CATEGORY_1 = "category-1";
     private static final String CATEGORY_2 = "category-2";
 
+    /**
+     * Tests notebook settings related to archived items visibility and pinning.
+     *
+     * <ul>
+     *   <li>Creates two categories, archives one, pins both.</li>
+     *   <i>Hide archived items</i> verifies only the non‑archived pinned category is shown.
+     *   <i>Show archived items</i> verifies both categories appear again.
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     void showAndHideArchived() {
         WebDriver driver = extractDriver();

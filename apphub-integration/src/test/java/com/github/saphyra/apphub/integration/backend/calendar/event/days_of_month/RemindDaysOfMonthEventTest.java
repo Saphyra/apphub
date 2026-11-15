@@ -33,6 +33,15 @@ public class RemindDaysOfMonthEventTest extends BackEndTest {
     private static final int REMIND_ME_BEFORE_DAYS = 1;
     private static final Integer NEW_REMIND_ME_BEFORE_DAYS = 2;
 
+    /**
+     * Tests creating, editing and verifying reminder logic for a days‑of‑month event.
+     *
+     * <ul>
+     *   <li>Creates an event with remindMeBeforeDays=1.</li>
+     *   <li>Edits the event to remindMeBeforeDays=2.</li>
+     *   <li>Verifies that reminder and pending occurrences are correctly generated for both settings.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void remindDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

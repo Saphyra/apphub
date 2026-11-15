@@ -26,6 +26,17 @@ public class CustomTableCheckboxTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_COLUMN_TITLE = "new-column-title";
 
+    /**
+     * Tests CRUD operations for a custom checkbox table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate successful creation and retrieval of checkbox value</li>
+     *   <li>validate editing updates checkbox value</li>
+     *   <li>validate setting status to null returns error</li>
+     *   <li>validate setting status on non‑checkbox column returns error</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableCheckboxCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

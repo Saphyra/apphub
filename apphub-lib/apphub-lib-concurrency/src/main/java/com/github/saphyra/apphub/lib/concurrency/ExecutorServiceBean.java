@@ -164,4 +164,26 @@ public class ExecutorServiceBean {
     public void stop() {
         executor.shutdownNow();
     }
+
+    public <T> List<ExecutionResult<Void>> consumeCollectionWithWait(List<T> requests, Consumer<T> consumer, int parallelism) {
+        List<List<T>> batches = Lists.partition(requests, parallelism);
+
+        List<ExecutionResult<Void>> executionResults = new ArrayList<>();
+
+        for(List<T> batch: batches){
+            List<FutureWrapper<Void>> futures = consumeCollection(batch, consumer);
+
+            for(FutureWrapper<Void> future : futures){
+                executionResults.add(future.get());
+            }
+        }
+
+        return executionResults;
+    }
+
+    public  <T> List<FutureWrapper<Void>> consumeCollection(List<T> batch, Consumer<T> consumer) {
+        return  batch.stream()
+            .map(item -> execute(() -> consumer.accept(item)))
+            .toList();
+    }
 }

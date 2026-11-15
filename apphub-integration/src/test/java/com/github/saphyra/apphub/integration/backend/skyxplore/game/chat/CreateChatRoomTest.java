@@ -35,6 +35,20 @@ public class CreateChatRoomTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String ROOM_TITLE = "room-title";
 
+    /**
+     * Tests chat room creation and validation.
+     *
+     * <ul>
+     *   <li>validate endpoint /chat/rooms create returns 200 when called with valid data</li>
+     *   <li>validate endpoint /chat/rooms create returns 400 when members is null</li>
+     *   <li>validate endpoint /chat/rooms create returns 400 when members contains null</li>
+     *   <li>validate endpoint /chat/rooms create returns 403 when member not in game</li>
+     *   <li>validate endpoint /chat/rooms create returns 400 when roomTitle is null</li>
+     *   <li>validate endpoint /chat/rooms create returns 400 when roomTitle too short</li>
+     *   <li>validate endpoint /chat/rooms create returns 400 when roomTitle too long</li>
+     *   <li>validate that chat rooms list includes created, general and alliance rooms</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void createChatRoom() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

@@ -1,9 +1,6 @@
 package com.github.saphyra.apphub.api.platform.monitoring.model;
 
 public class MonitoringEndpoints {
-    //Internal
-    public static final String MONITORING_REPORT_METRICS = "/allowed-internal/monitoring/metrics/{service}";
-
     //Event
     public static final String MONITORING_EVENT_AGGREGATE_SECOND_METRICS = "/event/monitoring/aggregation/second";
     public static final String MONITORING_EVENT_AGGREGATE_MINUTE_METRICS = "/event/monitoring/aggregation/minute";

@@ -28,6 +28,14 @@ public class AddTableRowTest extends SeleniumTest {
     private static final String COLUMN_VALUE = "column-value";
     private static final String FIRST_COLUMN = "first-column";
 
+    /**
+     * Adds rows to a checklist table and verifies the initial state.
+     *
+     * <ul>
+     *   <li>Add a new row at the start of the table.</li>
+     *   <li>Add a new row at the end of the table.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void addRowsToTable() {
         WebDriver driver = extractDriver();

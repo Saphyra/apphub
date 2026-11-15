@@ -16,6 +16,13 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class AccountPageRoleProtectionTest extends SeleniumTest {
+    /**
+     * Tests that account page is protected when user lacks ACCESS role.
+     * <ul>
+     *   <li>user logs in, role removed, access token invalidated</li>
+     *   <li>direct navigation to account page redirects or shows missing role message</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "account", "role-protection"})
     public void accountRoleProtection() {
         WebDriver driver = extractDriver();

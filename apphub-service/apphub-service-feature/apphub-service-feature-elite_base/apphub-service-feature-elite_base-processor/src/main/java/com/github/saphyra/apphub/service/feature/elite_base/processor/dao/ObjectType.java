@@ -14,6 +14,7 @@ public enum ObjectType {
     COMMODITY_AVERAGE_PRICE,
     MINOR_FACTION,
     STATION,
+    SETTLEMENT,
     ;
 
     public static final List<ObjectType> TRADING_TYPES = List.of(COMMODITY);

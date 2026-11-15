@@ -22,6 +22,13 @@ public class ChangeLanguageTest extends SeleniumTest {
         };
     }
 
+    /**
+     * Tests language selection for supported locales.
+     * <ul>
+     *   <li>switch to English</li>
+     *   <li>switch to Hungarian</li>
+     * </ul>
+     */
     @Test(dataProvider = "languages", groups = {"fe", "account"})
     public void changeLanguage(Language language) {
         WebDriver driver = extractDriver();

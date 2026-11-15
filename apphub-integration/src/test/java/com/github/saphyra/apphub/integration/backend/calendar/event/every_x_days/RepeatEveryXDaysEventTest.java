@@ -25,6 +25,15 @@ public class RepeatEveryXDaysEventTest extends BackEndTest {
     private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS).plusDays(1);
     private static final int NEW_REPEAT_FOR_DAYS = 4;
 
+    /**
+     * Tests editing a recurring event with {@link RepetitionType#EVERY_X_DAYS}.
+     *
+     * <ul>
+     *   <li>Creates an event with custom repeat days and end date.</li>
+     *   <li>Edits the event to change repeat days and end date.</li>
+     *   <li>Verifies that occurrences are updated accordingly.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void repeatEveryXDaysEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

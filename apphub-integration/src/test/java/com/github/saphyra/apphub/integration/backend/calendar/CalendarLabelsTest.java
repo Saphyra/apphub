@@ -18,6 +18,17 @@ public class CalendarLabelsTest extends BackEndTest {
     private static final String LABEL = "label";
     private static final String NEW_LABEL = "new-label";
 
+    /**
+     * Tests CRUD operations for calendar labels.
+     * <ul>
+     *   <li>Creates a label with valid data.</li>
+     *   <li>Attempts to create blank and too long labels, expecting validation errors.</li>
+     *   <li>Retrieves all labels and verifies the created one is present.</li>
+     *   <li>Edits the label with blank, too long, and valid values, checking for correct updates.</li>
+     *   <li>Fetches the single label by ID to confirm its properties.</li>
+     *   <li>Deletes the label and ensures it no longer exists.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void labelCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

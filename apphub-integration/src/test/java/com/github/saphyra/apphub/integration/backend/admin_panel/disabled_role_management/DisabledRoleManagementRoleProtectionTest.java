@@ -12,6 +12,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class DisabledRoleManagementRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests role protection for disabled‑role management endpoints.
+     * <ul>
+     *   <li>Ensures that protected actions are blocked when the user lacks the required role.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void disabledRoleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

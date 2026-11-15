@@ -20,6 +20,14 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetUserRolesTest extends BackEndTest {
+    /**
+     * Tests retrieval of user roles.
+     * <ul>
+     *   <li>Validates that a null query string returns an error.</li>
+     *   <li>Checks that a too short query string is rejected.</li>
+     *   <li>Confirms successful role list for a registered user.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void getRoles() {

@@ -22,6 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EditSharedObjectTest extends BackEndTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Tests editing shared object grants and validation.
+     * <ul>
+     *   <li>edit grants of a shared label</li>
+     *   <li>verify empty grants error</li>
+     *   <li>forbidden when not owner</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void editSharedObject() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -57,8 +65,7 @@ public class EditSharedObjectTest extends BackEndTest {
 
         Collection<Grant> editedGrants = CalendarShareActions.getSharedObject(getServerPort(), ownerToken, SharedObjectType.LABEL, labelId, null)
             .getSharedWith()
-            .iterator()
-            .next()
+            .getFirst()
             .getGrants();
         assertThat(editedGrants).containsExactlyInAnyOrder(Grant.VIEW, Grant.EDIT);
     }

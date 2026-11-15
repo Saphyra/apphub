@@ -24,6 +24,15 @@ public class CalendarArchiveEventTest extends SeleniumTest {
     private static final String EVENT_TITLE_1 = "event-1";
     private static final String EVENT_TITLE_2 = "event-2";
 
+    /**
+     * Tests archiving and unarchiving a calendar event.
+     *
+     * <ul>
+     *   <li>Creates two events, archives one, verifies it is marked archived.</li>
+     *   <li>Checks that the labels page orders non‑archived before archived.</li>
+     *   <li>Unarchives the event and confirms its new position in the list.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void archiveEvent() {
         WebDriver driver = extractDriver();

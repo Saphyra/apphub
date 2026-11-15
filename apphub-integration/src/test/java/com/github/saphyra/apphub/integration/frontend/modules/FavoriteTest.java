@@ -17,6 +17,15 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FavoriteTest extends SeleniumTest {
+    /**
+     * Tests adding and removing modules from favorites.
+     *
+     * <ul>
+     *   <li>Add a module to favorites via the module button.</li>
+     *   <li>Remove it using the favorite entry’s remove button.</li>
+     *   <li>Remove it again through the module’s own remove action.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "modules"})
     public void addToFavorites() {
         WebDriver driver = extractDriver();

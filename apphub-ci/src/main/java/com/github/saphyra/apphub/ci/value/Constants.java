@@ -27,4 +27,12 @@ public class Constants {
     //Property keys
     public static final String DYNAMO_DB_ACCESS_KEY_ID = "DYNAMO_DB_ACCESS_KEY_ID";
     public static final String DYNAMO_DB_SECRET_KEY = "DYNAMO_DB_SECRET_KEY";
+
+    //Panel titles
+    public static final String PANEL_TITLE_STARTUP_INDICATOR = "Starting up services - ApphubCI";
+    public static final String PANEL_TITLE_DOWNLOAD_BACKUP = "Downloading backups - ApphubCI";
+    public static final String PANEL_TITLE_LOCAL_BACKUP = "Backing up database to local directory - ApphubCI";
+    public static final String PANEL_TITLE_S3_BACKUP = "Backing up database to S3 - ApphubCI";
+    public static final String PANEL_TITLE_LOCAL_RESTORE = "Restoring database from local directory - ApphubCI";
+    public static final String PANEL_TITLE_S3_RESTORE = "Restoring database from S3 - ApphubCI";
 }

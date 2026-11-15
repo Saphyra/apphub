@@ -21,6 +21,16 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleCrudTest extends BackEndTest {
+    /**
+     * Tests enabling and disabling roles for a user.
+     * <ul>
+     *   <li>Registers an admin and a test user, then verifies initial disabled role state.</li>
+     *   <li>Attempts to disable the role with incorrect password and checks error handling.</li>
+     *   <li>Disables the role successfully and confirms status change.</li>
+     *   <li>Attempts to enable the role with incorrect password and checks error handling.</li>
+     *   <li>Enables the role successfully and confirms status reset.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void disabledRoleCrud() {

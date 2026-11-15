@@ -24,6 +24,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarReminderTest extends SeleniumTest {
     private static final int REMIND_ME_BEFORE_DAYS = 2;
 
+    /**
+     * Tests the reminder functionality for a one‑time event.
+     *
+     * <ul>
+     *   <li>Creates an event with a reminder set 2 days before.</li>
+     *   <li>Verifies that a REMINDER occurrence appears on the expected date.</li>
+     *   <li>Confirms the reminder and checks that the original event is removed from the calendar.</li>
+     *   <li>Ensures the event can be edited after the reminder has been triggered.
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void reminder() {
         WebDriver driver = extractDriver();

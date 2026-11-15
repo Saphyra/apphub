@@ -23,6 +23,30 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarOccurrenceTest extends BackEndTest {
+    /**
+     * Tests the full lifecycle of calendar occurrences.
+     *
+     * <ul>
+     *   <li>Creates an event and verifies it exists.</li>
+     *   <li>Creates an occurrence with valid data.</li>
+     *   <li>Verifies creation fails when event does not exist (404).</li>
+     *   <li>Verifies creation fails when date is null.</li>
+     *   <li>Verifies creation fails when status is null.</li>
+     *   <li>Verifies creation fails when remindMeBeforeDays is null or too low.</li>
+     *   <li>Verifies creation fails when note is null.</li>
+     *   <li>Verifies creation fails when reminded is null.</li>
+     *   <li>Edits the occurrence with valid data.</li>
+     *   <li>Verifies edit fails when date is null.</li>
+     *   <li>Verifies edit fails when status is null.</li>
+     *   <li>Verifies edit fails when remindMeBeforeDays is null or too low.</li>
+     *   <li>Verifies edit fails when note is null.</li>
+     *   <li>Verifies edit fails when reminded is null.</li>
+     *   <li>Retrieves occurrences and verifies returned values.</li>
+     *   <li>Updates the occurrence status to SNOOZED and verifies the change.</li>
+     *   <li>Verifies status update fails when status is null.</li>
+     *   <li>Sets the reminded flag on an occurrence and confirms it is true.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void occurrenceCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

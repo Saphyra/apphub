@@ -17,6 +17,15 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreDataDeletedWithUserTest extends BackEndTest {
+    /**
+     * Tests that deleting a user removes all associated SkyXplore data such as characters, friendships, and friend requests.
+     *
+     * <ul>
+     *   <li>validate that character table for the deleted user is empty</li>
+     *   <li>validate that friendship records involving the deleted user are removed</li>
+     *   <li>validate that friend request records sent by the deleted user are cleared</li>
+     * </ul>
+     */
     @Test(groups = {"skyxplore", "be"})
     public void skyXploreDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -1,0 +1,67 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-settlement_v2" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="settlement_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="settlement_v2">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="star_system_id" type="varchar(37)"/>
+            <column name="body_id" type="varchar(37)"/>
+            <column name="market_id" type="numeric"/>
+            <column name="settlement_name" type="varchar(255)"/>
+            <column name="longitude" type="numeric"/>
+            <column name="latitude" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="settlement_v2" columnNames="id" constraintName="settlement_v2-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="settlement_v2" indexName="index-settlement_v2-star_system_id-settlement_name">
+            <column name="star_system_id"/>
+            <column name="settlement_name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create-settlement_v2-star_system_id-fk" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="settlement_v2-star_system_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="settlement_v2"
+                baseColumnNames="star_system_id"
+                constraintName="settlement_v2-star_system_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="star_system"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="create-settlement_v2-body_id-fk" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="settlement_v2-body_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="settlement_v2"
+                baseColumnNames="body_id"
+                constraintName="settlement_v2-body_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="body_v3"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

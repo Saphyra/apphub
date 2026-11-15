@@ -18,6 +18,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetFriendsTest extends BackEndTest {
+    /**
+     * Tests retrieving the list of friendships after accepting a friend request.
+     *
+     * <ul>
+     *   <li>Creates two users and establishes a friendship via a friend request.</li>
+     *   <li>Verifies that the sender sees one friendship with correct name.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void getFriends() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

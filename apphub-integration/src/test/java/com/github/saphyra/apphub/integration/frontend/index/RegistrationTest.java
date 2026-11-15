@@ -18,6 +18,18 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class RegistrationTest extends SeleniumTest {
+    /**
+     * Validates registration form behavior: checks field validation, duplicate username/email handling,
+     * and successful user creation.
+     *
+     * <ul>
+     *   <li>invalid input scenarios for each field</li>
+     *   <li>duplicate username detection</li>
+     *   <li>duplicate email detection</li>
+     *   <li>email used as username detection</li>
+     *   <li>successful registration flow</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void registrationValidation() {
         WebDriver driver = extractDriver();

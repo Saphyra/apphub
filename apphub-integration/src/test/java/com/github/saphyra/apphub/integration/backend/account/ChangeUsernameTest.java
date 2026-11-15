@@ -20,6 +20,18 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeUsernameTest extends BackEndTest {
+    /** Tests the username change endpoint covering validation and success scenarios.
+     *
+     * <ul>
+     *   <li>Null username returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Password too short returns 400 with TOO_SHORT</li>
+     *   <li>Password too long returns 400 with TOO_LONG</li>
+     *   <li>Username already exists returns 409 with USERNAME_ALREADY_EXISTS</li>
+     *   <li>Null password returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Incorrect password returns 401 with INCORRECT_PASSWORD</li>
+     *   <li>Successful change returns 200 and old username cannot be used to login</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     public void changeUsername() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

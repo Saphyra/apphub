@@ -38,5 +38,13 @@
     "event-created": {
         "en": "Event created.",
         "hu": "Esemény létrehozva."
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
+    },
+    "event": {
+        "en": "Event",
+        "hu": "Esemény"
     }
 }

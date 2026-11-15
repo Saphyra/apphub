@@ -23,6 +23,7 @@ class MetricDataRepositoryTest {
     private static final String METRIC_DATA_ID_3 = "metric-data-id-3";
     private static final String METRIC_DATA_ID_4 = "metric-data-id-4";
     private static final String METRIC_DATA_ID_5 = "metric-data-id-5";
+    private static final String METRIC_DATA_ID_6 = "metric-data-id-6";
     private static final LocalDateTime REFERENCE_TIME = LocalDateTime.now();
     private static final LocalDateTime START_TIME = REFERENCE_TIME.minusMinutes(1);
     private static final LocalDateTime END_TIME = REFERENCE_TIME.plusMinutes(1);
@@ -133,7 +134,16 @@ class MetricDataRepositoryTest {
             .build();
         underTest.save(expiredEntity);
 
-        assertThat(underTest.getByTypeAndMetricIdInAndServiceAfter(MetricDataType.SECOND, List.of(METRIC_ID_1), SERVICE_1, REFERENCE_TIME))
+        MetricDataEntity tooNewEntry = MetricDataEntity.builder()
+            .metricDataId(METRIC_DATA_ID_6)
+            .type(MetricDataType.SECOND)
+            .metricId(METRIC_ID_1)
+            .service(SERVICE_1)
+            .timestamp(REFERENCE_TIME.plusHours(2))
+            .build();
+        underTest.save(tooNewEntry);
+
+        assertThat(underTest.getByTypeAndMetricIdInAndServiceBetween(MetricDataType.SECOND, List.of(METRIC_ID_1), SERVICE_1, REFERENCE_TIME, REFERENCE_TIME.plusHours(1)))
             .extracting(MetricDataEntity::getMetricDataId)
             .containsExactly(METRIC_DATA_ID_1);
     }
@@ -181,7 +191,7 @@ class MetricDataRepositoryTest {
             .build();
         underTest.save(expiredEntity);
 
-        assertThat(underTest.getByTypeAndMetricIdInAndServiceAfter(MetricDataType.SECOND, List.of(METRIC_ID_1), null, REFERENCE_TIME))
+        assertThat(underTest.getByTypeAndMetricIdInAndServiceBetween(MetricDataType.SECOND, List.of(METRIC_ID_1), null, REFERENCE_TIME, REFERENCE_TIME.plusHours(1)))
             .extracting(MetricDataEntity::getMetricDataId)
             .containsExactlyInAnyOrder(METRIC_DATA_ID_1, METRIC_DATA_ID_4);
     }

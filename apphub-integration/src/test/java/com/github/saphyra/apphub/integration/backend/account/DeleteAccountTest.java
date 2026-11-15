@@ -21,6 +21,15 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAccountTest extends BackEndTest {
+    /**
+     * Tests the account deletion endpoint covering validation and success scenarios.
+     *
+     * <ul>
+     *   <li>Null password returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Incorrect password triggers bad request twice then locks account, returning 423 with ACCOUNT_LOCKED</li>
+     *   <li>Successful deletion returns 200 and subsequent login fails with BAD_CREDENTIALS</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     public void deleteAccount() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

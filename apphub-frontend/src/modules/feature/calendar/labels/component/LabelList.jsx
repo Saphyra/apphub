@@ -15,7 +15,7 @@ const LabelList = ({ selectedLabel, setSelectedLabel, localizationHandler, setDi
     useLoader({
         request: CALENDAR_GET_LABELS.createRequest(),
         mapper: setLabels,
-        setDisplaySpinner: setDisplaySpinner
+        setDisplaySpinner: setDisplaySpinner,
     });
 
     return (

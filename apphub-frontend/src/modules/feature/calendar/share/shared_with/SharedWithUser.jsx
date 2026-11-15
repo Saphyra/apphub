@@ -6,8 +6,12 @@ import { CALENDAR_GET_GRANTS, CALENDAR_SHARE_EDIT_GRANTS, CALENDAR_UNSHARE_OBJEC
 import Button from "common/component/input/Button";
 import NotificationService from "common/js/notification/NotificationService";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
+import grantLocalizationData from "../../common/share_with/grant_localization.json";
+import LocalizationHandler from "common/js/LocalizationHandler";
 
 const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, objectId, setConfirmationDialogData, itemName, refresh }) => {
+    const grantLocalizationHandler = new LocalizationHandler(grantLocalizationData);
+
     const [grants, setGrants] = useState([]);
     const [selectedGrants, setSelectedGrants] = useState(user.grants);
 
@@ -47,7 +51,7 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
 
     function getOperationOptions() {
         return new Stream(grants)
-            .map(operation => new SelectOption(localizationHandler.get(operation, { type: localizationHandler.get(type) }), operation))
+            .map(operation => new SelectOption(grantLocalizationHandler.get(operation, { type: localizationHandler.get(type) }), operation))
             .toList();
     }
 

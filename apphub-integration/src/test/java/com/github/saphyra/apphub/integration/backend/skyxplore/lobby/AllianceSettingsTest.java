@@ -28,6 +28,18 @@ public class AllianceSettingsTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String AI_NAME = "ai-name";
 
+    /**
+     * Tests alliance CRUD operations and game start restrictions.
+     *
+     * <ul>
+     *   <li>verify non‑host cannot change alliances</li>
+     *   <li>create new alliance and validate event payloads</li>
+     *   <li>remove alliance and confirm player state updates</li>
+     *   <li>change existing alliance and check consistency</li>
+     *   <li>add AI to alliance and verify AI events</li>
+     *   <li>prevent game start with insufficient alliances</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     void allianceCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

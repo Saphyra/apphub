@@ -61,7 +61,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.processor.com
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_MATERIAL_TRADER_OVERRIDE;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_V2;
-import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_SERVICE;
+import static com.github.saphyra.apphub.service.feature.elite_base.processor.common.DatabaseConstants.TABLE_STATION_SERVICE_V2;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -107,7 +107,7 @@ public class NearestMaterialTraderService {
                 new QualifiedColumn(TABLE_STATION_V2, COLUMN_ID),
                 SqlBuilder.select()
                     .column(COLUMN_STATION_ID)
-                    .from(new QualifiedTable(SCHEMA, TABLE_STATION_SERVICE))
+                    .from(new QualifiedTable(SCHEMA, TABLE_STATION_SERVICE_V2))
                     .condition(new Equation(new DefaultColumn(COLUMN_SERVICE), new WrappedValue(StationServiceEnum.MATERIAL_TRADER)))
             ))
             .and()

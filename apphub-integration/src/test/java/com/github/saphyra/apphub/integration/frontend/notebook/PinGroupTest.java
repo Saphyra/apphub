@@ -31,6 +31,16 @@ public class PinGroupTest extends SeleniumTest {
     private static final String NEW_PIN_GROUP_NAME = "new-pin-group-name";
     private static final String LIST_ITEM_TITLE_2 = "list-item-title-2";
 
+    /**
+     * Tests pin group creation, renaming, item addition/removal, and deletion.
+     *
+     * <ul>
+     *   <li>Creates two list items and pins them.</li>
+     *   <li>Attempts to create a blank and too‑long pin group name and verifies error messages.</li>
+     *   <li>Creates a valid pin group, renames it (blank/too long tests), adds an item via drag & drop, removes the item, and deletes the group.</li>
+     *   <li>Verifies that the default pin group remains open after operations.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     void openParentOfPinnedItem() {
         WebDriver driver = extractDriver();
@@ -150,6 +160,15 @@ public class PinGroupTest extends SeleniumTest {
             .assertTrue("PinGroup items are not updated.");
     }
 
+    /**
+     * Tests ordering of pin groups after creation.
+     *
+     * <ul>
+     *   <li>Creates two pin groups with a delay to ensure different timestamps.</li>
+     *   <li>Verifies that the newly created group appears at the end.</li>
+     *   <li>Opens the second group and checks that the order updates correctly.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void orderPinGroups() {
         WebDriver driver = extractDriver();

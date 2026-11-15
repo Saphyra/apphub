@@ -34,6 +34,23 @@ public class LinkCrudTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_URL = "new-url";
 
+    /**
+     * Tests CRUD operations for links, including validation of title and URL lengths,
+     * parent constraints, and deletion.
+     *
+     * <ul>
+     *   <li>validate too long title error</li>
+     *   <li>validate blank title error</li>
+     *   <li>validate parent not a category error</li>
+     *   <li>validate parent not found error</li>
+     *   <li>validate null URL error</li>
+     *   <li>validate too long URL error</li>
+     *   <li>create link successfully</li>
+     *   <li>edit link with too long URL error</li>
+     *   <li>edit link successfully</li>
+     *   <li>delete link successfully</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void linkCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -14,6 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CollapseModulesTest extends SeleniumTest {
     private static final String CATEGORY_ID = "accounts";
 
+    /**
+     * Tests collapsing and expanding a module category.
+     *
+     * <ul>
+     *   <li>Category is collapsed after toggle, modules list becomes empty.</li>
+     *   <li>Category is expanded again, modules list restored.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "modules"})
     public void collapseModules() {
         WebDriver driver = extractDriver();

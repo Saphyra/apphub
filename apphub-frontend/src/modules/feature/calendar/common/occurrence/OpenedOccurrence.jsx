@@ -30,7 +30,8 @@ const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, se
             listener: [occurrenceId, refreshCounter],
             errorHandler: new ErrorHandler(
                 (response) => response.status == 404,
-                () => setSelectedOccurrence(null)),
+                () => setSelectedOccurrence(null)
+            ),
             setDisplaySpinner: setDisplaySpinner
         }
     );

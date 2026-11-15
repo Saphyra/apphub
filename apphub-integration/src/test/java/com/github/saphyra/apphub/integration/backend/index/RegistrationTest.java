@@ -18,6 +18,22 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationTest extends BackEndTest {
+    /**
+     * Tests the registration endpoint covering various validation scenarios and a successful registration.
+     * <p>
+     * Sub‑cases:
+     * <ul>
+     *   <li>invalid email format</li>
+     *   <li>username too short</li>
+     *   <li>username too long</li>
+     *   <li>password too short</li>
+     *   <li>password too long</li>
+     *   <li>language null or unsupported</li>
+     *   <li>duplicate email</li>
+     *   <li>duplicate username</li>
+     *   <li>successful registration with default roles</li>
+     * </ul>
+     */
     @Test(groups = {"be", "index"})
     public void register() {
         invalidEmail();
@@ -38,7 +54,8 @@ public class RegistrationTest extends BackEndTest {
             .build()
             .toRegistrationRequest();
         Response nullLanguageResponse = IndexPageActions.getRegistrationResponse(getServerPort(), nullLanguageRequest);
-        verifyInvalidParam(nullLanguageResponse, "language", ValidationConstants.MUST_NOT_BE_NULL);;
+        verifyInvalidParam(nullLanguageResponse, "language", ValidationConstants.MUST_NOT_BE_NULL);
+        ;
 
         RegistrationRequest unsupportedLanguageRequest = RegistrationParameters.validParameters()
             .toBuilder()

@@ -24,6 +24,21 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConstructionAreaQueueTest extends SeleniumTest {
+    /**
+     * Tests CRUD operations for construction area queue on a planet surface,
+     * covering creation, progress, cancellation, and completion.
+     *
+     * <ul>
+     *   <li>Creates a construction area item and verifies title.</li>
+     *   <li>Resumes game to start construction and checks status &gt;20.</li>
+     *   <li>Cancels the queue item and ensures queue is empty.</li>
+     *   <li>Recreates construction area item and verifies completion after resume.</li>
+     *   <li>Starts deconstruction of built area, verifies title.</li>
+     *   <li>Resumes game to start deconstruction and checks status &gt;20.</li>
+     *   <li>Cancels deconstruction and ensures queue is empty.</li>
+     *   <li>Recreates deconstruction item and verifies completion after resume.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void constructionAreaQueueCrud() {
         WebDriver driver = extractDriver();

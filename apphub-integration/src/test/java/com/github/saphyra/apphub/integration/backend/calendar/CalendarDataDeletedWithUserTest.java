@@ -30,6 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarDataDeletedWithUserTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Tests that calendar data is deleted when a user account is removed.
+     * <ul>
+     *   <li>Creates a label, event, occurrence and shares them with another user.</li>
+     *   <li>Deletes the owner account.</li>
+     *   <li>Verifies that all related records are removed from DynamoDB.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void calendarDataDeletedWithUser() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

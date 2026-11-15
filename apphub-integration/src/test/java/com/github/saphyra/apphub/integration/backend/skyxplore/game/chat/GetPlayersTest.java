@@ -26,6 +26,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GetPlayersTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests retrieving players in a game after lobby start.
+     *
+     * <ul>
+     *   <li>validate that only the player who joined the lobby is returned as a participant</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void getPlayers() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

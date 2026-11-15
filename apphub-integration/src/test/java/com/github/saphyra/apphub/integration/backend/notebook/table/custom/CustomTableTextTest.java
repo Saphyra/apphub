@@ -27,6 +27,18 @@ public class CustomTableTextTest extends BackEndTest {
     private static final String NEW_COLUMN_TITLE = "new-column-title";
     private static final String TEXT = "text";
 
+    /**
+     * Tests CRUD operations for a custom text table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate creation fails when data exceeds max length</li>
+     *   <li>validate successful creation and retrieval of text data</li>
+     *   <li>validate editing fails when data is null</li>
+     *   <li>validate editing fails when data exceeds max length</li>
+     *   <li>validate successful edit to empty string</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableTextCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

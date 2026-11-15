@@ -13,7 +13,6 @@
 
     <modules>
         <module>apphub-api-platform-monitoring-model</module>
-        <module>apphub-api-platform-monitoring-client</module>
         <module>apphub-api-platform-monitoring-server</module>
     </modules>
 </project>

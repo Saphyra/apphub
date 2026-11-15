@@ -14,6 +14,14 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreContactsRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests role protection for SkyXplore friend endpoints.
+     *
+     * <ul>
+     *   <li>Verifies that a user without the required role receives a missing‑role error when accessing any friend endpoint.</li>
+     *   <li>Runs the checks for both SKYXPLORE and ACCESS roles.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void contactsRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

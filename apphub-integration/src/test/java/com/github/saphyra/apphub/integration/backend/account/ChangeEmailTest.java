@@ -19,6 +19,18 @@ import static com.github.saphyra.apphub.integration.framework.RandomDataProvider
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeEmailTest extends BackEndTest {
+    /**
+     * Tests the account email change endpoint covering validation and success scenarios.
+     *
+     * <ul>
+     *   <li>Null email returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Invalid email format returns 400 with "invalid format"</li>
+     *   <li>Null password returns 400 with MUST_NOT_BE_NULL</li>
+     *   <li>Incorrect password returns 401 with INCORRECT_PASSWORD</li>
+     *   <li>Email already exists returns 409 with EMAIL_ALREADY_EXISTS</li>
+     *   <li>Successful change returns 200 and old email cannot be used to login</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     public void changeEmail() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -32,6 +44,13 @@ public class ChangeEmailTest extends BackEndTest {
         successfulChange(userData1, accessToken1);
     }
 
+    /**
+     * Tests the email change endpoint when new email equals username.
+     *
+     * <ul>
+     *   <li>Endpoint accepts same value as username and returns 200</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account"})
     void changeEmail_newEmailEqualsUsername() {
         RegistrationParameters userData = RegistrationParameters.validParameters()

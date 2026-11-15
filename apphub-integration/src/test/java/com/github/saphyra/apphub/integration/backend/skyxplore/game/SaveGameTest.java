@@ -29,6 +29,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SaveGameTest extends BackEndTest {
+    /**
+     * Tests game persistence by exiting with and without saving.
+     *
+     * <ul>
+     *   <li>exiting without saving results in no terraformation data.</li>
+     *   <li>exiting after saving preserves terraformation state.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void saveGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

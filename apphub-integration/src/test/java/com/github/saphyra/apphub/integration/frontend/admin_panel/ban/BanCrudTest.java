@@ -38,6 +38,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BanCrudTest extends SeleniumTest {
     private static final String REASON = "reason";
 
+    /**
+     * Tests the full lifecycle of a ban: creation, validation errors, revocation and cleanup.
+     *
+     * <ul>
+     *   <li>Validate form fields with missing or incorrect data.</li>
+     *   <li>Create a valid ban and verify the user is blocked.</li>
+     *   <li>Revoke the ban and confirm the user regains access.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void banCrud() {

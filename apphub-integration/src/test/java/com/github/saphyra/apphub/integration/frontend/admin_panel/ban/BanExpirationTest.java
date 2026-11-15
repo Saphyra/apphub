@@ -28,6 +28,15 @@ import java.util.List;
 public class BanExpirationTest extends SeleniumTest {
     private static final String REASON = "reason";
 
+    /**
+     * Tests that a user banned for a short duration is blocked from accessing the application
+     * and automatically unbanned after the ban period expires.
+     *
+     * <ul>
+     *   <li>Ban a user for 1 minute and verify they are redirected to an error page when accessing the app.</li>
+     *   <li>Verify the user becomes accessible again after the ban duration has elapsed.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     public void userCanAccessApplicationWhenBanExpired() {
         List<WebDriver> drivers = extractDrivers(2);

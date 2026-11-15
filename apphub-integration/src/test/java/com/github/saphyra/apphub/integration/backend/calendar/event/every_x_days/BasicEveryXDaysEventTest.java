@@ -23,6 +23,15 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
     private static final Integer NEW_REPEAT_FOR_DAYS = 2;
     private static final Integer NEW_REMIND_ME_BEFORE_DAYS = 1;
 
+    /**
+     * Tests the lifecycle of a calendar event with {@link RepetitionType#EVERY_X_DAYS}.
+     *
+     * <ul>
+     *   <li>Creates an event with default values.</li>
+     *   <li>Edit the event: change end date, repeat days and remind‑before days.</li>
+     *   <li>Delete the event and verify no events or occurrences exist.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void basicEveryXDaysEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

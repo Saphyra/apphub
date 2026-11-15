@@ -17,6 +17,14 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests retrieval of active friends while a lobby is in progress.
+ *
+ * <ul>
+ *   <li>verify no active friends before any invitation</li>
+ *   <li>after sending an invitation, verify the friend appears as active with correct id and name</li>
+ * </ul>
+ */
 public class GetActiveFriendsTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 

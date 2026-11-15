@@ -21,6 +21,14 @@ public class OrderListItemTest extends SeleniumTest {
     private static final String LIST_ITEM_TITLE_1 = "list-item-title-1";
     private static final String LIST_ITEM_TITLE_2 = "list-item-title-2";
 
+    /**
+     * Tests ordering and archiving of list items in the notebook module.
+     *
+     * <ul>
+     *   <li>Creates categories and items, archives some, then verifies order and archived flag.</li>
+     *   <li>Ensures archived items appear after non‑archived ones in the list view.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void orderListItems() {
         WebDriver driver = extractDriver();

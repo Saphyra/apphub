@@ -25,6 +25,15 @@ public class CustomTableDateTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
     private static final String NEW_COLUMN_TITLE = "new-column-title";
 
+    /**
+     * Tests CRUD operations for a custom date table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate successful creation and retrieval of date value</li>
+     *   <li>validate editing updates date to empty string</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableDateCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

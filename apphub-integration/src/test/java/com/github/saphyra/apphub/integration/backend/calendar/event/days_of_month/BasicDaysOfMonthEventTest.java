@@ -30,6 +30,15 @@ public class BasicDaysOfMonthEventTest extends BackEndTest {
         .withDayOfMonth(1)
         .minusDays(1);
 
+    /**
+     * Tests creating, editing, and deleting a days-of-month calendar event.
+     *
+     * <ul>
+     *   <li>Creates an event with default repetition settings.</li>
+     *   <li>Edits the event's start and end dates.</li>
+     *   <li>Deletes the event and verifies no events or occurrences remain.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void basicDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -17,6 +17,15 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetFriendRequestsTest extends BackEndTest {
+    /**
+     * Tests retrieving sent and incoming friend requests between two users.
+     *
+     * <ul>
+     *   <li>Creates a friend request from user1 to user2.</li>
+     *   <li>Verifies that the sender sees one sent request with correct name.</li>
+     *   <li>Verifies that the receiver sees one incoming request with correct sender name.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void getFriendRequests() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

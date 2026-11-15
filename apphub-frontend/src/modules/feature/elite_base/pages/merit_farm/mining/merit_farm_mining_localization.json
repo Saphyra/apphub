@@ -62,5 +62,9 @@
     "activity": {
         "en": "Activity",
         "hu": "Tevékenység"
+    },
+    "copy-to-clipboard": {
+        "en": "Copy to clipboard",
+        "hu": "Vágólapra másolás"
     }
 }

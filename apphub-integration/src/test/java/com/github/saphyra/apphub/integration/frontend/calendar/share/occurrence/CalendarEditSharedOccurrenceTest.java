@@ -23,6 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Edits a shared occurrence when the owner shares via OCCURRENCE, EVENT or LABEL with full grants.
+     * <ul>
+     *   <li>Share target: OCCURRENCE</li>
+     *   <li>Share target: EVENT</li>
+     *   <li>Share target: LABEL</li>
+     * </ul>
+     */
     @Test(dataProvider = "editableShareCases", groups = {"fe", "calendar"})
     void editSharedOccurrence(ShareTarget shareTarget) {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -51,6 +59,9 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         };
     }
 
+    /**
+     * Attempts to edit a shared occurrence without EDIT grant; verifies the occurrence remains unchanged.
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedOccurrence_noEditGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -79,6 +90,9 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).isEmpty());
     }
 
+    /**
+     * Attempts to edit a shared occurrence without VIEW grant; verifies the occurrence remains unchanged.
+     */
     @Test(groups = {"fe", "calendar"})
     public void editSharedOccurrence_noViewGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -107,6 +121,9 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).isEmpty());
     }
 
+    /**
+     * Attempts to edit an occurrence of a shared event without EDIT_CHILDREN grant; verifies no change.
+     */
     @Test(groups = {"fe", "calendar"})
     public void editOccurrenceOfSharedEvent_noEditGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -135,6 +152,9 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).isEmpty());
     }
 
+    /**
+     * Attempts to edit an occurrence of a shared event without VIEW_CHILDREN grant; verifies no change.
+     */
     @Test(groups = {"fe", "calendar"})
     public void editOccurrenceOfSharedEvent_noViewGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -163,6 +183,9 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).isEmpty());
     }
 
+    /**
+     * Attempts to edit an occurrence of a shared label without EDIT_CHILDREN grant; verifies no change.
+     */
     @Test(groups = {"fe", "calendar"})
     public void editOccurrenceOfSharedLabel_noEditGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -191,6 +214,9 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).isEmpty());
     }
 
+    /**
+     * Attempts to edit an occurrence of a shared label without VIEW_CHILDREN grant; verifies no change.
+     */
     @Test(groups = {"fe", "calendar"})
     public void editOccurrenceOfSharedLabel_noViewGrant() {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));
@@ -219,6 +245,17 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).isEmpty());
     }
 
+    /**
+     * Tests editing a shared occurrence with various combinations of grants across label, event and occurrence.
+     * <ul>
+     *   <li>EDIT_CHILDREN + VIEW_CHILDREN (label+event)</li>
+     *   <li>EDIT_CHILDREN + VIEW (occurrence)</li>
+     *   <li>VIEW_CHILDREN + EDIT (occurrence)</li>
+     *   <li>VIEW_CHILDREN + EDIT_CHILDREN (label+event)</li>
+     *   <li>VIEW_CHILDREN (event) + EDIT (occurrence)</li>
+     *   <li>EDIT_CHILDREN (event) + VIEW (occurrence)</li>
+     * </ul>
+     */
     @Test(dataProvider = "lego", groups = {"fe", "calendar"})
     public void editSharedOccurrence_legoGrants(Grant labelGrant, Grant eventGrant, Grant occurrenceGrant) {
         CalendarFlow.TestContext testContext = CalendarFlow.initContext(getServerPort(), extractDrivers(2));

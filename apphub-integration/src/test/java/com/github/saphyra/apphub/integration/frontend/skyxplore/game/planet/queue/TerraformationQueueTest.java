@@ -24,6 +24,17 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TerraformationQueueTest extends SeleniumTest {
+    /**
+     * Tests CRUD operations for terraformation queue on a planet surface,
+     * covering creation, progress, cancellation, and completion.
+     *
+     * <ul>
+     *   <li>Creates a terraformation item and verifies title.</li>
+     *   <li>Resumes game to start terraformation and checks status &gt;20.</li>
+     *   <li>Cancels the queue item and ensures queue is empty.</li>
+     *   <li>Recreates terraformation item and verifies completion after resume.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void terraformationQueueCrud() {
         WebDriver driver = extractDriver();

@@ -22,6 +22,15 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemoveRoleTest extends BackEndTest {
+    /**
+     * Tests removal of a role from a user.
+     * <ul>
+     *   <li>Validates that null userId returns an error.</li>
+     *   <li>Checks that null role causes validation failure.</li>
+     *   <li>Ensures incorrect password triggers error response.</li>
+     *   <li>Confirms successful removal of the role from the user.
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     public void removeRole() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

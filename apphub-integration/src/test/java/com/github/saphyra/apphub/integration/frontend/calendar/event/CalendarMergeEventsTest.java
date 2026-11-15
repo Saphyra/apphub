@@ -28,6 +28,15 @@ public class CalendarMergeEventsTest extends SeleniumTest {
         .withDayOfMonth(1);
     private static final String TITLE = "title";
 
+    /**
+     * Tests merging of calendar events with the same title.
+     *
+     * <ul>
+     *   <li>Creates a repeating event, a parent and child event sharing the same base title.</li>
+     *   <li>Merges them via the labels page and verifies two occurrences are shown.</li>
+     *   <li>Confirms that the merged event appears in the list of events and has correct dates.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void mergeEventsTest() {
         WebDriver driver = extractDriver();

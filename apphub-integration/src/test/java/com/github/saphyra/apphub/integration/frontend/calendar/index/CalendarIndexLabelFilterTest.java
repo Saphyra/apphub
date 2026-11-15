@@ -30,6 +30,15 @@ public class CalendarIndexLabelFilterTest extends SeleniumTest {
     private static final String LABELED_EVENT = "labeled-event";
     private static final LocalDate CURRENT_DATE = LocalDate.now();
 
+    /**
+     * Tests filtering calendar occurrences by label.
+     *
+     * <ul>
+     *   <li>Create two events on the same day, one with a label and one without.</li>
+     *   <li>Apply the label filter; verify only the labeled event appears in both selected‑day and date lists.</li>
+     *   <li>Clear the filter; confirm both events are visible again.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void indexLabelFilter() {
         WebDriver driver = extractDriver();

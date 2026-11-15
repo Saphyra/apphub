@@ -27,6 +27,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class GameCrudTest extends SeleniumTest {
+    /**
+     * Tests creating a lobby, starting a game, and handling various error scenarios.
+     *
+     * <ul>
+     *   <li>Create lobby with valid name; verify navigation to lobby page.</li>
+     *   <li>Attempt to start game when members not ready; expect error toast.</li>
+     *   <li>Start game successfully after all members are ready.</li>
+     *   <li>Recreate lobby from existing game and accept invitation.</li>
+     *   <li>Verify errors for missing players, incomplete readiness, and unavailable friends.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void gameCrud() {
         List<WebDriver> drivers = extractDrivers(3);

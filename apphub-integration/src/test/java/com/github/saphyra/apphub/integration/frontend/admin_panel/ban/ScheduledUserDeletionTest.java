@@ -29,6 +29,17 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
     private static final Integer HOURS = 18;
     private static final Integer MINUTES = 45;
 
+    /**
+     * Tests scheduling a user for deletion and the related validation flows.
+     *
+     * <ul>
+     *   <li>Attempt to schedule with an empty date – error toast appears.</li>
+     *   <li>Schedule with a password but no date – error toast appears.</li>
+     *   <li>Provide incorrect password – error toast appears.</li>
+     *   <li>Schedule with correct credentials – user is marked for deletion at the specified time.</li>
+     *   <li>Unmark the scheduled deletion – user is no longer marked for deletion.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel", "ban"})
     public void scheduleUserDeletionCd() {
         List<WebDriver> drivers = extractDrivers(2);

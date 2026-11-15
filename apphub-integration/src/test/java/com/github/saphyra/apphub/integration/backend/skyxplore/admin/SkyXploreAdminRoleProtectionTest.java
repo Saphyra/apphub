@@ -15,6 +15,16 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreAdminRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests that an admin user who has the {@code ROLE_ADMIN} privilege but lacks one of the required roles ({@code ROLE_ADMIN}, {@code ROLE_SKYXPLORE}, or {@code ROLE_ACCESS}).
+     * The test verifies that such a user is prevented from accessing SkyXplore admin endpoints.
+     *
+     * <ul>
+     *   <li>validate endpoint {@code /skyxplore/admin/getByType} returns 403 when called without {@code ROLE_ADMIN}</li>
+     *   <li>validate endpoint {@code /skyxplore/admin/getItem} returns 403 when called without {@code ROLE_SKYXPLORE}</li>
+     *   <li>validate endpoint {@code /skyxplore/admin/getItem} returns 403 when called without {@code ROLE_ACCESS}</li>
+     * </ul>
+     */
     @Test(dataProvider = "adminRoleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void adminRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

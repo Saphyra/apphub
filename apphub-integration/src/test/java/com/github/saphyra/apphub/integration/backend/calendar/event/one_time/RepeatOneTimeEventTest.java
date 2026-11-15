@@ -21,6 +21,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RepeatOneTimeEventTest extends BackEndTest {
     private static final LocalDate NEW_START_DATE = EventRequestFactory.DEFAULT_START_DATE.plusDays(1);
 
+    /**
+     * Tests editing a one‑time event’s repeat days and start date.
+     *
+     * <ul>
+     *   <li>Creates an event with default repeat days.</li>
+     *   <li>Edits the event to change start date and repeat days.</li>
+     *   <li>Verifies updated event properties and occurrence dates.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void repeatOneTimeEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

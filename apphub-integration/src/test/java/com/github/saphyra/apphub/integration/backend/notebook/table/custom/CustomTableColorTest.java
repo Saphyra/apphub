@@ -26,6 +26,15 @@ public class CustomTableColorTest extends BackEndTest {
     private static final String NEW_COLUMN_TITLE = "new-column-title";
     private static final String COLOR_CODE = "#ffffff";
 
+    /**
+     * Tests CRUD operations for a custom color table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate successful creation and retrieval of color code</li>
+     *   <li>validate editing updates color code correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableColorCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

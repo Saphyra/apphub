@@ -26,6 +26,14 @@ import java.util.UUID;
 public class MoraleRecoveryTest extends BackEndTest {
     public static final int REFERENCE_MORALE = 9000;
 
+    /**
+     * Checks morale recovery behavior for citizens.
+     *
+     * <ul>
+     *   <li>Verifies that morale decreases when the game is running.</li>
+     *   <li>Ensures morale recovers to reference value after a set period.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void checkMoraleRecovery() {
         Integer serverPort = getServerPort();

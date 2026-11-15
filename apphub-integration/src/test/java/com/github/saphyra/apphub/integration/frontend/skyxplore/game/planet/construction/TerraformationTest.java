@@ -25,6 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TerraformationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests terraformation workflow on a planet surface.
+     *
+     * <ul>
+     *   <li>Starts terraformation of a DESERT surface to LAKE and verifies progress.</li>
+     *   <li>Cancels the terraformation and ensures it stops.</li>
+     *   <li>Finishes terraformation by resuming game, waiting for queue empty, and checks surface type changed to CONCRETE.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void terraformationCD() {
         WebDriver driver = extractDriver();
@@ -79,6 +88,15 @@ public class TerraformationTest extends SeleniumTest {
             .assertTrue("Terraformation is not cancelled.");
     }
 
+    /**
+     * Tests finishing terraformation of a planet surface.
+     *
+     * <ul>
+     *   <li>Starts terraformation of a DESERT surface to CONCRETE.</li>
+     *   <li>Resumes the game and waits for the construction queue to be empty.</li>
+     *   <li>Verifies that the surface type has changed to CONCRETE.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void finishTerraformation() {
         WebDriver driver = extractDriver();

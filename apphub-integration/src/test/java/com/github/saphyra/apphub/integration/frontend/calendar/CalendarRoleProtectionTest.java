@@ -18,6 +18,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CalendarRoleProtectionTest extends SeleniumTest {
+    /**
+     * Verifies that a user without calendar or access roles cannot reach any calendar page.
+     *
+     * <ul>
+     *   <li>Removes the specified role from the user.</li>
+     *   <li>Invalidates the session token.</li>
+     *   <li>Attempts to navigate to each calendar endpoint and expects a missing‑role error.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleDataProvider", groups = {"fe", "calendar", "role-protection"})
     public void calendarRoleProtection(String role) {
         WebDriver driver = extractDriver();

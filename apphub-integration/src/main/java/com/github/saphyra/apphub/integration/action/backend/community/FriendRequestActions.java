@@ -44,14 +44,14 @@ public class FriendRequestActions {
     }
 
     public static List<FriendRequestResponse> getReceivedFriendRequests(int serverPort, String accessToken) {
-        Response response = getReceivedFriendRequeestsResponse(serverPort, accessToken);
+        Response response = getReceivedFriendRequestsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendRequestResponse[].class));
     }
 
-    public static Response getReceivedFriendRequeestsResponse(int serverPort, String accessToken) {
+    public static Response getReceivedFriendRequestsResponse(int serverPort, String accessToken) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_RECEIVED_FRIEND_REQUESTS));
     }

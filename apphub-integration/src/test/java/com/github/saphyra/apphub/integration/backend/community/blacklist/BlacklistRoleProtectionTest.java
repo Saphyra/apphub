@@ -14,6 +14,16 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class BlacklistRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests that blacklist endpoints enforce required roles.
+     *
+     * <ul>
+     *   <li>search endpoint requires role.</li>
+     *   <li>listing blacklists requires role.</li>
+     *   <li>creating a blacklist requires role.</li>
+     *   <li>deleting a blacklist requires role.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "community", "role-protection"})
     public void blacklistRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

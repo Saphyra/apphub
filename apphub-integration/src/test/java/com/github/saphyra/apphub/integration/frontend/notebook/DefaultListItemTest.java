@@ -28,6 +28,14 @@ public class DefaultListItemTest extends SeleniumTest {
     private static final String TEXT_TITLE = "text";
     private static final String TEXT_CONTENT = "content";
 
+    /**
+     * Tests setting and loading of the default list item in the notebook module.
+     * <ul>
+     *   <li>Creates a category, an only-title item, a link, and a text item.</li>
+     *   <li>Selects the text item as the default list item via settings.</li>
+     *   <li>Logs in with another driver and verifies that the default list item is opened automatically.</li>
+     * </ul>
+     */
     @Test(groups = {"notebook", "fe"})
     public void defaultListItem() {
         List<WebDriver> drivers = extractDrivers(2);

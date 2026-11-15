@@ -23,6 +23,16 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests notification related operations in the task manager.
+ *
+ * <ul>
+ *   <li>Creates organization and accepts invitation.</li>
+ *   <li>Tests setting notification status with null values.</li>
+ *   <li>Tests setting notification status to READ.</li>
+ *   <li>Deletes notification and verifies deletion.</li>
+ * </ul>
+ */
 public class TaskManagerNotificationTest extends BackEndTest {
     private static final String ORGANIZATION_NAME = "organization-name";
     private static final String DESCRIPTION = "description";

@@ -39,6 +39,13 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
     private static final String TEXT_TITLE = "text-title";
     private static final String NEW_TEXT_TITLE = "new-text-title";
 
+    /**
+     * Tests auto‑refresh of notebook content across tabs.
+     * <ul>
+     *   <li>Verifies category title updates after editing in a separate tab.</li>
+     *   <li>Checks checklist, table, and text items refresh when edited elsewhere.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshCategory() {
         WebDriver driver = extractDriver(WebDriverMode.HEADED);
@@ -75,6 +82,13 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
         });
     }
 
+    /**
+     * Tests auto‑refresh of a checklist item after editing in another tab.
+     * <ul>
+     *   <li>Opens the checklist, edits its title in a new tab.</li>
+     *   <li>Verifies that the original tab shows the updated title.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshChecklist() {
         WebDriver driver = extractDriver(WebDriverMode.HEADED);
@@ -114,6 +128,13 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
             .assertTrue("Checklist is not refreshed.");
     }
 
+    /**
+     * Tests auto‑refresh of a table item after editing in another tab.
+     * <ul>
+     *   <li>Opens the table, edits its title in a new tab.</li>
+     *   <li>Verifies that the original tab shows the updated title.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshTable() {
         WebDriver driver = extractDriver(WebDriverMode.HEADED);
@@ -150,6 +171,13 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
             .assertTrue("Table is not refreshed.");
     }
 
+    /**
+     * Tests auto‑refresh of a text item after editing in another tab.
+     * <ul>
+     *   <li>Opens the text, edits its title in a new tab.</li>
+     *   <li>Verifies that the original tab shows the updated title.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook", "headed-only"})
     public void autoRefreshText() {
         WebDriver driver = extractDriver(WebDriverMode.HEADED);

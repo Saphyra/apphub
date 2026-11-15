@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.processor.service.p
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.commodity.Commodity;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.item.trading.commodity.CommodityDao;
@@ -34,7 +34,7 @@ class OfferServiceTest {
     private CommodityDao commodityDao;
 
     @Spy
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @InjectMocks
     private OfferService offerService;

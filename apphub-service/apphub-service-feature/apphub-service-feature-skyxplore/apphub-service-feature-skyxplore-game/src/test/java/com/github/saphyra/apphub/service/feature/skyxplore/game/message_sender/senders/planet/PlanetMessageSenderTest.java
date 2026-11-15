@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.message_sender.
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.message_sender.UpdateItem;
@@ -52,7 +52,7 @@ class PlanetMessageSenderTest {
         underTest = PlanetMessageSender.builder()
             .messageProviders(List.of(messageProvider))
             .errorReporterService(errorReporterService)
-            .executorServiceBean(ExecutorServiceBeenTestUtils.create(errorReporterService))
+            .executorServiceBean(ExecutorServiceBeeaTestUtils.create(errorReporterService))
             .planetWebSocketHandler(planetWebSocketHandler)
             .build();
     }

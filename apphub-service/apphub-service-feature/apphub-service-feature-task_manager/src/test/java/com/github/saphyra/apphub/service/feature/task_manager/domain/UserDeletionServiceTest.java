@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.task_manager.domain;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeeaTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.Alm;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.AlmDao;
@@ -35,7 +35,7 @@ class UserDeletionServiceTest {
     @Mock
     private DeleteOrganizationService deleteOrganizationService;
 
-    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeeaTestUtils.create(mock(ErrorReporterService.class));
 
     @Mock
     private DeleteByUserIdDao deleteByUserIdDao;

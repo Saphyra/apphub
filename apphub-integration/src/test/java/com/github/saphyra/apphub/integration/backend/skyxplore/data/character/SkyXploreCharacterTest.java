@@ -20,6 +20,19 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreCharacterTest extends BackEndTest {
+    /**
+     * Tests the full lifecycle of a SkyXplore character: creation, validation of input constraints,
+     * handling duplicate names, no‑op updates, and successful edits.
+     *
+     * <ul>
+     *   <li>validate POST /skyxplore/character/create returns 400 when name is null</li>
+     *   <li>validate POST /skyxplore/character/create returns 400 when name is too short</li>
+     *   <li>validate POST /skyxplore/character/create returns 400 when name exceeds max length</li>
+     *   <li>validate POST /skyxplore/character/create returns 409 when duplicate name exists</li>
+     *   <li>validate POST /skyxplore/character/create returns 200 and no change when same data is sent again</li>
+     *   <li>validate POST /skyxplore/character/create returns 200 and updates name on valid input</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void createAndEditCharacter() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

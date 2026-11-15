@@ -15,6 +15,15 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModulesDataDeletedWithUserTest extends BackEndTest {
+    /**
+     * Verifies that deleting a user removes all module favorite data associated with the user.
+     *
+     * <ul>
+     *   <li>Set module as favorite for user.</li>
+     *   <li>Delete user account.</li>
+     *   <li>Assert that module favorites are removed from database.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "modules"})
     public void modulesDataDeletedWithUser(){
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -7,11 +7,9 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Econom
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.StationType;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomyDao;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_economy.StationEconomySyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceEnum;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.station.station_service.StationServiceSyncService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +22,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class StationConverterTest {
@@ -43,12 +40,6 @@ class StationConverterTest {
 
     @Mock
     private UuidConverter uuidConverter;
-
-    @Mock
-    private StationEconomySyncService stationEconomySyncService;
-
-    @Mock
-    private StationServiceSyncService stationServiceSyncService;
 
     @Mock
     private StationEconomyDao stationEconomyDao;
@@ -97,8 +88,6 @@ class StationConverterTest {
             .returns(EconomyEnum.ENGINEER, StationEntity::getEconomy)
             .returns(CONTROLLING_FACTION_ID_STRING, StationEntity::getControllingFactionId);
 
-        then(stationServiceSyncService).should().sync(ID, List.of(StationServiceEnum.CREW_LOUNGE));
-        then(stationEconomySyncService).should().sync(ID, List.of(stationEconomy));
     }
 
     @Test

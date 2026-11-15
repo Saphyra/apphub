@@ -31,6 +31,25 @@ public class TextCrudTest extends BackEndTest {
     private static final String NEW_CONTENT = "new-content";
     private static final String NEW_TITLE = "new-title";
 
+    /**
+     * Tests CRUD operations for text items including validation of input constraints and deletion.
+     *
+     * <ul>
+     *   <li>validate creation with blank title returns error</li>
+     *   <li>validate creation with too long title returns error</li>
+     *   <li>validate creation with too long content returns error</li>
+     *   <li>validate creation with non-existent parent category returns 404</li>
+     *   <li>validate creation with parent that is not a category returns invalid type</li>
+     *   <li>validate creation with null content returns error</li>
+     *   <li>validate successful creation and retrieval of text item</li>
+     *   <li>validate editing with blank title returns error</li>
+     *   <li>validate editing with too long title returns error</li>
+     *   <li>validate editing with null content returns error</li>
+     *   <li>validate editing with too long content returns error</li>
+     *   <li>validate successful edit of text item</li>
+     *   <li>validate deletion removes item from parent</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void textCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -52,6 +71,13 @@ public class TextCrudTest extends BackEndTest {
         delete(accessToken, parentCategoryId, textId);
     }
 
+    /**
+     * Creates a text item using maximum allowed title and content lengths to verify that boundary values are accepted.
+     *
+     * <ul>
+     *   <li>validate creation of text item with max sized data succeeds</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void createTextWithMaxSizedData() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

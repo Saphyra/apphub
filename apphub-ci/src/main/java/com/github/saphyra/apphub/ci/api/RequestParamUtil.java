@@ -70,14 +70,12 @@ public class RequestParamUtil {
     }
 
     public List<String> extractUserDefinedServices(HttpServletRequest request) {
-        String userDefinedServices = request.getParameter(PARAM_USER_DEFINED_SERVICES);
-        if (isNull(userDefinedServices)) {
-            throw new IllegalArgumentException("Missing parameter: " + PARAM_USER_DEFINED_SERVICES);
-        }
+        String[] selectedServices = request.getParameterValues(PARAM_USER_DEFINED_SERVICES);
+        List<String> userDefinedServices = isNull(selectedServices) ? List.of() : List.of(selectedServices);
 
-        propertyDao.save(PropertyName.USER_DEFINED_SERVICES, userDefinedServices);
+        propertyDao.save(PropertyName.USER_DEFINED_SERVICES, String.join(",", userDefinedServices));
 
-        return List.of(userDefinedServices.split(","));
+        return userDefinedServices;
     }
 
     public int extractBuildThreadCount(HttpServletRequest request) {

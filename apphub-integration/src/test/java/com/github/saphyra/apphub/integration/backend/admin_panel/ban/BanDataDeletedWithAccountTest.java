@@ -20,6 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BanDataDeletedWithAccountTest extends BackEndTest {
     private static final String REASON = "reason";
 
+    /**
+     * Tests that ban data is removed when a user account is deleted.
+     * <ul>
+     *   <li>Creates a permanent ban for the training role.</li>
+     *   <li>Deletes the user's account using their password.</li>
+     *   <li>Verifies that the ban entry no longer exists in the database.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "admin-panel"})
     public void banDataDeletedWithAccount() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

@@ -1,5 +1,9 @@
 package com.github.saphyra.apphub.service.feature.elite_base.processor.message_processing.saver;
 
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.ObjectType;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdate;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.settlement.Settlement;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.settlement.SettlementDao;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.settlement.SettlementFactory;
@@ -29,6 +33,7 @@ class SettlementSaverTest {
     private static final Long MARKET_ID = 3432L;
     private static final Double LONGITUDE = 23423.324;
     private static final Double LATITUDE = 24.234;
+    private static final UUID SETTLEMENT_ID = UUID.randomUUID();
 
     @Mock
     private SettlementDao settlementDao;
@@ -36,11 +41,20 @@ class SettlementSaverTest {
     @Mock
     private SettlementFactory settlementFactory;
 
+    @Mock
+    private LastUpdateDao lastUpdateDao;
+
+    @Mock
+    private LastUpdateFactory lastUpdateFactory;
+
     @InjectMocks
     private SettlementSaver underTest;
 
     @Mock
     private Settlement settlement;
+
+    @Mock
+    private LastUpdate lastUpdate;
 
     @Test
     void nullStarSystemId() {
@@ -55,31 +69,35 @@ class SettlementSaverTest {
     @Test
     void save_new() {
         given(settlementDao.findByStarSystemIdAndSettlementName(STAR_SYSTEM_ID, SETTLEMENT_NAME)).willReturn(Optional.empty());
-        given(settlementFactory.create(LAST_UPDATE, STAR_SYSTEM_ID, BODY_ID, SETTLEMENT_NAME, MARKET_ID, LONGITUDE, LATITUDE)).willReturn(settlement);
-        given(settlement.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
+        given(settlementFactory.create(STAR_SYSTEM_ID, BODY_ID, SETTLEMENT_NAME, MARKET_ID, LONGITUDE, LATITUDE)).willReturn(settlement);
+        given(settlement.getId()).willReturn(SETTLEMENT_ID);
+        given(lastUpdateFactory.create(SETTLEMENT_ID, ObjectType.SETTLEMENT, LAST_UPDATE)).willReturn(lastUpdate);
 
         underTest.save(LAST_UPDATE, STAR_SYSTEM_ID, BODY_ID, SETTLEMENT_NAME, MARKET_ID, LONGITUDE, LATITUDE);
 
-        then(settlement).should(times(0)).setLastUpdate(any());
         then(settlement).should(times(0)).setBodyId(any());
         then(settlement).should(times(0)).setMarketId(any());
         then(settlement).should(times(0)).setLongitude(any());
         then(settlement).should(times(0)).setLatitude(any());
         then(settlementDao).should().save(settlement);
+        then(lastUpdateDao).should().save(lastUpdate);
     }
 
     @Test
     void save_existing() {
         given(settlementDao.findByStarSystemIdAndSettlementName(STAR_SYSTEM_ID, SETTLEMENT_NAME)).willReturn(Optional.of(settlement));
-        given(settlement.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
+        given(settlement.getId()).willReturn(SETTLEMENT_ID);
+        given(lastUpdateDao.findByIdOrDefault(SETTLEMENT_ID, ObjectType.SETTLEMENT)).willReturn(lastUpdate);
+        given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
+        given(lastUpdateFactory.create(SETTLEMENT_ID, ObjectType.SETTLEMENT, LAST_UPDATE)).willReturn(lastUpdate);
 
         underTest.save(LAST_UPDATE, STAR_SYSTEM_ID, BODY_ID, SETTLEMENT_NAME, MARKET_ID, LONGITUDE, LATITUDE);
 
-        then(settlement).should().setLastUpdate(LAST_UPDATE);
         then(settlement).should().setBodyId(BODY_ID);
         then(settlement).should().setMarketId(MARKET_ID);
         then(settlement).should().setLongitude(LONGITUDE);
         then(settlement).should().setLatitude(LATITUDE);
         then(settlementDao).should().save(settlement);
+        then(lastUpdateDao).should().save(lastUpdate);
     }
 }

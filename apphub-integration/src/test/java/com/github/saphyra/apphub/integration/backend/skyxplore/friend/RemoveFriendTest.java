@@ -22,6 +22,15 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemoveFriendTest extends BackEndTest {
+    /**
+     * Tests removing a friendship between two users.
+     *
+     * <ul>
+     *   <li>Verifies that attempting to delete a non‑existent friendship returns 404.</li>
+     *   <li>Ensures that a user without ownership receives a forbidden error when deleting another's friendship.</li>
+     *   <li>Confirms successful deletion and WebSocket notification for the owner.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void removeFriend() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

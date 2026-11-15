@@ -26,6 +26,15 @@ public class CreateEventTest extends SeleniumTest {
     private static final String LABEL = "label";
     private static final String NEW_EVENT = "new-event";
 
+    /**
+     * Creates an event with a new label, shares the label, creates another event using the shared label,
+     * and verifies visibility for both users.
+     *
+     * <ul>
+     *   <li>validate that shared user can see event created with shared label</li>
+     *   <li>validate that owner sees both events after sharing</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void createEventToSharedLabel() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -55,7 +64,7 @@ public class CreateEventTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Create event using shared label
         CalendarIndexPageActions.openCreateEventPage(sharedWithDriver);

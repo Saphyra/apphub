@@ -16,6 +16,16 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import org.testng.annotations.Test;
 
 public class AccountRoleProtectionTest extends BackEndTest {
+    /**
+     * Ensures that a user without the required role cannot perform account modification actions.
+     *
+     * <ul>
+     *   <li>Attempt to change email fails with missing role error</li>
+     *   <li>Attempt to change password fails with missing role error</li>
+     *   <li>Attempt to change username fails with missing role error</li>
+     *   <li>Attempt to delete account fails with missing role error</li>
+     * </ul>
+     */
     @Test(groups = {"be", "account", "role-protection"})
     public void accountRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

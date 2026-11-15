@@ -36,4 +36,12 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-item_fc_material" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="item_fc_material"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="item_fc_material"/>
+    </changeSet>
 </databaseChangeLog>

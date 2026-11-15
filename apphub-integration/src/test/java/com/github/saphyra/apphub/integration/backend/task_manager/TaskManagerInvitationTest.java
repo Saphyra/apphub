@@ -27,6 +27,13 @@ public class TaskManagerInvitationTest extends BackEndTest {
     private static final String ORGANIZATION_NAME = "organization-name";
     private static final String DESCRIPTION = "description";
 
+    /**
+     * Tests invitation acceptance and rejection flows.
+     *
+     * <ul>
+     *   <li>acceptInvitation: verifies that a user can accept an invitation, receives notification, and organization membership is added.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "task-manager"})
     void acceptInvitation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
@@ -56,6 +63,13 @@ public class TaskManagerInvitationTest extends BackEndTest {
             );
     }
 
+    /**
+     * Tests invitation rejection flow.
+     *
+     * <ul>
+     *   <li>rejectInvitation: verifies that rejecting an invitation removes it from the invitee’s list and does not add them to the organization.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "task-manager"})
     void rejectInvitation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

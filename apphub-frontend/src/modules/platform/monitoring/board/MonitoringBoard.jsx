@@ -18,7 +18,7 @@ const MonitoringBoard = ({ setDisplaySpinner, queryData, filterText }) => {
         request: MONITORING_GET_METRICS.createRequest(
             null,
             { type: queryData.timeFrame },
-            { feature: queryData.feature, functionality: queryData.functionality, service: queryData.service }
+            { feature: queryData.feature, functionality: queryData.functionality, service: queryData.service, startTime: queryData.startTime, endTime: queryData.endTime }
         ),
         mapper: response => setMetricsData({ queryData: queryData, metrics: response }),
         setDisplaySpinner: setDisplaySpinner,

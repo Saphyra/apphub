@@ -24,6 +24,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InviteToLobbyTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests inviting a user to a lobby and handling various edge cases.
+     *
+     * <ul>
+     *   <li>invite to lobby succeeds when users are friends</li>
+     *   <li>invitation fails with 412 when target is not a friend</li>
+     *   <li>flooding invitation triggers 429 and TOO_FREQUENT_INVITATIONS error</li>
+     *   <li>invitation from different player updates sender info correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void inviteToLobby() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

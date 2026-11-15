@@ -27,6 +27,14 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ManualTickProcessingTest extends SeleniumTest {
+    /**
+     * Tests manual tick processing after admin role is granted.
+     *
+     * <ul>
+     *   <li>Process tick button appears only for admins.</li>
+     *   <li>Ticks progress construction until completion.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void manualTickProcessing() {
         WebDriver driver = extractDriver();

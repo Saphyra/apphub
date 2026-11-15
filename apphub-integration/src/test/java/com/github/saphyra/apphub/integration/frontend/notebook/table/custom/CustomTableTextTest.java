@@ -29,6 +29,16 @@ public class CustomTableTextTest extends SeleniumTest {
     private static final String TEXT = "text";
     private static final String NEW_TEXT = "new-text";
 
+    /**
+     * Tests CRUD operations for a custom table containing a text column.
+     *
+     * <ul>
+     *   <li>Creates a new custom table with a text cell and verifies the initial value.</li>
+     *   <li>Opens the created table and checks that the displayed value matches the expected text.</li>
+     *   <li>Edits the text cell, saves changes, and confirms the updated value is persisted.</li>
+     *   <li>Ensures editing mode is disabled after saving changes.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void customTableTextCrud() {
         WebDriver driver = extractDriver();

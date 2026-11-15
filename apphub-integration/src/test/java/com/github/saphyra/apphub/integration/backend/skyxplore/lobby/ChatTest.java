@@ -24,6 +24,14 @@ public class ChatTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String MESSAGE = "message";
 
+    /**
+     * Tests sending chat messages and message length validation.
+     *
+     * <ul>
+     *   <li>validate that a message longer than 1024 chars is rejected</li>
+     *   <li>verify that a valid message is broadcast to host and member clients</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void sendMessage() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

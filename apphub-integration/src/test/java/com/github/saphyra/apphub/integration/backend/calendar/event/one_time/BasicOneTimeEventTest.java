@@ -27,6 +27,15 @@ public class BasicOneTimeEventTest extends BackEndTest {
     private static final LocalDate NEW_START_DATE = EventRequestFactory.DEFAULT_START_DATE.plusDays(1);
     private static final LocalTime NEW_TIME = EventRequestFactory.DEFAULT_TIME.plusHours(1);
 
+    /**
+     * Tests creation, editing and deletion of a one‑time event.
+     *
+     * <ul>
+     *   <li>Creates an event with default values.</li>
+     *   <li>Edits title, content, start date and time.</li>
+     *   <li>Deletes the event and verifies no events or occurrences remain.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void basicOneTimeEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

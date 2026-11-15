@@ -30,6 +30,15 @@ public class RepeatDaysOfWeekEventTest extends BackEndTest {
     private static final Integer REPEAT_FOR_DAYS = 3;
     private static final int NEW_REPEAT_FOR_DAYS = 2;
 
+    /**
+     * Tests creation and editing of a days‑of‑week event with repeatForDays.
+     *
+     * <ul>
+     *   <li>Validate that creating an event with repeatForDays=3 returns correct data.</li>
+     *   <li>Validate that editing the event to repeatForDays=2 updates the field.</li>
+     *   <li>Validate that the occurrence list contains 8 dates for the new interval.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void repeatDaysOfWeekEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

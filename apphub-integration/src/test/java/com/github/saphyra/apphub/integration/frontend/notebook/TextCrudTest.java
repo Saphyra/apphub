@@ -30,6 +30,18 @@ public class TextCrudTest extends SeleniumTest {
     private static final String NEW_TEXT_TITLE = "new-text";
     private static final String NEW_TEXT_CONTENT = "new-content";
 
+    /**
+     * Tests CRUD operations for text items including validation, editing, and deletion.
+     *
+     * <ul>
+     *   <li>Create text item with empty title shows error toast.</li>
+     *   <li>Create valid text item navigates to notebook page and displays content.</li>
+     *   <li>Edit text item with empty title shows error toast.</li>
+     *   <li>Discard changes restores original title and content.</li>
+     *   <li>Save changes updates title and content.</li>
+     *   <li>Delete text item removes it from list.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void textCrud() {
         WebDriver driver = extractDriver();

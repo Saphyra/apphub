@@ -25,6 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageSettingTest extends SeleniumTest {
     public static final int AMOUNT = 10;
 
+    /**
+     * Tests CRUD operations for planet storage settings in SkyXplore.
+     *
+     * <ul>
+     *   <li>Create a new storage setting with amount 10 and priority 3 for steel ingot.</li>
+     *   <li>Edit the created storage setting to amount 20 and priority 8.</li>
+     *   <li>Delete the edited storage setting and verify it is removed.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void storageSettingCrud() {
         WebDriver driver = extractDriver();
@@ -107,6 +116,15 @@ public class StorageSettingTest extends SeleniumTest {
         assertThat(SkyXplorePlanetStorageSettingActions.createStorageSettingResourceSelectMenu(driver).getOptions()).contains(Constants.DATA_ID_STEEL_INGOT);
     }
 
+    /**
+     * Tests resource production for a storage setting on a planet in SkyXplore.
+     *
+     * <ul>
+     *   <li>Create a storage setting with amount 10 and priority 3.</li>
+     *   <li>Verify that the storage is reserved after creation.</li>
+     *   <li>Check that resource production increases by 100 within 60 seconds.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "skyxplore"})
     public void produceResourcesForStorageSetting() {
         WebDriver driver = extractDriver();

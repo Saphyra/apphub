@@ -71,7 +71,7 @@ public class CalendarFlow {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithEmail);
         grantSetup.accept(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
     }
 
     public static void shareEvent(WebDriver ownerDriver, LocalDate date, String sharedWithEmail, Consumer<WebDriver> grantSetup) {
@@ -84,7 +84,7 @@ public class CalendarFlow {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithEmail);
         grantSetup.accept(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
     }
 
     public static void shareOccurrence(WebDriver ownerDriver, LocalDate date, String sharedWithEmail, Consumer<WebDriver> grantSetup) {
@@ -97,7 +97,7 @@ public class CalendarFlow {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithEmail);
         grantSetup.accept(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
     }
 
     public static void deleteOccurrence(WebDriver driver, LocalDate date) {

@@ -23,6 +23,13 @@ public class EditLabelTest extends BackEndTest {
     private static final String LABEL_1 = "label-1";
     private static final String LABEL_2 = "label-2";
 
+    /**
+     * Tests editing a shared calendar label.
+     *
+     * <ul>
+     *   <li>validate that a user with EDIT and VIEW grants can change the label name</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void editLabel() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -56,6 +63,13 @@ public class EditLabelTest extends BackEndTest {
             .returns(LABEL_2, LabelResponse::getLabel);
     }
 
+    /**
+     * Tests editing a shared calendar label without sufficient grant.
+     *
+     * <ul>
+     *   <li>validate that a user lacking EDIT or VIEW grants receives 404 when attempting to edit the label</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "editLabel_noGrantData")
     public void editLabel_noGrant(Set<Grant> grants) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

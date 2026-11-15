@@ -33,6 +33,18 @@ public class LinkCrudTest extends SeleniumTest {
     private static final String CATEGORY = "category";
     private static final String NEW_LINK_TITLE = "new-link";
 
+    /**
+     * Tests CRUD operations for link list items in the notebook module.
+     *
+     * <ul>
+     *   <li>Creates a new link with valid data and verifies it is displayed.</li>
+     *   <li>Attempts to create a link with an empty title and expects an error toast.</li>
+     *   <li>Attempts to create a link with an empty URL and expects an error toast.</li>
+     *   <li>Edits the existing link's URL and parent, then verifies changes are saved.</li>
+     *   <li>Opens the link in a new tab and checks navigation to the correct URL.</li>
+     *   <li>Deletes the link and confirms it is removed from the list.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void linkCrud() {
         WebDriver driver = extractDriver();

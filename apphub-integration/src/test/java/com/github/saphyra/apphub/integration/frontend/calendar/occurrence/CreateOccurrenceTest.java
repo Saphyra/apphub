@@ -23,6 +23,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateOccurrenceTest extends SeleniumTest {
     private static final String NOTE = "note";
 
+    /**
+     * Creates an event with recurrence, then creates a single occurrence and verifies it appears with the correct note.
+     *
+     * <ul>
+     *   <li>Event created successfully when user submits the event form.</li>
+     *   <li>Occurrence created successfully when user sets date and note for a recurring event.</li>
+     *   <li>Opened occurrence displays the correct note after creation.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void createOccurrence() {
         WebDriver driver = extractDriver();

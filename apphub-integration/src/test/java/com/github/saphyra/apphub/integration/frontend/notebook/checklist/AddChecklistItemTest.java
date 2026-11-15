@@ -27,6 +27,15 @@ public class AddChecklistItemTest extends SeleniumTest {
     private static final String LAST_CONTENT = "last-content";
     private static final String FIRST_CONTENT = "first-content";
 
+    /**
+     * Adds a checklist item to an existing notebook list.
+     *
+     * <ul>
+     *   <li>Creates a new list item of type CHECKLIST with title and first content.</li>
+     *   <li>Adds a new item at the end, sets its content, verifies two items exist.</li>
+     *   <li>Adds an item to the start, verifies order and content.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void addChecklistItem() {
         WebDriver driver = extractDriver();

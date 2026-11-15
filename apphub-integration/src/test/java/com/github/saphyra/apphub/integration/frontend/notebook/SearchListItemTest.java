@@ -34,6 +34,14 @@ public class SearchListItemTest extends SeleniumTest {
     private static final String ONLY_TITLE_TITLE = "only-title-title";
     private static final String CHECKLIST_TABLE_HEAD = "checklist-table-head";
 
+    /**
+     * Tests searching for various notebook list item types and verifies the result.
+     *
+     * <ul>
+     *   <li>Creates categories, links, texts, checklists, tables, checklist tables, and only titles.</li>
+     *   <li>Searches by title or content and checks that exactly one matching item is returned with correct type.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void search() {
         WebDriver driver = extractDriver();
@@ -67,6 +75,9 @@ public class SearchListItemTest extends SeleniumTest {
         search(driver, ONLY_TITLE_TITLE, ONLY_TITLE_TITLE, ListItemType.ONLY_TITLE);
     }
 
+    /**
+     * Tests that duplicate titles result in a single unique search result.
+     */
     @Test(groups = {"fe", "notebook"})
     public void itemsShouldBeUnique() {
         WebDriver driver = extractDriver();
@@ -81,6 +92,9 @@ public class SearchListItemTest extends SeleniumTest {
         search(driver, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
     }
 
+    /**
+     * Tests opening the parent of a searched result and verifies that the correct parent category is displayed.
+     */
     @Test(groups = {"fe", "notebook"})
     public void openParentOfSearchResult() {
         WebDriver driver = extractDriver();

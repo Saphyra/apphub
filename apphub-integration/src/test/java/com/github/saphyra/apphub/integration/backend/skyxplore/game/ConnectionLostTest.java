@@ -17,6 +17,14 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ConnectionLostTest extends BackEndTest {
+    /**
+     * Tests that when a player disconnects during an active game, the host receives pause and disconnection events.
+     *
+     * <ul>
+     *   <li>host receives SKYXPLORE_GAME_PAUSED with true payload after player disconnect.</li>
+     *   <li>host receives SKYXPLORE_GAME_PLAYER_DISCONNECTED event indicating the player left.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void playerDisconnected() {
         RegistrationParameters hostData = RegistrationParameters.validParameters();
@@ -43,6 +51,13 @@ public class ConnectionLostTest extends BackEndTest {
         gameWsClients.get(hostAccessToken).awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PLAYER_DISCONNECTED);
     }
 
+    /**
+     * Tests that when the host disconnects during an active game, the remaining player receives a pause event.
+     *
+     * <ul>
+     *   <li>player receives SKYXPLORE_GAME_PAUSED with true payload after host disconnect.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void hostDisconnected() {
         RegistrationParameters hostData = RegistrationParameters.validParameters();

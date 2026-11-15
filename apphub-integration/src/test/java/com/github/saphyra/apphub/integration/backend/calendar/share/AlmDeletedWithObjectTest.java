@@ -28,6 +28,16 @@ import java.util.function.BiFunction;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AlmDeletedWithObjectTest extends BackEndTest {
+    /**
+     * Tests that deleting a shared calendar label removes it from all participants.
+     *
+     * <ul>
+     *   <li>validate deleteLabel endpoint returns success when called by owner</li>
+     *   <li>validate deleteLabel endpoint returns success when called by shared user</li>
+     *   <li>verify label is removed from both users' lists after deletion</li>
+     *   <li>verify ALM record for the label is deleted</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "deletedByData")
     public void almDeletedWithLabel(BiFunction<String, String, String> deletedByTokenSelector) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -55,6 +65,16 @@ public class AlmDeletedWithObjectTest extends BackEndTest {
         assertThat(CalendarDynamoDbRepository.almRecordExists(sharedWithId, SharedObjectType.LABEL, labelId)).isFalse();
     }
 
+    /**
+     * Tests that deleting a shared calendar event removes it from all participants.
+     *
+     * <ul>
+     *   <li>validate deleteEvent endpoint returns success when called by owner</li>
+     *   <li>validate deleteEvent endpoint returns success when called by shared user</li>
+     *   <li>verify event is removed from both users' lists after deletion</li>
+     *   <li>verify ALM record for the event is deleted</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "deletedByData")
     public void almDeletedWithEvent(BiFunction<String, String, String> deletedByTokenSelector) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -81,6 +101,16 @@ public class AlmDeletedWithObjectTest extends BackEndTest {
         assertThat(CalendarDynamoDbRepository.almRecordExists(sharedWithId, SharedObjectType.EVENT, eventId)).isFalse();
     }
 
+    /**
+     * Tests that deleting a shared calendar occurrence removes it from all participants.
+     *
+     * <ul>
+     *   <li>validate deleteOccurrence endpoint returns success when called by owner</li>
+     *   <li>validate deleteOccurrence endpoint returns success when called by shared user</li>
+     *   <li>verify occurrence is removed from both users' lists after deletion</li>
+     *   <li>verify ALM record for the occurrence is deleted</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"}, dataProvider = "deletedByData")
     public void almDeletedWithOccurrence(BiFunction<String, String, String> deletedByTokenSelector) {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

@@ -37,6 +37,35 @@ public class ChecklistCrudTest extends BackEndTest {
     private static final String NEW_CONTENT = "new-content";
     private static final String NEW_TITLE = "new-title";
 
+    /**
+     * Comprehensive CRUD test for checklist functionality.
+     *
+     * <ul>
+     *   <li>validate creation with blank title returns error</li>
+     *   <li>validate creation when parent category not found returns 404</li>
+     *   <li>validate creation when parent is a text item returns invalid type error</li>
+     *   <li>validate creation with null items list returns error</li>
+     *   <li>validate creation with null content in an item returns error</li>
+     *   <li>validate creation with null checked flag returns error</li>
+     *   <li>validate creation with null index returns error</li>
+     *   <li>validate editing with blank title returns error</li>
+     *   <li>validate editing with null content in an item returns error</li>
+     *   <li>validate editing with null checked flag returns error</li>
+     *   <li>validate editing with null index returns error</li>
+     *   <li>validate editing when list item not found returns 404</li>
+     *   <li>validate editing when checklist item not found returns data not found error</li>
+     *   <li>validate deleting all items results in empty checklist</li>
+     *   <li>validate adding a new checklist item works and updates ordering</li>
+     *   <li>validate checking an item sets its status to true</li>
+     *   <li>validate unchecking an item sets its status to false</li>
+     *   <li>validate modifying an existing item updates content, index and checked flag</li>
+     *   <li>validate deleting checked items removes them from checklist</li>
+     *   <li>validate deleting a list item removes it from parent category children</li>
+     *   <li>validate ordering of two items works correctly</li>
+     *   <li>validate editing an item with null content returns error</li>
+     *   <li>validate editing an existing item updates its content correctly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void checklistCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

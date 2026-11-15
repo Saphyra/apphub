@@ -29,6 +29,22 @@ public class CategoryCrudTest extends BackEndTest {
     private static final String TITLE_2 = "title-2";
     private static final String NEW_TITLE = "new-title";
 
+    /**
+     * Tests CRUD operations for categories, covering validation of empty title,
+     * adding to root, parent not found, parent not a category, creating child,
+     * editing own child error, editing child, and deletion.
+     *
+     * <ul>
+     *   <li>validate empty title error</li>
+     *   <li>add first category to root</li>
+     *   <li>validate parent not found error</li>
+     *   <li>validate parent not a category error</li>
+     *   <li>create child category under parent</li>
+     *   <li>edit own child error</li>
+     *   <li>edit child successfully</li>
+     *   <li>delete category tree</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void categoryCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

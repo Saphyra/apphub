@@ -19,12 +19,13 @@ interface MetricDataRepository extends CrudRepository<MetricDataEntity, String> 
     @Query("SELECT e FROM MetricDataEntity e WHERE type = :type AND timestamp BETWEEN :expirationStart AND :expirationEnd")
     List<MetricDataEntity> getByTypeBetween(@Param("type") MetricDataType type, @Param("expirationStart") LocalDateTime expirationStart, @Param("expirationEnd") LocalDateTime expirationEnd);
 
-    @Query("SELECT e FROM MetricDataEntity e WHERE e.type = :type AND e.metricId IN (:metricIds) AND (:service IS NULL OR e.service = :service) AND e.timestamp >= :timestamp")
-    List<MetricDataEntity> getByTypeAndMetricIdInAndServiceAfter(
+    @Query("SELECT e FROM MetricDataEntity e WHERE e.type = :type AND e.metricId IN (:metricIds) AND (:service IS NULL OR e.service = :service) AND e.timestamp BETWEEN :start AND :end")
+    List<MetricDataEntity> getByTypeAndMetricIdInAndServiceBetween(
         @Param("type") MetricDataType type,
         @Param("metricIds") List<String> metricIds,
         @Param("service") String service,
-        @Param("timestamp") LocalDateTime timestamp
+        @Param("start") LocalDateTime start,
+        @Param("end") LocalDateTime end
     );
 
     Optional<MetricDataEntity> findFirstByTypeOrderByTimestampAsc(MetricDataType type);

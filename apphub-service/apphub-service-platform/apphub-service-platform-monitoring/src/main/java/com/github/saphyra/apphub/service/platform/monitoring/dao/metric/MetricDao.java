@@ -8,6 +8,7 @@ import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,7 +78,7 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
             .toList();
     }
 
-    public void deleteByMetricIdNotIn(List<UUID> metricIds) {
+    public void deleteByMetricIdNotIn(Collection<UUID> metricIds) {
         List<String> toRemove = cache.keySet()
             .stream()
             .filter(id -> !metricIds.contains(uuidConverter.convertEntity(id)))

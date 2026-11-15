@@ -17,6 +17,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MonitoringTest extends BackEndTest {
+    /**
+     * Tests that monitoring endpoints return expected data for an admin user.
+     *
+     * <ul>
+     *   <li>validate GET /monitoring/features returns MEMORY_MONITORING when logged in as admin</li>
+     *   <li>validate GET /monitoring/functionality/MEMORY_MONITORING returns the memory status functionality</li>
+     *   <li>validate GET /monitoring/services/MEMORY_MONITORING/{service} returns all services for the environment</li>
+     *   <li>validate GET /monitoring/metrics/second/MEMORY_MONITORING/memory-status/{service} returns non‑empty metrics list for each service</li>
+     * </ul>
+     */
     @Test(groups = {"be", "monitoring"})
     public void monitoringTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

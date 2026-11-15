@@ -21,6 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GetSharedLabelTest extends BackEndTest {
     private static final String LABEL = "label";
 
+    /**
+     * Tests retrieving a shared calendar label.
+     *
+     * <ul>
+     *   <li>validate that a user with VIEW grant can see the shared label via getLabels</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void getSharedLabel() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();
@@ -52,6 +59,13 @@ public class GetSharedLabelTest extends BackEndTest {
             .returns(labelId, LabelResponse::getLabelId);
     }
 
+    /**
+     * Tests retrieving a shared calendar label without sufficient grant.
+     *
+     * <ul>
+     *   <li>validate that a user lacking VIEW grant receives 404 when requesting the label directly</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     public void getSharedLabel_noGrant() {
         RegistrationParameters ownerData = RegistrationParameters.validParameters();

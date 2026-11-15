@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicator;
+import com.github.saphyra.apphub.ci.ui.progress.ProgressIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutionResult;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,11 +29,14 @@ import java.util.concurrent.TimeUnit;
 public class DbBackupDownloader {
     private final ExecutorServiceBean workerPool = new ExecutorServiceBean(Executors.newFixedThreadPool(16));
 
+    private final ProgressIndicatorFactory progressIndicatorFactory;
+
     public void downloadBackup(String backupDirectory, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
+        ProgressIndicator progressIndicator = progressIndicatorFactory.createFromLabels(Constants.PANEL_TITLE_DOWNLOAD_BACKUP, tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         List<FutureWrapper<Void>> futures = tables.stream()
-            .map(table -> workerPool.execute(() -> download(backupDirectory, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, table)))
+            .map(table -> workerPool.execute(() -> download(progressIndicator, backupDirectory, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, table)))
             .toList();
 
         futures.stream()
@@ -42,9 +48,10 @@ public class DbBackupDownloader {
     }
 
     @SneakyThrows
-    private void download(String backupDirectory, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, String table) {
+    private void download(ProgressIndicator progressIndicator, String backupDirectory, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, String table) {
         log.info("Downloading {}/{}/{}/{} to {} from bucket {}", database, version, backup, table, backupDirectory, s3Bucket);
 
+        progressIndicator.started(table);
         Stopwatch stopwatch = Stopwatch.createStarted();
         String s3FileName = database + "/" + version + "/" + backup + "/" + table + ".bin.gz";
         String localFileName = table.replace(":", "-") + ".bin.gz";
@@ -66,7 +73,9 @@ public class DbBackupDownloader {
             Files.copy(s3Stream, localFilePath);
             stopwatch.stop();
             log.info("Downloaded {} in {} seconds", table, stopwatch.elapsed().toSeconds());
+            progressIndicator.completed(table);
         } catch (IOException e) {
+            progressIndicator.failed(table);
             throw new RuntimeException("Failed to download backup for table " + table, e);
         }
     }

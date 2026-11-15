@@ -24,7 +24,26 @@
         </preConditions>
 
         <addColumn schemaName="elite_base" tableName="material_trader_override">
-            <column name="verified" type="boolean" />
+            <column name="verified" type="boolean"/>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="create-material_trader_override-station_id-fk" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="material_trader_override-station_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="material_trader_override"
+                baseColumnNames="station_id"
+                constraintName="material_trader_override-station_id-fk"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="station_v2"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
     </changeSet>
 </databaseChangeLog>

@@ -13,13 +13,19 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-config-rabbitmq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-event</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-platform-monitoring-client</artifactId>
+            <artifactId>apphub-api-platform-monitoring-model</artifactId>
             <version>${project.version}</version>
         </dependency>
 

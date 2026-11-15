@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
 import jakarta.transaction.Transactional;
@@ -13,14 +14,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ExpiredMetricCleanupService {
-    private final MetricDataDao metricDataDao;
+    private final MetricDataDaoSelector metricDataDaoSelector;
     private final DateTimeUtil dateTimeUtil;
     private final MonitoringProperties monitoringProperties;
     private final MetricDao metricDao;
@@ -33,19 +36,21 @@ public class ExpiredMetricCleanupService {
             .minus(monitoringProperties.getAggregation().get(MetricDataType.HOUR).getExpirationDuration());
         log.info("Deleting metrics before {}", expiration);
 
+        MetricDataDao metricDataDao = metricDataDaoSelector.selectDao(MetricDataType.HOUR);
+
         metricDataDao.deleteByTimestampBefore(expiration);
 
-        deleteByMetricId();
-        deleteByService();
+        deleteByMetricId(metricDataDao);
+        deleteByService(metricDataDao);
     }
 
-    private void deleteByService() {
-        List<String> services = metricDataDao.getServices();
+    private void deleteByService(MetricDataDao metricDataDao) {
+        Collection<String> services = metricDataDao.getServices();
         metricServiceDao.deleteByServiceNotIn(services);
     }
 
-    private void deleteByMetricId() {
-        List<UUID> metricIds = metricDataDao.getMetricIds();
+    private void deleteByMetricId(MetricDataDao metricDataDao) {
+        Collection<UUID> metricIds = metricDataDao.getMetricIds();
 
         metricDao.deleteByMetricIdNotIn(metricIds);
         metricServiceDao.deleteByMetricIdsNotIn(metricIds);

@@ -23,6 +23,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CalendarViewSharedLabelTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
+    /**
+     * Verifies that a shared label is not visible to the user without VIEW grant.
+     *
+     * <ul>
+     *   <li>Owner creates event with label.</li>
+     *   <li>Owner shares label granting only VIEW permission.</li>
+     *   <li>Shared user navigates to labels page and should see no labels.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "calendar"})
     public void viewSharedLabel_noGrant() {
         List<WebDriver> drivers = extractDrivers(2);
@@ -53,7 +62,7 @@ public class CalendarViewSharedLabelTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
-        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.shareExistingObject(ownerDriver);
 
         //Verify label is not visible
         CalendarIndexPageActions.toLabelsPage(sharedWithDriver);

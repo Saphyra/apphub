@@ -18,6 +18,21 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Validates that task manager endpoints enforce role protection.
+ *
+ * <ul>
+ *   <li>create organization</li>
+ *   <li>get organizations list</li>
+ *   <li>get single organization</li>
+ *   <li>list invitations</li>
+ *   <li>accept invitation</li>
+ *   <li>reject invitation</li>
+ *   <li>list notifications</li>
+ *   <li>set notification status</li>
+ *   <li>delete notifications</li>
+ * </ul>
+ */
 public class TaskManagerRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "task-manager", "role-protection"})
     public void taskManagerRoleProtection(String role) {

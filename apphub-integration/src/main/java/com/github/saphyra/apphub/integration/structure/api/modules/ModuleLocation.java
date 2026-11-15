@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.EliteBaseEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.MonitoringEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
@@ -21,6 +22,7 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
+    ELITE_BASE("custom", "elite-base", EliteBaseEndpoints.ELITE_BASE_PAGE, "EliteBase"),
     COMMUNITY("community", "community", CommunityEndpoints.COMMUNITY_PAGE, "Közösség"),
     MODULES("modules", "modules", CommunityEndpoints.MODULES_PAGE, "Modules"),
     CALENDAR("office", "calendar", CalendarEndpoints.CALENDAR_PAGE, "Határidőnapló"),

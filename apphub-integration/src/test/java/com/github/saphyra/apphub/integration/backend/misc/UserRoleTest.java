@@ -13,6 +13,12 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRoleTest extends BackEndTest {
+    /**
+     * Tests user role based access control.
+     * <ul>
+     *   <li>verifies that a non‑admin user is not considered admin and an admin user is recognized as admin after role assignment</li>
+     * </ul>
+     */
     @Test(groups = {"be", "misc"})
     public void isAdminTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

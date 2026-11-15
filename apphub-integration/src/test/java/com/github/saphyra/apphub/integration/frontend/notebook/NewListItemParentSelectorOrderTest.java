@@ -28,6 +28,14 @@ public class NewListItemParentSelectorOrderTest extends SeleniumTest {
         .limit(10)
         .toList();
 
+    /**
+     * Tests that the parent selector for new list items shows all existing categories in sorted order.
+     *
+     * <ul>
+     *   <li>Creates ten random categories.</li>
+     *   <li>Opens a new category list item dialog and verifies the dropdown contains all created titles sorted alphabetically.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void newListItemParentSelectorOrder() {
         WebDriver driver = extractDriver();

@@ -31,6 +31,24 @@ public class CustomTableLinkTest extends BackEndTest {
     private static final String NEW_LABEL = "new-label";
     private static final String NEW_URL = "new-url";
 
+    /**
+     * Tests CRUD operations for a custom link table.
+     *
+     * <ul>
+     *   <li>validate creation fails when data is null</li>
+     *   <li>validate creation fails when link URL is null</li>
+     *   <li>validate creation fails when link URL exceeds max length</li>
+     *   <li>validate creation fails when label is blank</li>
+     *   <li>validate creation fails when label exceeds max length</li>
+     *   <li>validate successful creation and retrieval of link data</li>
+     *   <li>validate editing fails when data is null</li>
+     *   <li>validate editing fails when link URL is null</li>
+     *   <li>validate editing fails when link URL exceeds max length</li>
+     *   <li>validate editing fails when label is blank</li>
+     *   <li>validate editing fails when label exceeds max length</li>
+     *   <li>validate successful edit of link data</li>
+     * </ul>
+     */
     @Test(groups = {"be", "notebook"})
     public void customTableLinkCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();

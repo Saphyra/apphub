@@ -16,6 +16,12 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class BanRoleProtectionTest extends BackEndTest {
+    /**
+     * Tests role protection for ban endpoints.
+     * <ul>
+     *   <li>Ensures that protected actions are blocked when the user lacks the required role.</li>
+     * </ul>
+     */
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void banRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();

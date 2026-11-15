@@ -484,3 +484,7 @@ textarea {
 .resizable {
     resize: both;
 }
+
+.inline-block {
+    display: inline-block;
+}

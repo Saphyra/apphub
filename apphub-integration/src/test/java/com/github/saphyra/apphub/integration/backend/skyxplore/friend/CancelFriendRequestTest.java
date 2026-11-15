@@ -21,6 +21,15 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CancelFriendRequestTest extends BackEndTest {
+    /**
+     * Tests cancelling a pending friend request between two users.
+     *
+     * <ul>
+     *   <li>Verifies 404 when no pending request exists for the requester.</li>
+     *   <li>Ensures forbidden error when another user attempts to cancel.</li>
+     *   <li>Confirms successful cancellation clears requests and emits WebSocket event.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void cancelFriendRequest() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

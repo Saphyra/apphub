@@ -36,4 +36,12 @@
 
         <renameColumn schemaName="elite_base" tableName="conflicting_minor_faction" oldColumnName="faction_id" newColumnName="minor_faction_id"/>
     </changeSet>
+
+    <changeSet id="drop-table-conflicting_minor_faction" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="conflicting_minor_faction"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="conflicting_minor_faction"/>
+    </changeSet>
 </databaseChangeLog>

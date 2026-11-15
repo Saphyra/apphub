@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDaoSelector;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +32,11 @@ public class MetricDataQueryService {
     private static final String INVALID_COMBINATION = "invalid_combination";
 
     private final MetricDao metricDao;
-    private final MetricDataDao metricDataDao;
+    private final MetricDataDaoSelector metricDataDaoSelector;
     private final MonitoringProperties monitoringProperties;
     private final DateTimeUtil dateTimeUtil;
 
-    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service) {
+    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service, @Nullable LocalDateTime startTime, @Nullable LocalDateTime endTime) {
         Map<UUID, Metric> metrics = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
             .stream()
             .collect(Collectors.toMap(Metric::getMetricId, metric -> metric));
@@ -56,10 +56,14 @@ public class MetricDataQueryService {
         Duration expirationDuration = monitoringProperties.getAggregation()
             .get(type)
             .getExpirationDuration();
-        LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
-            .minus(expirationDuration);
+        LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
+        LocalDateTime aggregationStartTime = currentTime.minus(expirationDuration);
 
-        return metricDataDao.getByTypeAndMetricIdInAndServiceAfter(type, metrics.keySet(), service, timestamp)
+        LocalDateTime start = startTime == null ? aggregationStartTime : startTime;
+        LocalDateTime end = endTime == null ? currentTime : endTime;
+
+        return metricDataDaoSelector.selectDao(type)
+            .getByTypeAndMetricIdInAndServiceBetween(type, metrics.keySet(), service, start, end)
             .stream()
             .map(metricData -> {
                 Metric metric = metrics.get(metricData.getMetricId());

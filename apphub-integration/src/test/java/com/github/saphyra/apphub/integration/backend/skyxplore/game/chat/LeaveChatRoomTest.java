@@ -29,6 +29,16 @@ public class LeaveChatRoomTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String ROOM_TITLE = "room-title";
 
+    /**
+     * Tests leaving chat rooms and related error handling.
+     *
+     * <ul>
+     *   <li>validate that leaving the alliance room is forbidden</li>
+     *   <li>validate that leaving the general room is forbidden</li>
+     *   <li>validate that leaving an unknown chat room returns 404 not found</li>
+     *   <li>validate that leaving a created chat room removes the user and emits a system message with correct details</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void leaveAllianceRoom() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

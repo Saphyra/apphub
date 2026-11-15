@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.Allegi
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionState;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateDao;
-import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.MinorFactionStateSyncService;
 import com.github.saphyra.apphub.service.feature.elite_base.processor.dao.minor_faction.state.StateStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class MinorFactionConverterTest {
@@ -33,9 +31,6 @@ class MinorFactionConverterTest {
 
     @Mock
     private MinorFactionStateDao minorFactionStateDao;
-
-    @Mock
-    private MinorFactionStateSyncService minorFactionStateSyncService;
 
     @InjectMocks
     private MinorFactionConverter underTest;
@@ -70,8 +65,6 @@ class MinorFactionConverterTest {
             .returns(FactionStateEnum.BLIGHT, MinorFactionEntity::getState)
             .returns(INFLUENCE, MinorFactionEntity::getInfluence)
             .returns(Allegiance.ALLIANCE, MinorFactionEntity::getAllegiance);
-
-        then(minorFactionStateSyncService).should().sync(ID, List.of(activeState), List.of(pendingState), List.of(recoveringState));
     }
 
     @Test

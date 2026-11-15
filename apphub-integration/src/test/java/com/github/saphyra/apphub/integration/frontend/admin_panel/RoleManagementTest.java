@@ -32,6 +32,18 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoleManagementTest extends SeleniumTest {
+    /**
+     * Tests adding and removing a role for a user.
+     *
+     * <ul>
+     *   <li>Add role with empty password – error toast appears.</li>
+     *   <li>Add role with incorrect password – error toast appears.</li>
+     *   <li>Add role with correct credentials – success toast appears and role granted.</li>
+     *   <li>Revoke role with empty password – error toast appears.</li>
+     *   <li>Revoke role with incorrect password – error toast appears.</li>
+     *   <li>Revoke role with correct credentials – success toast appears and role revoked.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
     public void addAndRemoveRole() {

@@ -31,6 +31,16 @@ public class CustomTableNumberTest extends SeleniumTest {
     private static final int NEW_VALUE = 35;
     private static final int NEW_STEP = 3;
 
+    /**
+     * Tests CRUD operations for a custom table containing a number column.
+     *
+     * <ul>
+     *   <li>Creates a new custom table with a number cell and verifies the initial value and step.</li>
+     *   <li>Opens the created table and checks that the displayed value matches the expected number.</li>
+     *   <li>Edits the number cell, updates value and step, saves changes, and confirms persistence.</li>
+     *   <li>Ensures editing mode is disabled after saving changes.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "notebook"})
     public void customTableNumberCrud() {
         WebDriver driver = extractDriver();

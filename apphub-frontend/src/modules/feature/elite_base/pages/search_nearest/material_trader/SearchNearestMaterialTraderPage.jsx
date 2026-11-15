@@ -14,7 +14,7 @@ import SearchNearestMaterialTraderResult from "./SearchNearestMaterialTraderResu
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./search_nearest_material_trader.css";
 
-const SearchNearestMaterialTraderPage = ({ }) => {
+const SearchNearestMaterialTraderPage = ({ setDisplaySpinner }) => {
     const CACHE_KEY_MATERIAL_TYPE = "eliteBaseNearestMaterialTraderMaterialType";
 
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -33,8 +33,10 @@ const SearchNearestMaterialTraderPage = ({ }) => {
                 <legend>{localizationHandler.get("parameters")}</legend>
 
                 <StarSelector
+                    id="elite-base-sn-material-trader-reference-system"
                     starId={starId}
                     setStarId={setStarId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div>
@@ -88,7 +90,7 @@ const SearchNearestMaterialTraderPage = ({ }) => {
         }
 
         const response = await ELITE_BASE_NEAREST_MATERIAL_TRADERS.createRequest(null, { starId: starId, materialType: materialType, page: page })
-            .send();
+            .send(setDisplaySpinner);
 
         if (response.length == 0) {
             NotificationService.showError(localizationHandler.get("no-more-result"));

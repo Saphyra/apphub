@@ -27,6 +27,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateAndDeleteGameTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
 
+    /**
+     * Tests creating a game, handling errors, and deleting it.
+     *
+     * <ul>
+     *   <li>validate forbidden start when not host</li>
+     *   <li>validate error when lobby member not ready</li>
+     *   <li>verify successful game creation via WebSocket events</li>
+     *   <li>check saved game details match expectations</li>
+     *   <li>validate deletion errors for non‑existent and non‑host games</li>
+     *   <li>confirm game is removed after host deletes it</li>
+     * </ul>
+     */
     @Test(groups = {"be", "skyxplore"})
     public void createAndDeleteGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();

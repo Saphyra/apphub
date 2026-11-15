@@ -21,6 +21,19 @@ import java.util.stream.Stream;
 public class LoginTest extends SeleniumTest {
     private static final String INCORRECT_PASSWORD = "incorrect-password";
 
+    /**
+     * Tests the full login workflow including validation of empty and incorrect credentials,
+     * successful authentication, and account locking after multiple failed attempts.
+     *
+     * <ul>
+     *   <li>empty email</li>
+     *   <li>empty password</li>
+     *   <li>incorrect email</li>
+     *   <li>incorrect password</li>
+     *   <li>successful login</li>
+     *   <li>account locked after repeated failures</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void login() {
         WebDriver driver = extractDriver();
@@ -38,6 +51,13 @@ public class LoginTest extends SeleniumTest {
         lockUser(driver, registrationParameters, loginParameters);
     }
 
+    /**
+     * Tests login functionality using a username as the identifier.
+     *
+     * <ul>
+     *   <li>login with valid username and password redirects to modules page</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "index"})
     public void loginWithUsername() {
         WebDriver driver = extractDriver();

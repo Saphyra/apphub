@@ -17,12 +17,20 @@ const EliteBase = () => {
     document.title = localizationHandler.get("title");
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
     const [openedPage, setOpenedPage] = useState(sessionStorage.eliteBaseOpenedPage ? sessionStorage.eliteBaseOpenedPage : EliteBasePage.INDEX);
 
     const updateOpenedPage = (newValue) => {
         sessionStorage.eliteBaseOpenedPage = newValue;
         setOpenedPage(newValue);
+    }
+
+    const updateDisplaySpinner = (value) => {
+        if (value) {
+            setDisplaySpinner(prev => prev + 1);
+        } else {
+            setDisplaySpinner(prev => prev - 1);
+        }
     }
 
     return (
@@ -35,7 +43,7 @@ const EliteBase = () => {
 
                 <EliteBasePages
                     openedPage={openedPage}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
                 />
             </main>
 
@@ -58,7 +66,7 @@ const EliteBase = () => {
                 />
             }
 
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
 
             <ToastContainer />
         </div>

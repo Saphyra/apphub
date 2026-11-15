@@ -29,6 +29,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TaskManagerOrganizationTest extends SeleniumTest {
     private static final String ORGANIZATION_NAME = "organization-name";
 
+    /**
+     * Tests organization creation, invitation handling, and notification flow in the Task Manager.
+     *
+     * <ul>
+     *   <li>Creates an organization with a valid name.</li>
+     *   <li>Invites two users to the organization.</li>
+     *   <li>Rejects one invitation and verifies it is removed.</li>
+     *   <li>Accepts the other invitation and verifies membership.</li>
+     *   <li>Checks that notifications for acceptance and rejection are displayed.</li>
+     * </ul>
+     */
     @Test(groups = {"fe", "task-manager"})
     public void createAndJoinOrganization() {
         List<WebDriver> driverList = extractDrivers(3);

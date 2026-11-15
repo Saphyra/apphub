@@ -24,6 +24,13 @@ public class ExpiredEventTest extends BackEndTest {
     private static final LocalDate START_DATE = CURRENT_DATE.minusDays(3);
     private static final LocalDate END_DATE = CURRENT_DATE.plusDays(3);
 
+    /**
+     * Tests hiding an expired event.
+     *
+     * <ul>
+     *   <li>Verifies that hideExpiredEvent removes the event from expired list.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     void hideExpiredEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -39,6 +46,14 @@ public class ExpiredEventTest extends BackEndTest {
         assertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessToken)).isEmpty();
     }
 
+    /**
+     * Tests extending an expired event.
+     *
+     * <ul>
+     *   <li>Validates that extendExpiredEvent updates end date and clears expired list.</li>
+     *   <li>Checks error handling for null or too long extensions.</li>
+     * </ul>
+     */
     @Test(groups = {"be", "calendar"})
     void extendExpiredEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
