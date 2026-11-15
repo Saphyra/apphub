@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.platform.monitoring.controller;
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsResponse;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
-import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
@@ -16,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +27,8 @@ class MonitoringControllerImplTest {
     private static final String SERVICE = "service";
     private static final String FUNCTIONALITY = "functionality";
     private static final UUID METRIC_ID = UUID.randomUUID();
+    private static final LocalDateTime START_TIME = LocalDateTime.now();
+    private static final LocalDateTime END_TIME = START_TIME.plusSeconds(1);
 
     @Mock
     private MetricDao metricDao;
@@ -39,9 +41,6 @@ class MonitoringControllerImplTest {
 
     @InjectMocks
     private MonitoringControllerImpl underTest;
-
-    @Mock
-    private PutMetricsRequest request;
 
     @Mock
     private AccessToken accessToken;
@@ -81,8 +80,8 @@ class MonitoringControllerImplTest {
 
     @Test
     void getMetrics() {
-        given(metricDataQueryService.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE)).willReturn(List.of(getMetricsResponse));
+        given(metricDataQueryService.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, START_TIME, END_TIME)).willReturn(List.of(getMetricsResponse));
 
-        assertThat(underTest.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, accessToken)).containsExactly(getMetricsResponse);
+        assertThat(underTest.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, START_TIME, END_TIME, accessToken)).containsExactly(getMetricsResponse);
     }
 }

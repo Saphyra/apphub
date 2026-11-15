@@ -3,6 +3,8 @@
         Visual indicator of table backup and restoration progress
     Calendar
         Instantly share newly created events
+    Monitoring
+        Pick start and end time for metrics to display
 
 ===BUGFIXES===
     ApphubCI ignored foreign key dependencies when referring partitioned tables

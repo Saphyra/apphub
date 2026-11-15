@@ -143,6 +143,10 @@ export const nullIfEmpty = (input) => {
     return input;
 }
 
+export const isNullOrEmpty = (value) => {
+    return !hasValue(value) || value.length === 0;
+}
+
 export const isJsonString = (input) => {
     try {
         JSON.parse(input);

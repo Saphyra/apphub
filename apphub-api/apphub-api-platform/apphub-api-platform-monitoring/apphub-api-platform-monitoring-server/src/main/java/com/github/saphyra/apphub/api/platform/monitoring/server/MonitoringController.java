@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MonitoringController {
@@ -33,6 +34,8 @@ public interface MonitoringController {
         @RequestParam("feature") Feature feature,
         @RequestParam(name = "functionality", required = false) String functionality,
         @RequestParam(name = "service", required = false) String service,
+        @RequestParam(name = "startTime", required = false) LocalDateTime startTime,
+        @RequestParam(name = "endTime", required = false) LocalDateTime endTime,
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 }

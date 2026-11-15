@@ -40,6 +40,8 @@ class MetricDataQueryServiceTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final UUID METRIC_DATA_ID = UUID.randomUUID();
     private static final Long TIMESTAMP = 233L;
+    private static final LocalDateTime START_TIME = LocalDateTime.now();
+    private static final LocalDateTime END_TIME = START_TIME.plusSeconds(1);
 
     @Mock
     private MetricDao metricDao;
@@ -70,7 +72,7 @@ class MetricDataQueryServiceTest {
         given(metricDao.getByFeatureAndOptionalFunctionality(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY)).willReturn(List.of());
 
         ExceptionValidator.validateNotLoggedException(
-            catchThrowable(() -> underTest.getMetrics(MetricDataType.SECOND, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE)),
+            catchThrowable(() -> underTest.getMetrics(MetricDataType.SECOND, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, START_TIME, END_TIME)),
             HttpStatus.BAD_REQUEST,
             ErrorCode.INVALID_PARAM,
             new BiWrapper<>(Feature.ELITE_BASE_MESSAGE_PROCESSING.name(), "invalid_combination"),
@@ -79,7 +81,7 @@ class MetricDataQueryServiceTest {
     }
 
     @Test
-    void getMetrics() {
+    void getMetrics_noStartAndEndTimestamp() {
         given(metricDataDaoSelector.selectDao(MetricDataType.SECOND)).willReturn(metricDataDao);
         given(metricDao.getByFeatureAndOptionalFunctionality(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY)).willReturn(List.of(metric));
         given(metric.getMetricId()).willReturn(METRIC_ID);
@@ -94,12 +96,42 @@ class MetricDataQueryServiceTest {
             .timestamp(CURRENT_TIME)
             .properties(properties)
             .build();
-        given(metricDataDao.getByTypeAndMetricIdInAndServiceAfter(MetricDataType.SECOND, Set.of(METRIC_ID), SERVICE, CURRENT_TIME.minus(EXPIRATION_DURATION))).willReturn(List.of(metricData));
+        given(metricDataDao.getByTypeAndMetricIdInAndServiceBetween(MetricDataType.SECOND, Set.of(METRIC_ID), SERVICE, CURRENT_TIME.minus(EXPIRATION_DURATION), CURRENT_TIME)).willReturn(List.of(metricData));
         given(dateTimeUtil.toEpochSecond(CURRENT_TIME)).willReturn(TIMESTAMP);
         given(metric.getFeature()).willReturn(Feature.ELITE_BASE_MESSAGE_PROCESSING);
         given(metric.getFunctionality()).willReturn(FUNCTIONALITY);
 
-        CustomAssertions.singleListAssertThat(underTest.getMetrics(MetricDataType.SECOND, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE))
+        CustomAssertions.singleListAssertThat(underTest.getMetrics(MetricDataType.SECOND, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, null, null))
+            .returns(METRIC_DATA_ID, GetMetricsResponse::getMetricDataId)
+            .returns(Feature.ELITE_BASE_MESSAGE_PROCESSING, GetMetricsResponse::getFeature)
+            .returns(FUNCTIONALITY, GetMetricsResponse::getFunctionality)
+            .returns(SERVICE, GetMetricsResponse::getService)
+            .returns(TIMESTAMP, GetMetricsResponse::getTimestamp)
+            .returns(properties, GetMetricsResponse::getProperties);
+    }
+
+    @Test
+    void getMetrics_WithStartAndEndTimestamp() {
+        given(metricDataDaoSelector.selectDao(MetricDataType.SECOND)).willReturn(metricDataDao);
+        given(metricDao.getByFeatureAndOptionalFunctionality(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY)).willReturn(List.of(metric));
+        given(metric.getMetricId()).willReturn(METRIC_ID);
+        given(monitoringProperties.getAggregation()).willReturn(Map.of(MetricDataType.SECOND, aggregationProperties));
+        given(aggregationProperties.getExpirationDuration()).willReturn(EXPIRATION_DURATION);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
+        Map<String, Double> properties = Map.of("asd", 3d);
+        MetricData metricData = MetricData.builder()
+            .metricDataId(METRIC_DATA_ID)
+            .metricId(METRIC_ID)
+            .service(SERVICE)
+            .timestamp(CURRENT_TIME)
+            .properties(properties)
+            .build();
+        given(metricDataDao.getByTypeAndMetricIdInAndServiceBetween(MetricDataType.SECOND, Set.of(METRIC_ID), SERVICE, START_TIME, END_TIME)).willReturn(List.of(metricData));
+        given(dateTimeUtil.toEpochSecond(CURRENT_TIME)).willReturn(TIMESTAMP);
+        given(metric.getFeature()).willReturn(Feature.ELITE_BASE_MESSAGE_PROCESSING);
+        given(metric.getFunctionality()).willReturn(FUNCTIONALITY);
+
+        CustomAssertions.singleListAssertThat(underTest.getMetrics(MetricDataType.SECOND, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, START_TIME, END_TIME))
             .returns(METRIC_DATA_ID, GetMetricsResponse::getMetricDataId)
             .returns(Feature.ELITE_BASE_MESSAGE_PROCESSING, GetMetricsResponse::getFeature)
             .returns(FUNCTIONALITY, GetMetricsResponse::getFunctionality)

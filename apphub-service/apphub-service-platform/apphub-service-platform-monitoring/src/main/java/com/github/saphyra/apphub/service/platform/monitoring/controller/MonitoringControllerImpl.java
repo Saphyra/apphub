@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,9 +58,17 @@ public class MonitoringControllerImpl implements MonitoringController {
     }
 
     @Override
-    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service, AccessToken accessToken) {
-        log.info("{} wants to query the metrics for type {}, feature {}, functionality {} and service {}", accessToken.getUserId(), type, feature, functionality, service);
+    public List<GetMetricsResponse> getMetrics(
+        MetricDataType type,
+        Feature feature,
+        @Nullable String functionality,
+        @Nullable String service,
+        @Nullable LocalDateTime startTime,
+        @Nullable LocalDateTime endTime,
+        AccessToken accessToken
+    ) {
+        log.info("{} wants to query the metrics for type {}, feature {}, functionality {} and service {} between {} and {}", accessToken.getUserId(), type, feature, functionality, service, startTime, endTime);
 
-        return metricDataQueryService.getMetrics(type, feature, functionality, service);
+        return metricDataQueryService.getMetrics(type, feature, functionality, service, startTime, endTime);
     }
 }

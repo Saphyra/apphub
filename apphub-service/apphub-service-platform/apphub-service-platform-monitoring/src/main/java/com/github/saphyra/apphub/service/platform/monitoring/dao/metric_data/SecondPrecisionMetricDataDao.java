@@ -67,13 +67,14 @@ class SecondPrecisionMetricDataDao implements MetricDataDao {
     }
 
     @Override
-    public Collection<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, Collection<UUID> metricIds, @Nullable String service, LocalDateTime timestamp) {
+    public Collection<MetricData> getByTypeAndMetricIdInAndServiceBetween(MetricDataType type, Collection<UUID> metricIds, @Nullable String service, LocalDateTime start, LocalDateTime end) {
         return repository.values()
             .stream()
             .filter(metricData -> metricData.getType() == type)
             .filter(metricData -> metricIds.contains(metricData.getMetricId()))
             .filter(metricData -> service == null || service.equals(metricData.getService()))
-            .filter(metricData -> !metricData.getTimestamp().isBefore(timestamp))
+            .filter(metricData -> !metricData.getTimestamp().isBefore(start))
+            .filter(metricData -> !metricData.getTimestamp().isAfter(end))
             .collect(Collectors.toList());
     }
 }

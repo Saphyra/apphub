@@ -31,8 +31,8 @@ class MetricDataDaoImpl extends AbstractDao<MetricDataEntity, MetricData, String
         return converter.convertEntity(repository.getByTypeBetween(type, expirationStart, expirationEnd));
     }
 
-    public Collection<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, Collection<UUID> metricIds, @Nullable String service, LocalDateTime timestamp) {
-        return converter.convertEntity(repository.getByTypeAndMetricIdInAndServiceAfter(type, uuidConverter.convertDomain(metricIds), service, timestamp));
+    public Collection<MetricData> getByTypeAndMetricIdInAndServiceBetween(MetricDataType type, Collection<UUID> metricIds, @Nullable String service, LocalDateTime start, LocalDateTime end) {
+        return converter.convertEntity(repository.getByTypeAndMetricIdInAndServiceBetween(type, uuidConverter.convertDomain(metricIds), service, start, end));
     }
 
     public Optional<MetricData> findOldest(MetricDataType metricDataType) {

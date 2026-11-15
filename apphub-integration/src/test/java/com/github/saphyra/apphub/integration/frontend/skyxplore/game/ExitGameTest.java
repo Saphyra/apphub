@@ -104,13 +104,14 @@ public class ExitGameTest extends SeleniumTest {
     private static void loadGame(WebDriver driver) {
         SkyXploreMainMenuActions.openSavedGames(driver);
         AwaitilityWrapper.getListWithWait(() -> SkyXploreMainMenuActions.getSavedGames(driver), savedGames -> !savedGames.isEmpty())
-            .get(0)
+            .getFirst()
             .load(driver);
 
         SkyXploreLobbyPageActions.setReady(driver);
         SkyXploreLobbyPageActions.startGameCreation(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreGameActions.isGameLoaded(driver));
+            .until(() -> SkyXploreGameActions.isGameLoaded(driver))
+            .assertTrue("Game not loaded.");
     }
 }

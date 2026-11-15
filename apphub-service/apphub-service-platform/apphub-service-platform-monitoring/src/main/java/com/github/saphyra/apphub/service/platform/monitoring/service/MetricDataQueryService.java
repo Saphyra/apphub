@@ -32,11 +32,11 @@ public class MetricDataQueryService {
     private static final String INVALID_COMBINATION = "invalid_combination";
 
     private final MetricDao metricDao;
-    private final MetricDataDaoSelector  metricDataDaoSelector;
+    private final MetricDataDaoSelector metricDataDaoSelector;
     private final MonitoringProperties monitoringProperties;
     private final DateTimeUtil dateTimeUtil;
 
-    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service) {
+    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service, @Nullable LocalDateTime startTime, @Nullable LocalDateTime endTime) {
         Map<UUID, Metric> metrics = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
             .stream()
             .collect(Collectors.toMap(Metric::getMetricId, metric -> metric));
@@ -56,11 +56,14 @@ public class MetricDataQueryService {
         Duration expirationDuration = monitoringProperties.getAggregation()
             .get(type)
             .getExpirationDuration();
-        LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
-            .minus(expirationDuration);
+        LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
+        LocalDateTime aggregationStartTime = currentTime.minus(expirationDuration);
+
+        LocalDateTime start = startTime == null ? aggregationStartTime : startTime;
+        LocalDateTime end = endTime == null ? currentTime : endTime;
 
         return metricDataDaoSelector.selectDao(type)
-            .getByTypeAndMetricIdInAndServiceAfter(type, metrics.keySet(), service, timestamp)
+            .getByTypeAndMetricIdInAndServiceBetween(type, metrics.keySet(), service, start, end)
             .stream()
             .map(metricData -> {
                 Metric metric = metrics.get(metricData.getMetricId());

@@ -59,12 +59,12 @@ class MetricDataDaoImplTest {
     }
 
     @Test
-    void getByTypeAndMetricIdInAndServiceAfter() {
-        given(repository.getByTypeAndMetricIdInAndServiceAfter(MetricDataType.MINUTE, List.of(METRIC_ID_STRING), SERVICE, TIMESTAMP_1)).willReturn(List.of(entity));
+    void getByTypeAndMetricIdInAndServiceBetween() {
+        given(repository.getByTypeAndMetricIdInAndServiceBetween(MetricDataType.MINUTE, List.of(METRIC_ID_STRING), SERVICE, TIMESTAMP_1, TIMESTAMP_2)).willReturn(List.of(entity));
         given(uuidConverter.convertDomain(List.of(METRIC_ID))).willReturn(List.of(METRIC_ID_STRING));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
-        assertThat(underTest.getByTypeAndMetricIdInAndServiceAfter(MetricDataType.MINUTE, List.of(METRIC_ID), SERVICE, TIMESTAMP_1)).containsExactly(domain);
+        assertThat(underTest.getByTypeAndMetricIdInAndServiceBetween(MetricDataType.MINUTE, List.of(METRIC_ID), SERVICE, TIMESTAMP_1, TIMESTAMP_2)).containsExactly(domain);
     }
 
     @Test

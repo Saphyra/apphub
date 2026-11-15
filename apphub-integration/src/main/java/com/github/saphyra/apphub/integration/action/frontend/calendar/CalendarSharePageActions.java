@@ -13,7 +13,13 @@ import java.util.Optional;
 
 public class CalendarSharePageActions {
     public static void selectUser(WebDriver driver, String credential) {
-        WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-share-with-search-input")), credential);
+        By selector = By.id("calendar-share-with-search-input");
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.getIfPresent(driver, selector).isPresent())
+            .assertTrue("Search input is not present.");
+
+        WebElementUtils.clearAndFill(driver.findElement(selector), credential);
 
         driver.findElement(By.id("calendar-share-with-search-button"))
             .click();

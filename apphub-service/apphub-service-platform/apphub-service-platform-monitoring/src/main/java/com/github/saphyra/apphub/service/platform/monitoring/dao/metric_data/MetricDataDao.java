@@ -24,5 +24,5 @@ public interface MetricDataDao {
 
     void deleteAll(List<MetricData> metrics);
 
-    Collection<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, Collection<UUID> uuids, @Nullable String service, LocalDateTime timestamp);
+    Collection<MetricData> getByTypeAndMetricIdInAndServiceBetween(MetricDataType type, Collection<UUID> uuids, @Nullable String service, LocalDateTime start, LocalDateTime end);
 }
