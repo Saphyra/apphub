@@ -34,11 +34,11 @@ public class OrderChecklistItemsService {
 
         List<UUID> checklistItemsOrdered = order(contents);
         List<ChecklistItem> modifiedItems = new ArrayList<>();
-        for(int i = 0; i  < checklistItemsOrdered.size(); i++) {
+        for (int i = 0; i < checklistItemsOrdered.size(); i++) {
             UUID checklistItemId = checklistItemsOrdered.get(i);
             ChecklistItem checklistItem = checklistItems.get(checklistItemId);
             int originalIndex = checklistItem.getIndex();
-            if(i != originalIndex){
+            if (i != originalIndex) {
                 checklistItem.setIndex(i);
                 modifiedItems.add(checklistItem);
             }
@@ -52,6 +52,7 @@ public class OrderChecklistItemsService {
     private List<UUID> order(List<Content> contents) {
         return contents.stream()
             .flatMap(content -> content.getContent().entrySet().stream())
+            .map(entry -> Map.entry(entry.getKey(), entry.getValue().toLowerCase()))
             .sorted(Map.Entry.comparingByValue())
             .map(Map.Entry::getKey)
             .toList();

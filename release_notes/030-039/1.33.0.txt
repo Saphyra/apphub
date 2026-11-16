@@ -10,6 +10,8 @@
     ApphubCI ignored foreign key dependencies when referring partitioned tables
     EliteBase
         Saving MinorFactionState before MinorFaction caused ForeignKeyViolation making up the system unable to register new MinorFactions
+    Notebook
+        Order checklist items case insensitive
 
 ===PLATFORM CHANGES===
     Monitoring
