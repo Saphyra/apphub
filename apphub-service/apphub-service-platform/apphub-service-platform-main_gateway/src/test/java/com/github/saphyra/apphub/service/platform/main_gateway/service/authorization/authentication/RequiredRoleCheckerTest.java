@@ -7,11 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,31 +28,31 @@ class RequiredRoleCheckerTest {
 
     @Test
     void hasRequiredRoles() {
-        given(disabledRoleCache.get()).willReturn(List.of());
+        given(disabledRoleCache.get()).willReturn(Mono.just(List.of()));
         given(accessToken.getRoles()).willReturn(List.of(Role.ACCESS, Role.ADMIN));
 
-        boolean result = underTest.hasRequiredRoles(Set.of(Role.ACCESS, Role.ADMIN), accessToken);
-
-        assertThat(result).isTrue();
+        StepVerifier.create(underTest.hasRequiredRoles(Set.of(Role.ACCESS, Role.ADMIN), accessToken))
+            .expectNext(true)
+            .verifyComplete();
     }
 
     @Test
     void accessTokenDoesNotHaveRequiredRole() {
-        given(disabledRoleCache.get()).willReturn(List.of());
+        given(disabledRoleCache.get()).willReturn(Mono.just(List.of()));
         given(accessToken.getRoles()).willReturn(List.of(Role.ACCESS));
 
-        boolean result = underTest.hasRequiredRoles(Set.of(Role.ACCESS, Role.ADMIN), accessToken);
-
-        assertThat(result).isFalse();
+        StepVerifier.create(underTest.hasRequiredRoles(Set.of(Role.ACCESS, Role.ADMIN), accessToken))
+            .expectNext(false)
+            .verifyComplete();
     }
 
     @Test
     void requiredRoleIsDisabled() {
-        given(disabledRoleCache.get()).willReturn(List.of(Role.ACCESS));
+        given(disabledRoleCache.get()).willReturn(Mono.just(List.of(Role.ACCESS)));
         given(accessToken.getRoles()).willReturn(List.of(Role.ACCESS, Role.ADMIN));
 
-        boolean result = underTest.hasRequiredRoles(Set.of(Role.ACCESS, Role.ADMIN), accessToken);
-
-        assertThat(result).isFalse();
+        StepVerifier.create(underTest.hasRequiredRoles(Set.of(Role.ACCESS, Role.ADMIN), accessToken))
+            .expectNext(false)
+            .verifyComplete();
     }
 }

@@ -16,6 +16,7 @@
 ===PLATFORM CHANGES===
     Monitoring
         Reporting metrics goes through RabbitMQ
+    Use RestClient instead of FeignClient
 
 ===TECHNICAL DEBTS===
     ApphubCI

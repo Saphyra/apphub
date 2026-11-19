@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
@@ -75,7 +76,7 @@ class AuthenticationServiceTest {
     void hasRequiredRole(){
         given(matchingRoleProvider.getMatchingSettings(request)).willReturn(List.of(roleSetting));
         given(roleSetting.getRequiredRoles()).willReturn(List.of(Role.SKYXPLORE));
-        given(requiredRoleChecker.hasRequiredRoles(Set.of(Role.SKYXPLORE), accessToken)).willReturn(true);
+        given(requiredRoleChecker.hasRequiredRoles(Set.of(Role.SKYXPLORE), accessToken)).willReturn(Mono.just(true));
 
         StepVerifier.create(underTest.authenticate(request, accessToken))
             .expectNextCount(0)
@@ -86,7 +87,7 @@ class AuthenticationServiceTest {
     void authenticationFailed(){
         given(matchingRoleProvider.getMatchingSettings(request)).willReturn(List.of(roleSetting));
         given(roleSetting.getRequiredRoles()).willReturn(List.of(Role.SKYXPLORE));
-        given(requiredRoleChecker.hasRequiredRoles(Set.of(Role.SKYXPLORE), accessToken)).willReturn(false);
+        given(requiredRoleChecker.hasRequiredRoles(Set.of(Role.SKYXPLORE), accessToken)).willReturn(Mono.just(false));
         given(request.getHeaders()).willReturn(httpHeaders);
         given(errorResponseFactory.create(HttpStatus.FORBIDDEN, ErrorCode.MISSING_ROLE)).willReturn(errorResponseWrapper);
         given(redirectUrlProvider.getRedirectUrl(Set.of(Role.SKYXPLORE), accessToken)).willReturn(REDIRECT_URL);

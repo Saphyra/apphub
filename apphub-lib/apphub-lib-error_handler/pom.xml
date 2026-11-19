@@ -55,11 +55,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-feign</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <scope>provided</scope>

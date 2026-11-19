@@ -76,6 +76,17 @@ webSocketSession:
 authorization:
   accessTokenExpiration: PT15M
 
+baseUrls: # Base urls used for RestClients
+  adminPanel: http://${serviceHosts.adminPanel}
+  user: http://${serviceHosts.user}
+  authorization: http://${serviceHosts.authorization}
+  eventGateway: http://${serviceHosts.eventGateway}
+  mainGateway: http://${serviceHosts.mainGateway}
+  storage: http://${serviceHosts.storage}
+  skyxploreData: http://${serviceHosts.skyxploreData}
+  skyxploreGame: http://${serviceHosts.skyxploreGame}
+  skyxploreLobby: http://${serviceHosts.skyxploreLobby}
+
 endpoint:
   whitelisting:
     whiteListedEndpoints:

@@ -35,7 +35,9 @@ public class AuthenticationService {
             //Collect required roles
             .map(roleSettings -> roleSettings.stream().flatMap(roleSetting -> roleSetting.getRequiredRoles().stream()).collect(Collectors.toSet()))
             //Check if user has all the required roles
-            .filter(requiredRoles -> !requiredRoles.isEmpty() && !requiredRoleChecker.hasRequiredRoles(requiredRoles, accessToken))
+            .filter(requiredRoles -> !requiredRoles.isEmpty())
+            .filterWhen(requiredRoles -> requiredRoleChecker.hasRequiredRoles(requiredRoles, accessToken)
+                .map(hasRequiredRoles -> !hasRequiredRoles))
             //Return error if required role is not granted
             .map(roleSettings -> authResultHandlerFactory.authenticationFailed(request.getHeaders(), createErrorResponse(), redirectUrlProvider.getRedirectUrl(roleSettings, accessToken)));
     }

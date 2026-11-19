@@ -8,10 +8,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.test.StepVerifier;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -37,8 +37,13 @@ class DisabledRoleCacheTest {
         given(enabledRoleResponse.isDisabled()).willReturn(false);
         given(disabledRoleResponse.getRole()).willReturn(Role.ACCESS);
 
-        assertThat(underTest.get()).containsExactlyInAnyOrder(Role.ACCESS);
-        assertThat(underTest.get()).containsExactlyInAnyOrder(Role.ACCESS);
+        StepVerifier.create(underTest.get())
+            .expectNextMatches(roles -> roles.contains(Role.ACCESS))
+            .verifyComplete();
+
+        StepVerifier.create(underTest.get())
+            .expectNextMatches(roles -> roles.contains(Role.ACCESS))
+            .verifyComplete();
 
         then(client).should(times(1)).getDisabledRoles();
     }
@@ -50,9 +55,15 @@ class DisabledRoleCacheTest {
         given(enabledRoleResponse.isDisabled()).willReturn(false);
         given(disabledRoleResponse.getRole()).willReturn(Role.ACCESS);
 
-        assertThat(underTest.get()).containsExactlyInAnyOrder(Role.ACCESS);
+        StepVerifier.create(underTest.get())
+            .expectNextMatches(roles -> roles.contains(Role.ACCESS))
+            .verifyComplete();
+
         underTest.clear();
-        assertThat(underTest.get()).containsExactlyInAnyOrder(Role.ACCESS);
+
+        StepVerifier.create(underTest.get())
+            .expectNextMatches(roles -> roles.contains(Role.ACCESS))
+            .verifyComplete();
 
         then(client).should(times(2)).getDisabledRoles();
     }

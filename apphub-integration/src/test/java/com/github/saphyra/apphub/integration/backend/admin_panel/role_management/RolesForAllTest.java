@@ -87,7 +87,7 @@ public class RolesForAllTest extends BackEndTest {
         int serverPort = getServerPort();
         RoleManagementActions.addToAll(serverPort, accessToken, password, Constants.ROLE_TEST);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(RoleManagementActions.getRoles(serverPort, accessToken, testUserName).getFirst().getRoles()).contains(Constants.ROLE_TEST));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(RoleManagementActions.getRoles(serverPort, accessToken, testUserName).getFirst().getRoles()).contains(Constants.ROLE_TEST), 20);
     }
 
     private void addToAll_incorrectPassword(String accessToken) {

@@ -7,28 +7,26 @@ import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewFor
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreDataEndpoints;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.service.annotation.DeleteExchange;
+import org.springframework.web.service.annotation.GetExchange;
+import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-data-game", url = "${serviceHosts.skyxploreData}")
 public interface SkyXploreSavedGameClient {
-    @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
+    @GetExchange(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
     GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);
 
-    @PostMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
+    @PostExchange(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
     void saveGameData(@RequestBody List<GameItem> items);
 
-    @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
+    @DeleteExchange(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
     void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items);
 
-    @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
+    @GetExchange(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
     GameModel getGameModel(@PathVariable("gameId") UUID gameId);
 }

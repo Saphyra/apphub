@@ -91,12 +91,6 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-feign</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-test-service</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

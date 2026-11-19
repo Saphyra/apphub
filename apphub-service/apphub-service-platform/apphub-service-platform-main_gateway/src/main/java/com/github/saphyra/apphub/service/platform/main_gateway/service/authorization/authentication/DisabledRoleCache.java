@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
@@ -26,8 +28,9 @@ public class DisabledRoleCache {
             .build();
     }
 
-    public List<Role> get() {
-        return cache.get(CACHE_KEY, s -> getDisabledRoles());
+    public Mono<List<Role>> get() {
+        return Mono.fromCallable(() -> cache.get(CACHE_KEY, s -> getDisabledRoles()))
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     private List<Role> getDisabledRoles() {

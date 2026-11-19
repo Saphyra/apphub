@@ -10,17 +10,18 @@ import com.github.saphyra.apphub.lib.exception.LoggedException;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import com.github.saphyra.apphub.lib.exception.RestException;
-import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
@@ -53,11 +54,11 @@ class ErrorHandlerAdvice {
         return new ResponseEntity<>(errorResponse, getHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(FeignException.class)
-    ResponseEntity<?> feignException(FeignException exception) {
-        String content = exception.contentUTF8();
-        HttpStatus status = HttpStatus.valueOf(exception.status());
-        log.warn("Handling feignException with status {} and content {} for {} - {}", status, content, exception.request().httpMethod(), exception.request().url());
+    @ExceptionHandler(HttpClientErrorException.class)
+    ResponseEntity<?> restClientException(HttpClientErrorException ex) {
+        String content = ex.getResponseBodyAsString();
+        HttpStatusCode status = ex.getStatusCode();
+        log.warn("Handling HttpClientErrorException with status {} and content {}", status, content);
         return new ResponseEntity<>(content, getHeaders(), status);
     }
 

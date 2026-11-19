@@ -4,23 +4,21 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.service.annotation.DeleteExchange;
+import org.springframework.web.service.annotation.GetExchange;
+import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-game", url = "${serviceHosts.skyxploreGame}")
 public interface SkyXploreGameApiClient {
-    @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
+    @GetExchange(SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
     OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);
 
-    @PostMapping(GenericSkyXploreEndpoints.EVENT_SKYXPLORE_GAME_CLEANUP)
+    @PostExchange(GenericSkyXploreEndpoints.EVENT_SKYXPLORE_GAME_CLEANUP)
     void cleanUpExpiredGames();
 
-    @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME)
+    @DeleteExchange(SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME)
     void deleteGame(@PathVariable("gameId") UUID gameId);
 }

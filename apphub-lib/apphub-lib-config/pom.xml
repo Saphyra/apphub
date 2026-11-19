@@ -37,7 +37,6 @@
 
     <modules>
         <module>apphub-lib-config-common</module>
-        <module>apphub-lib-config-feign</module>
         <module>apphub-lib-config-health</module>
         <module>apphub-lib-config-liquibase</module>
       <module>apphub-lib-config-rabbitmq</module>

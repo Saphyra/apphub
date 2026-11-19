@@ -4,29 +4,25 @@ import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.service.annotation.GetExchange;
+import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "user-account", url = "${serviceHosts.user}")
 public interface AccountClient {
-    @RequestMapping(method = RequestMethod.GET, value = UserEndpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
+    @GetExchange(UserEndpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
     String getLanguage(@PathVariable("userId") UUID userId);
 
-    @GetMapping(UserEndpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
+    @GetExchange(UserEndpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
     AccountResponse getAccountInternal(@PathVariable("userId") UUID userId);
 
-    @PostMapping(UserEndpoints.USER_DATA_SEARCH_ACCOUNT)
+    @PostExchange(UserEndpoints.USER_DATA_SEARCH_ACCOUNT)
     List<AccountResponse> searchAccount(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);
 
-    @GetMapping(UserEndpoints.USER_DATA_INTERNAL_USER_EXISTS)
+    @GetExchange(UserEndpoints.USER_DATA_INTERNAL_USER_EXISTS)
     boolean userExists(@PathVariable("userId") UUID userId);
 }

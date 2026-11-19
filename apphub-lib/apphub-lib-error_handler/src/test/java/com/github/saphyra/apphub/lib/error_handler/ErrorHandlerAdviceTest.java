@@ -8,8 +8,6 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
-import feign.FeignException;
-import feign.Request;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +31,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class ErrorHandlerAdviceTest {
-    private static final String CONTENT = "content";
     private static final String MESSAGE = "message";
     private static final String PARAM_NAME = "paramName";
 
@@ -48,12 +45,6 @@ public class ErrorHandlerAdviceTest {
 
     @Mock
     private ErrorResponse errorResponse;
-
-    @Mock
-    private FeignException feignException;
-
-    @Mock
-    private Request request;
 
     @Mock
     private ErrorResponseWrapper errorResponseWrapper;
@@ -91,19 +82,6 @@ public class ErrorHandlerAdviceTest {
         ErrorResponse body2 = (ErrorResponse) result.getBody();
         assertThat(body2.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
         assertThat(body2.getParams()).isEqualTo(Map.of(PARAM_NAME, ex.getMessage()));
-    }
-
-    @Test
-    public void feignException() {
-        given(feignException.contentUTF8()).willReturn(CONTENT);
-        given(feignException.status()).willReturn(400);
-        given(feignException.request()).willReturn(request);
-
-        ResponseEntity<?> result = underTest.feignException(feignException);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(result.getBody()).isEqualTo(CONTENT);
-        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 
     @Test
