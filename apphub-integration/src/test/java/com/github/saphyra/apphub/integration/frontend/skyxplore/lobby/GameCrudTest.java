@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
@@ -138,8 +137,6 @@ public class GameCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreLobbyPageActions.getOnlineFriends(driver2).isEmpty())
             .assertTrue("Friend is still marked as active despite accepting invitation.");
-
-        SleepUtil.sleep(5000);
 
         SkyXploreLobbyPageActions.startGameCreation(driver1);
 
